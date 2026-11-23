@@ -5,7 +5,7 @@
   "title": "M0 — Prove the ACP integration paths",
   "kind": "feature",
   "description": "Establish what the installed providers actually support before building orchestration. Capture versions, authentication, protocol capabilities and unsupported behavior. No production tasks or broad worker privileges are needed for this experiment.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "m0",
@@ -22,5 +22,11 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:22.272Z",
-  "updatedAt": "2026-11-23T11:51:22.272Z"
+  "updatedAt": "2026-11-23T14:20:43.232Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Both M0 ACP provider investigations are complete and linked child tickets MAST-23 and MAST-24 are done.",
+    "verifiedBy": "Cursor ACP and Codex ACP completed isolated protocol checks; versions, auth status, capabilities, permission/cancellation behavior and extension caveats are recorded in child ticket comments."
+  },
+  "completedAt": "2026-11-23T14:20:43.232Z"
 }

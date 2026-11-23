@@ -5,7 +5,7 @@
   "title": "Verify Cursor ACP in an isolated fixture",
   "kind": "task",
   "description": "Test the installed Cursor CLI through a minimal disposable ACP client. Verify initialize, authentication status, session creation, streaming, permission requests, cancellation and load/resume capability. Handle Cursor blocking extensions such as ask_question and create_plan explicitly. Use a temporary fixture, not user projects. Local inspection found Cursor 2026.11.17-f532c45 and agent acp --help, but no authenticated session has been tested.",
-  "status": "in_progress",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "m0",
@@ -25,11 +25,11 @@
     },
     {
       "text": "Denied permission and cancellation do not hang",
-      "met": false
+      "met": true
     },
     {
       "text": "Capability and unsupported-extension behavior are recorded",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -39,10 +39,11 @@
   "size": "s",
   "evaluation": true,
   "createdAt": "2026-11-23T11:51:28.002Z",
-  "updatedAt": "2026-11-23T12:05:03.748Z",
-  "assignee": {
-    "agent": "codex",
-    "claimedAt": "2026-11-23T12:03:02.961Z",
-    "expiresAt": "2026-11-23T13:03:02.961Z"
-  }
+  "updatedAt": "2026-11-23T14:20:05.404Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Completed disposable Cursor ACP compatibility probe; evidence and caveats recorded in ticket comments.",
+    "verifiedBy": "initialize and session/new/session/load capability; streamed reply; sandbox permission denial; session/cancel with cancelled permission outcome; create_plan rejection; ask_question not observed and official blocking behavior documented"
+  },
+  "completedAt": "2026-11-23T14:20:05.404Z"
 }

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a208c6-d1aa-7259-9182-4b6e01c57148",
+  "ticketId": "01a2083f-2e02-70d9-aa40-7d51edc37d8a",
+  "body": "Cursor ACP probe results (2026-11-23), in disposable /private/tmp fixture. Current binary: cursor CLI 3.29.9, commit 306d153d51d714882ab7b1bc49649cab624e8a30, arm64. Launch: cursor agent --sandbox enabled acp; initialize protocolVersion 1. Capabilities: loadSession true, session list available, HTTP/SSE MCP capabilities, image prompt support. session/new and session/load succeed; a harmless prompt streamed OK (end_turn). cursor agent status reports Not logged in; ACP initialize advertises cursor_login. Because the prompt succeeded without an explicit authenticate call, this confirms CLI behavior but not an authenticated account identity. Denial: with --sandbox enabled, an out-of-workspace write generated session/request_permission; the reject_once option was selected, tool reported denied, turn ended without hanging, and the unique temp path was cleaned. Cancellation: a pending permission request was answered cancelled after session/cancel; prompt returned stopReason=cancelled. Plan mode produced blocking cursor/create_plan requests; explicit rejection let the prompt end. cursor/ask_question was not observed in this run; Cursor’s official ACP docs list it and cursor/create_plan as blocking extensions that clients must answer. Source: https://cursor.com/docs/cli/acp. No durable fixture code was required; probes only used /private/tmp.",
+  "author": "codex",
+  "createdAt": "2026-11-23T14:19:37.258Z"
+}

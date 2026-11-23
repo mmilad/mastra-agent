@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a208d4-473c-7462-ad15-d7fd78b6079c",
+  "ticketId": "01a2083f-3679-725f-af3d-d9e26ec78be8",
+  "body": "Implementation and verification (2026-11-23): added shared AcpWorkerClient with correlated bounded JSON-RPC requests, streamed update events, negotiated initialize capabilities/auth methods, client-request routing, conservative cancel/reject defaults, session cancellation and owned child process shutdown. Resume is gated by loadSession and verified with a fresh process. Cursor and Codex use separate launch definitions; delegateToCodex now uses the shared client while retaining the project root for process cwd, session/new cwd, and prompt scope. Six isolated tests pass (streaming, capability/resume gating, unknown blocking request failure, default cancellation for permission/plan, pending permission cancellation, process exit). The opt-in same live contract plus resume test passed against both installed providers from /private/tmp.",
+  "author": "codex",
+  "createdAt": "2026-11-23T14:34:19.324Z"
+}

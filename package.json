@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "mastra dev",
     "chat": "node --env-file-if-exists=.env src/run.ts",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "test:acp": "node --experimental-strip-types --test tests/acp/client.test.mjs",
+    "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs"
   },
   "dependencies": {
     "@agentclientprotocol/codex-acp": "2.10.0",

@@ -59,6 +59,29 @@ root passed as ACP `cwd`, and write access scoped to that workspace.
 npm run check
 ```
 
+## ACP adapter
+
+`src/integrations/acp/client.ts` owns ACP process startup, protocol negotiation,
+streamed updates, bounded requests, cancellation, and optional session loading.
+Codex and Cursor have separate launch definitions in `providers.ts`. Session
+loading is rejected unless the provider advertises it. Pending permission and
+Cursor question/plan requests are cancelled by default; unknown blocking
+requests receive a clear unsupported-method error. The user approval flow is
+tracked separately in Plantool MAST-27.
+
+Run the local protocol tests with:
+
+```sh
+npm run test:acp
+```
+
+To run the same harmless session-and-prompt contract against the installed
+Cursor and Codex CLIs (using their existing logins and account quotas):
+
+```sh
+RUN_ACP_PROVIDER_TESTS=1 npm run test:acp:providers
+```
+
 This checks TypeScript without an API key. To test a real model response after
 setting your key:
 
@@ -70,6 +93,8 @@ npm run chat -- "Reply with exactly: OK"
 
 - `src/mastra/agents/assistant.ts`: assistant instructions and model.
 - `src/mastra/tools/delegate-to-codex.ts`: workspace-scoped ACP handoff to Codex.
+- `src/integrations/acp/client.ts`, `src/integrations/acp/providers.ts`: shared ACP client and provider launch settings.
+- `tests/acp/`: isolated protocol fixture and opt-in live provider contract checks.
 - `src/mastra/index.ts`: registers the assistant with Mastra.
 - `mastra.db`: local persisted Studio threads and messages (ignored by Git).
 - `mastra-observability.duckdb`: local Studio logs and traces (ignored by Git).
