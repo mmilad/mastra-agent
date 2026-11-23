@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-5ec2-7349-a05c-4f4a4fb42591",
+  "number": 39,
+  "title": "M5 — Validate a dependable daily-use assistant",
+  "kind": "feature",
+  "description": "Review the vertical slice against real representative requests and controlled failure scenarios. Define reliability through observable outcomes rather than a vague claim of autonomy. Expand the product only after this gate.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "m5",
+    "release"
+  ],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "A successful demo is not enough to trust recurring delegated work.",
+  "acceptance": [
+    {
+      "text": "The agreed acceptance scenarios pass with recorded evidence",
+      "met": false
+    }
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:40.482Z",
+  "updatedAt": "2026-11-23T11:51:40.482Z"
+}

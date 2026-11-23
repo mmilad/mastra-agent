@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-6209-79b8-a0b3-24225bd51c90",
+  "number": 40,
+  "title": "Run acceptance scenarios and a short user pilot",
+  "kind": "task",
+  "description": "Build deterministic adapter/state-machine tests with simulated events, then opt-in live provider checks. Proposed pilot: ten representative tasks spanning planning lookup, delegation, correction and interruption. Record task success, needed interventions, context correctness, time and available usage. The user sets acceptable budget and intervention targets before the pilot. Include permission denial, timeout, disconnect, restart, duplicate request and stale-memory cases.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-5ec2-7349-a05c-4f4a4fb42591",
+  "why": "Reliability needs reproducible evidence and an honest record of limitations.",
+  "acceptance": [
+    {
+      "text": "All deterministic failure scenarios pass",
+      "met": false
+    },
+    {
+      "text": "Both supported workers complete an authenticated live smoke test",
+      "met": false
+    },
+    {
+      "text": "No silent task loss, duplicate side effect or cross-project leakage in the scenarios",
+      "met": false
+    },
+    {
+      "text": "Every pilot result records evidence and any user intervention",
+      "met": false
+    },
+    {
+      "text": "Unmet criteria remain open and are not hidden by an average score",
+      "met": false
+    }
+  ],
+  "files": [
+    "tests/acceptance/",
+    "tests/recovery/",
+    "docs/pilot/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:41.321Z",
+  "updatedAt": "2026-11-23T11:51:41.321Z"
+}

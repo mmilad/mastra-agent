@@ -54,3 +54,25 @@ npm run chat -- "Reply with exactly: OK"
 - `package.json`, `package-lock.json`, `tsconfig.json`, `.gitignore`: project setup.
 
 Based on the [Mastra setup guide](https://mastra.ai/docs).
+
+## Planning
+
+This project plans its work with `plantool`. Before changing the plan, run:
+
+```sh
+plantool agent onboard
+```
+
+Use `plantool` commands or its API to update records; do not edit `.plan` records
+by hand. Start the review interface with:
+
+```sh
+plantool serve
+```
+
+Open http://127.0.0.1:4000 and select **mastra**. Start with **MAST-1**,
+**Assistant roadmap and review guide**, and the five open decisions.
+The roadmap is a proposal for review; its features are not implemented yet.
+`plantool next` shows ready tasks and `plantool context MAST-23` shows the first
+compatibility investigation. Run `plantool validate` and `plantool check`
+after changing the plan.

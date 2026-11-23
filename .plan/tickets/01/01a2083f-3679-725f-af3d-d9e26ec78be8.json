@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-3679-725f-af3d-d9e26ec78be8",
+  "number": 26,
+  "title": "Implement the capability-aware ACP worker adapter",
+  "kind": "task",
+  "description": "Expose a small typed boundary for start, prompt, events, permission/question reply, cancel and optional resume. Represent unavailable capabilities explicitly. Keep worker credentials and process details out of model prompts. Delegate model/tool execution to worker harnesses. Use bounded request timeouts and terminate owned child processes on shutdown.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-336e-784d-8652-645af1d11517",
+  "why": "Provider differences should not leak into every assistant feature.",
+  "acceptance": [
+    {
+      "text": "Cursor and the selected OpenAI worker pass the same adapter contract tests",
+      "met": false
+    },
+    {
+      "text": "Unknown blocking requests get a clear failure instead of hanging",
+      "met": false
+    },
+    {
+      "text": "Cancellation and process exit close pending requests",
+      "met": false
+    },
+    {
+      "text": "Resume is offered only when negotiated and verified",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/integrations/acp/",
+    "src/workers/",
+    "tests/acp/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:30.169Z",
+  "updatedAt": "2026-11-23T11:51:30.169Z"
+}

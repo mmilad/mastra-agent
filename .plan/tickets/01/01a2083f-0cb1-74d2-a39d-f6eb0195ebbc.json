@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-0cb1-74d2-a39d-f6eb0195ebbc",
+  "number": 6,
+  "title": "Where should the first usable assistant run?",
+  "kind": "decision",
+  "description": "Propose a single-user local process on this Mac. Choose the first interaction surface and deployment expectation. Mastra Studio remains a development tool. The planning web UI is plantool serve, separate from the assistant UI. No public hosting, remote access, accounts, or desktop packaging is authorized by this plan.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "Propose a single-user local process on this Mac. Choose the first interaction surface and deployment expectation. Mastra Studio remains a development tool. The planning web UI is plantool serve, separate from the assistant UI. No public hosting, remote access, accounts, or desktop packaging is authorized by this plan.",
+  "decision": {
+    "owner": "human",
+    "criteria": [],
+    "chosen": null,
+    "reversible": true,
+    "recommendation": {
+      "option": "01a2083f-0d7f-7efe-81f6-4bea196482b1",
+      "why": "Smallest route to testing the assistant and ACP workers",
+      "by": "agent",
+      "at": "2026-11-23T11:51:20.340Z"
+    }
+  },
+  "createdAt": "2026-11-23T11:51:19.473Z",
+  "updatedAt": "2026-11-23T11:51:20.341Z"
+}

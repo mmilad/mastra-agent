@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-0f4d-7dcb-b83c-1da44ca9aa88",
+  "number": 9,
+  "title": "Desktop application first",
+  "kind": "option",
+  "description": "Desktop application first. Benefit: Closest to a persistent desktop companion. Tradeoff: Packaging and application lifecycle significantly expand scope. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-0cb1-74d2-a39d-f6eb0195ebbc",
+  "why": "Closest to a persistent desktop companion",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Closest to a persistent desktop companion"
+    ],
+    "cons": [
+      "Packaging and application lifecycle significantly expand scope"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:20.141Z",
+  "updatedAt": "2026-11-23T11:51:20.227Z"
+}

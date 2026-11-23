@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-16fe-7c87-9565-100cc7bae6bd",
+  "number": 21,
+  "title": "Broad autonomy within selected projects",
+  "kind": "option",
+  "description": "Broad autonomy within selected projects. Benefit: Fewer interruptions for routine work. Tradeoff: Requires stronger recovery controls and explicit limits before use. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-15bd-7f9c-972e-0fcae0ae57ab",
+  "why": "Fewer interruptions for routine work",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Fewer interruptions for routine work"
+    ],
+    "cons": [
+      "Requires stronger recovery controls and explicit limits before use"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:22.110Z",
+  "updatedAt": "2026-11-23T11:51:22.163Z"
+}

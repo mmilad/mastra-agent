@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-0e69-74e8-bfd6-6563893e4749",
+  "number": 8,
+  "title": "Local browser interface first",
+  "kind": "option",
+  "description": "Local browser interface first. Benefit: Chat, progress, approvals and context can be reviewed together. Tradeoff: More UI work before the delegation loop is proven. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-0cb1-74d2-a39d-f6eb0195ebbc",
+  "why": "Chat, progress, approvals and context can be reviewed together",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Chat, progress, approvals and context can be reviewed together"
+    ],
+    "cons": [
+      "More UI work before the delegation loop is proven"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:19.913Z",
+  "updatedAt": "2026-11-23T11:51:20.023Z"
+}

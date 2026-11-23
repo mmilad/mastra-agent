@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-4b79-7005-b9f5-c8659c958c09",
+  "number": 33,
+  "title": "Persist task lifecycle and recover interrupted runs",
+  "kind": "task",
+  "description": "Persist task ID, worker/session ID, workspace, timestamps, progress references and states queued, running, waiting_for_user, succeeded, failed, cancelled and interrupted. On restart reconcile actual worker state before resuming. Do not automatically replay side-effecting prompts with uncertain outcomes. Use bounded retry only for demonstrably safe operations.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "why": "Lost processes and duplicate side effects are the main failure cases in delegation.",
+  "acceptance": [
+    {
+      "text": "Injected crash produces a recoverable or visibly interrupted task",
+      "met": false
+    },
+    {
+      "text": "A repeated task ID does not launch a second worker",
+      "met": false
+    },
+    {
+      "text": "Unknown completion stays uncertain until checked",
+      "met": false
+    },
+    {
+      "text": "Waiting tasks survive restart without granting approval",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/tasks/",
+    "src/workers/",
+    "tests/recovery/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:35.545Z",
+  "updatedAt": "2026-11-23T11:51:35.545Z"
+}

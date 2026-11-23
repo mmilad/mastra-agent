@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-1380-74c1-8ddc-f2cede604c7a",
+  "number": 14,
+  "title": "How should conversation and task state be stored?",
+  "kind": "decision",
+  "description": "Propose local SQLite-compatible storage supported by Mastra for conversation and runtime records. Plantool .plan remains the planning source of truth, not a runtime event database. Decide retention, backup/export, forget behavior and the boundary between global preferences and project knowledge before persistence implementation.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "Propose local SQLite-compatible storage supported by Mastra for conversation and runtime records. Plantool .plan remains the planning source of truth, not a runtime event database. Decide retention, backup/export, forget behavior and the boundary between global preferences and project knowledge before persistence implementation.",
+  "decision": {
+    "owner": "human",
+    "criteria": [],
+    "chosen": null,
+    "reversible": true,
+    "recommendation": {
+      "option": "01a2083f-13f8-7142-a368-ff1f6fb840d4",
+      "why": "Supports restart recovery without operating a server",
+      "by": "agent",
+      "at": "2026-11-23T11:51:21.734Z"
+    }
+  },
+  "createdAt": "2026-11-23T11:51:21.216Z",
+  "updatedAt": "2026-11-23T11:51:21.734Z"
+}

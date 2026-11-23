@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-6555-727d-b37e-cdbf1e84bd47",
+  "number": 41,
+  "title": "Later — Expand only after the first reliable loop",
+  "kind": "feature",
+  "description": "Candidate capabilities retained for review, outside the initial release: richer desktop/web experience, more providers, larger parallel work and broader protocols. These are not committed implementation scope.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "later",
+    "not-mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "Keep the long-term direction visible without turning the prototype into infrastructure work.",
+  "acceptance": [
+    {
+      "text": "Each expansion has a demonstrated use case and a separate scope decision",
+      "met": false
+    }
+  ],
+  "size": "xl",
+  "createdAt": "2026-11-23T11:51:42.165Z",
+  "updatedAt": "2026-11-23T11:51:42.165Z"
+}

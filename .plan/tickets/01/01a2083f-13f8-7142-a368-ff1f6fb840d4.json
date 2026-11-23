@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-13f8-7142-a368-ff1f6fb840d4",
+  "number": 15,
+  "title": "Local durable database with explicit export",
+  "kind": "option",
+  "description": "Local durable database with explicit export. Benefit: Supports restart recovery without operating a server. Tradeoff: Backups and retention still need a clear policy. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-1380-74c1-8ddc-f2cede604c7a",
+  "why": "Supports restart recovery without operating a server",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Supports restart recovery without operating a server"
+    ],
+    "cons": [
+      "Backups and retention still need a clear policy"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:21.336Z",
+  "updatedAt": "2026-11-23T11:51:21.393Z"
+}

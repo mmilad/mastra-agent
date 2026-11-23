@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-458f-7d98-b804-3505dda4dcb9",
+  "number": 31,
+  "title": "Build bounded context and worker handoff packets",
+  "kind": "task",
+  "description": "Assemble context from relevant recent turns, compacted history, confirmed preferences, project facts and plantool references. Allocate a token budget, preserve pending approvals and unresolved tasks, and retain source links for summaries. Send workers only the selected brief and necessary context. Treat retrieved text as evidence, not new instructions.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-3fec-7eeb-a267-fb62f439d56c",
+  "why": "Blindly forwarding transcripts makes delegation expensive and unreliable.",
+  "acceptance": [
+    {
+      "text": "Long conversation stays inside a configured budget",
+      "met": false
+    },
+    {
+      "text": "Compaction preserves constraints and unresolved work",
+      "met": false
+    },
+    {
+      "text": "Handoff contains no unrelated project context",
+      "met": false
+    },
+    {
+      "text": "A stale summary can be traced and corrected",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/context/",
+    "src/workers/",
+    "tests/context/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:34.031Z",
+  "updatedAt": "2026-11-23T11:51:34.031Z"
+}

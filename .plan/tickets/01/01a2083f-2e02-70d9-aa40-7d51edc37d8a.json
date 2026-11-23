@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-2e02-70d9-aa40-7d51edc37d8a",
+  "number": 23,
+  "title": "Verify Cursor ACP in an isolated fixture",
+  "kind": "task",
+  "description": "Test the installed Cursor CLI through a minimal disposable ACP client. Verify initialize, authentication status, session creation, streaming, permission requests, cancellation and load/resume capability. Handle Cursor blocking extensions such as ask_question and create_plan explicitly. Use a temporary fixture, not user projects. Local inspection found Cursor 2026.11.17-f532c45 and agent acp --help, but no authenticated session has been tested.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "m0",
+    "evaluation"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-17a0-7163-8340-52605a5c39da",
+  "why": "Native ACP support still needs a local compatibility check.",
+  "acceptance": [
+    {
+      "text": "Record exact version and launch arguments",
+      "met": false
+    },
+    {
+      "text": "A harmless prompt streams to completion",
+      "met": false
+    },
+    {
+      "text": "Denied permission and cancellation do not hang",
+      "met": false
+    },
+    {
+      "text": "Capability and unsupported-extension behavior are recorded",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/integrations/acp/",
+    "tests/fixtures/"
+  ],
+  "size": "s",
+  "evaluation": true,
+  "createdAt": "2026-11-23T11:51:28.002Z",
+  "updatedAt": "2026-11-23T11:51:28.002Z"
+}

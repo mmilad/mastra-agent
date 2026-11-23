@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-17a0-7163-8340-52605a5c39da",
+  "number": 22,
+  "title": "M0 — Prove the ACP integration paths",
+  "kind": "feature",
+  "description": "Establish what the installed providers actually support before building orchestration. Capture versions, authentication, protocol capabilities and unsupported behavior. No production tasks or broad worker privileges are needed for this experiment.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "m0",
+    "discovery"
+  ],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "A reliable assistant cannot depend on assumed provider features.",
+  "acceptance": [
+    {
+      "text": "Both requested targets have an evidence-backed compatibility result",
+      "met": false
+    }
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:22.272Z",
+  "updatedAt": "2026-11-23T11:51:22.272Z"
+}

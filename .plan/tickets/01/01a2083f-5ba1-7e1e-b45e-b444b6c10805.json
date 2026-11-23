@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-5ba1-7e1e-b45e-b444b6c10805",
+  "number": 38,
+  "title": "Load inspectable Agent Skills on demand",
+  "kind": "task",
+  "description": "Use the Agent Skills SKILL.md format for a small configured set of local skills. Discover metadata first and load the body only when relevant. Record source/version, allow disable and show why a skill was selected. Validate referenced paths and apply the same execution scopes to any scripts. Detect conflicting instructions. A loaded skill is not permission to run every bundled command.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-5190-7d47-8d7d-7b76af53f822",
+  "why": "Reusable procedures should be portable and should not consume context unnecessarily.",
+  "acceptance": [
+    {
+      "text": "An irrelevant skill is not fully injected",
+      "met": false
+    },
+    {
+      "text": "A relevant skill is traceable to its source",
+      "met": false
+    },
+    {
+      "text": "A disabled or invalid skill is not executed",
+      "met": false
+    },
+    {
+      "text": "Skill instructions cannot override user constraints or expand authority",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/skills/",
+    "tests/skills/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:39.681Z",
+  "updatedAt": "2026-11-23T11:51:39.681Z"
+}

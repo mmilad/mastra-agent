@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083e-c0be-7826-9e66-3ce2639d684d",
+  "number": 2,
+  "title": "What does the initial ChatGPT ACP worker mean?",
+  "kind": "decision",
+  "description": "Cursor is confirmed as a target. Clarify whether the second worker is Codex authenticated with ChatGPT, the ChatGPT app itself, or both eventually. ACP here means Agent Client Protocol. Cursor documents agent acp. The maintained Codex adapter exposes Codex through ACP and supports ChatGPT login. This does not establish direct ChatGPT-app automation. Keep this decision open until the user confirms.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "Cursor is confirmed as a target. Clarify whether the second worker is Codex authenticated with ChatGPT, the ChatGPT app itself, or both eventually. ACP here means Agent Client Protocol. Cursor documents agent acp. The maintained Codex adapter exposes Codex through ACP and supports ChatGPT login. This does not establish direct ChatGPT-app automation. Keep this decision open until the user confirms.",
+  "decision": {
+    "owner": "human",
+    "criteria": [],
+    "chosen": null,
+    "reversible": true,
+    "recommendation": {
+      "option": "01a2083f-09e6-7024-b06e-ade8099737ef",
+      "why": "Documented ACP adapter and reusable coding-agent harness",
+      "by": "agent",
+      "at": "2026-11-23T11:51:19.320Z"
+    }
+  },
+  "createdAt": "2026-11-23T11:51:00.030Z",
+  "updatedAt": "2026-11-23T11:51:19.324Z"
+}

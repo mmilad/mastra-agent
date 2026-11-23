@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "number": 1,
+  "title": "Reliable personal assistant with managed ACP workers",
+  "kind": "feature",
+  "description": "Build one dependable assistant for Milad, inspired by the continuity and delegation of Dot or Grokbot. The assistant handles conversation, lookups, context selection, planning, and supervision. Existing Cursor and a confirmed OpenAI worker perform implementation work through ACP. Use Mastra and TypeScript, with plantool as the source of truth for goals, decisions, and delivery tasks. This is a proposed roadmap for review, not authorization to implement every milestone.",
+  "status": "todo",
+  "priority": "high",
+  "labels": [
+    "roadmap",
+    "review"
+  ],
+  "properties": {},
+  "parentId": null,
+  "why": "Replace fragile ad hoc calls between coding tools with one assistant that can explain what it knows, who is doing what, and what still needs attention.",
+  "acceptance": [
+    {
+      "text": "One conversation can delegate a bounded task and show progress, questions, cancellation, and evidence of completion",
+      "met": false
+    },
+    {
+      "text": "Context survives restart and remains isolated by project",
+      "met": false
+    },
+    {
+      "text": "Tools and skills are inspectable and follow explicit permissions",
+      "met": false
+    },
+    {
+      "text": "Both requested worker targets pass compatibility checks before being advertised as supported",
+      "met": false
+    },
+    {
+      "text": "Failures never silently become successful completion",
+      "met": false
+    }
+  ],
+  "size": "xl",
+  "assumptions": [
+    "Single-user local-first prototype is proposed, not yet a confirmed deployment decision",
+    "Dot and Grokbot are experience references, not a requirement to clone their full feature sets",
+    "The assistant initially supervises work rather than editing code itself"
+  ],
+  "createdAt": "2026-11-23T11:47:37.559Z",
+  "updatedAt": "2026-11-23T11:52:50.078Z",
+  "checklist": {
+    "name": "product",
+    "skipped": {
+      "monetization": "This is a personal assistant experiment. Commercial pricing and billing have not been requested.",
+      "legal": "Public release and distribution are outside this prototype plan. Revisit distribution, provider terms and data handling when that scope is proposed."
+    },
+    "answered": {
+      "goal": "See linked goal document and top-level acceptance criteria. Milad is the initial user.",
+      "platform": "Person-owned decision MAST-6 defines the first surface and deployment.",
+      "stack": "Mastra and TypeScript are already selected by the user and initialized. Provider/runtime choices remain explicit decisions.",
+      "core-features": "M0-M5 describe the first release. Later candidates are separated and blocked by the pilot.",
+      "accounts": "Proposed single-user local application has no new product account system. Existing provider login is verified in M0. Revisit if deployment scope changes.",
+      "data": "Person-owned decision MAST-14 covers storage. M2 defines scope, source, correction and deletion. Provider data transfer depends on the model decision.",
+      "ui-structure": "The surface decision controls implementation. Minimum flow is conversation -> task progress -> approval/question -> result evidence, with inspectable context and worker state.",
+      "visual": "No custom visual design required for terminal prototype. If a browser or desktop surface is chosen, define its visual direction before building it. Dot/Grokbot are behavior references.",
+      "quality": "M5 contains deterministic failure scenarios, opt-in live provider checks and proposed ten-task pilot. No reliability claims before evidence.",
+      "offline": "Offline capability remains part of the supervisor-model decision. The initial external ACP workers may require network access; a fully offline product is not assumed."
+    }
+  }
+}

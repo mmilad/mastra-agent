@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-5190-7d47-8d7d-7b76af53f822",
+  "number": 35,
+  "title": "M4 — Add useful tools and portable skills",
+  "kind": "feature",
+  "description": "Give the supervisor a small inspectable capability set: read project plans, retrieve scoped context, run approved lookups and manage workers. Add portable skill instructions with explicit provenance and lazy loading. Reuse worker-native tools. Broader connector catalogs are later work driven by an actual task.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "m4",
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "Tools perform actions and skills supply reusable procedures without inflating every prompt.",
+  "acceptance": [
+    {
+      "text": "A planning lookup and a relevant skill improve a real delegated task",
+      "met": false
+    }
+  ],
+  "size": "l",
+  "createdAt": "2026-11-23T11:51:37.104Z",
+  "updatedAt": "2026-11-23T11:51:37.104Z"
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-0d7f-7efe-81f6-4bea196482b1",
+  "number": 7,
+  "title": "Local terminal first, web UI later",
+  "kind": "option",
+  "description": "Local terminal first, web UI later. Benefit: Smallest route to testing the assistant and ACP workers. Tradeoff: Less similar to Dot visually. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-0cb1-74d2-a39d-f6eb0195ebbc",
+  "why": "Smallest route to testing the assistant and ACP workers",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Smallest route to testing the assistant and ACP workers"
+    ],
+    "cons": [
+      "Less similar to Dot visually"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:19.679Z",
+  "updatedAt": "2026-11-23T11:51:19.785Z"
+}

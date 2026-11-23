@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-6c89-7109-b9e4-b486d3db5b47",
+  "number": 43,
+  "title": "Evaluate proactive work, more workers and richer interaction",
+  "kind": "task",
+  "description": "After the pilot, evaluate scheduled follow-ups, additional worker providers, safe parallel workspaces, optional direct supervisor coding and the chosen richer UI. Split approved candidates into bounded tasks at that time. No always-on service, multi-user system or custom agent marketplace is required for the first release.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "later",
+    "not-mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-6555-727d-b37e-cdbf1e84bd47",
+  "why": "Preserve the companion-assistant ambition while learning from actual use.",
+  "acceptance": [
+    {
+      "text": "A user-reviewed use case and success measure exist for each selected expansion",
+      "met": false
+    },
+    {
+      "text": "Unselected candidates remain out of release scope",
+      "met": false
+    }
+  ],
+  "size": "l",
+  "createdAt": "2026-11-23T11:51:44.009Z",
+  "updatedAt": "2026-11-23T11:51:44.009Z"
+}

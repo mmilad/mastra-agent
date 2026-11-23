@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "number": 32,
+  "title": "M3 — Recover and manage worker tasks reliably",
+  "kind": "feature",
+  "description": "Make task state visible and durable. Start with a bounded queue and one writer per workspace. Add provider health, timeout and restart behavior before increasing concurrency. Runtime events belong in the chosen state store; milestones and user decisions remain in plantool.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "m3",
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "Managed agents must stay understandable when processes fail or conversations change.",
+  "acceptance": [
+    {
+      "text": "A worker failure or assistant restart does not silently lose or duplicate work",
+      "met": false
+    }
+  ],
+  "size": "l",
+  "createdAt": "2026-11-23T11:51:34.765Z",
+  "updatedAt": "2026-11-23T11:51:34.765Z"
+}

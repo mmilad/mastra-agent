@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-0b41-7cca-bdea-8c54daaad6c7",
+  "number": 5,
+  "title": "Codex first, ChatGPT app later",
+  "kind": "option",
+  "description": "Codex first, ChatGPT app later. Benefit: Provides an initial documented path while retaining the broader ambition. Tradeoff: Direct app integration remains a separate later investigation. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083e-c0be-7826-9e66-3ce2639d684d",
+  "why": "Provides an initial documented path while retaining the broader ambition",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Provides an initial documented path while retaining the broader ambition"
+    ],
+    "cons": [
+      "Direct app integration remains a separate later investigation"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:19.105Z",
+  "updatedAt": "2026-11-23T11:51:19.211Z"
+}

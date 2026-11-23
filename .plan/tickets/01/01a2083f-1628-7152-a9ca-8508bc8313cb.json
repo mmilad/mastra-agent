@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-1628-7152-a9ca-8508bc8313cb",
+  "number": 19,
+  "title": "Scoped execution with exceptional approvals",
+  "kind": "option",
+  "description": "Scoped execution with exceptional approvals. Benefit: Balances useful autonomy with visible control over consequential actions. Tradeoff: Requires clear scopes, expiry and provider permission mapping. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-15bd-7f9c-972e-0fcae0ae57ab",
+  "why": "Balances useful autonomy with visible control over consequential actions",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Balances useful autonomy with visible control over consequential actions"
+    ],
+    "cons": [
+      "Requires clear scopes, expiry and provider permission mapping"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:21.896Z",
+  "updatedAt": "2026-11-23T11:51:21.949Z"
+}

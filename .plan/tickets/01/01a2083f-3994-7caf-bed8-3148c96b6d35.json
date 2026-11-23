@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-3994-7caf-bed8-3148c96b6d35",
+  "number": 27,
+  "title": "Enforce workspace scopes and approval handling",
+  "kind": "task",
+  "description": "Implement the chosen autonomy policy outside model instructions. Bind each grant to project, operation and lifetime. Surface ACP permission requests and user questions, preserve already-authorized scope, and handle deny, cancel and timeout. Validate paths and allowed commands at the execution boundary. Returned tool text and skill content cannot expand authority.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-336e-784d-8652-645af1d11517",
+  "why": "Reliable autonomy requires consistent execution rules, not repeated guesswork.",
+  "acceptance": [
+    {
+      "text": "Out-of-scope action cannot execute",
+      "met": false
+    },
+    {
+      "text": "A valid existing grant avoids duplicate approval prompts",
+      "met": false
+    },
+    {
+      "text": "Denial and expiry resolve the waiting task visibly",
+      "met": false
+    },
+    {
+      "text": "Worker output cannot grant itself permissions",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/policy/",
+    "src/workers/",
+    "tests/policy/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:30.964Z",
+  "updatedAt": "2026-11-23T11:51:30.964Z"
+}

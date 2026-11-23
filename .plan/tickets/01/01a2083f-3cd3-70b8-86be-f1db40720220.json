@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-3cd3-70b8-86be-f1db40720220",
+  "number": 28,
+  "title": "Connect the assistant to bounded delegation",
+  "kind": "task",
+  "description": "Extend the Mastra assistant with narrow delegate, status and cancel operations. A task brief includes objective, workspace, constraints, acceptance criteria, context references and a stable task identifier. Ask only when missing information materially blocks the task. Keep a user conversation responsive while the worker runs. Do not let the supervisor directly edit code in this first slice.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-336e-784d-8652-645af1d11517",
+  "why": "The user should interact with one assistant rather than coordinate provider tools manually.",
+  "acceptance": [
+    {
+      "text": "A goal creates one bounded worker task",
+      "met": false
+    },
+    {
+      "text": "Status questions do not start another task",
+      "met": false
+    },
+    {
+      "text": "Cancellation reaches the correct worker",
+      "met": false
+    },
+    {
+      "text": "Final reply distinguishes produced output from verified acceptance",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/mastra/agents/assistant.ts",
+    "src/mastra/tools/",
+    "src/run.ts"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:31.795Z",
+  "updatedAt": "2026-11-23T11:51:31.795Z"
+}

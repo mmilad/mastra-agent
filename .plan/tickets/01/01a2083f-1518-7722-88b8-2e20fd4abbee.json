@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-1518-7722-88b8-2e20fd4abbee",
+  "number": 17,
+  "title": "Hosted database",
+  "kind": "option",
+  "description": "Hosted database. Benefit: Can support multiple devices later. Tradeoff: Introduces infrastructure, credentials and remote data storage. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-1380-74c1-8ddc-f2cede604c7a",
+  "why": "Can support multiple devices later",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Can support multiple devices later"
+    ],
+    "cons": [
+      "Introduces infrastructure, credentials and remote data storage"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:21.624Z",
+  "updatedAt": "2026-11-23T11:51:21.678Z"
+}

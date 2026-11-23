@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-3fec-7eeb-a267-fb62f439d56c",
+  "number": 29,
+  "title": "M2 — Preserve useful context across conversations",
+  "kind": "feature",
+  "description": "Add durable scoped conversations, bounded context selection and transparent memory. Store runtime state separately from plantool planning records. Prefer existing Mastra memory and processor primitives after verifying their behavior against installed versions.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "m2",
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "Continuity and correct project context are central to the intended assistant experience.",
+  "acceptance": [
+    {
+      "text": "Restart and a project switch preserve the right information without leaking another project",
+      "met": false
+    }
+  ],
+  "size": "l",
+  "createdAt": "2026-11-23T11:51:32.588Z",
+  "updatedAt": "2026-11-23T11:51:32.588Z"
+}

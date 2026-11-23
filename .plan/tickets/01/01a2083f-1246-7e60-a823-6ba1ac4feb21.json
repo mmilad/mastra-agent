@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-1246-7e60-a823-6ba1ac4feb21",
+  "number": 12,
+  "title": "Local model from the start",
+  "kind": "option",
+  "description": "Local model from the start. Benefit: Can keep supervisor inference on the machine. Tradeoff: Hardware fit and reliable tool selection must be measured. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-1092-726f-bfa9-e3bf71fd7f50",
+  "why": "Can keep supervisor inference on the machine",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Can keep supervisor inference on the machine"
+    ],
+    "cons": [
+      "Hardware fit and reliable tool selection must be measured"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:20.902Z",
+  "updatedAt": "2026-11-23T11:51:20.957Z"
+}

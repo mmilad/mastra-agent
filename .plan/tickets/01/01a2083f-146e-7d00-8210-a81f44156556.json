@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-146e-7d00-8210-a81f44156556",
+  "number": 16,
+  "title": "Local readable files",
+  "kind": "option",
+  "description": "Local readable files. Benefit: Easy to inspect and version selected non-sensitive records. Tradeoff: Concurrent updates and recovery need more custom handling. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-1380-74c1-8ddc-f2cede604c7a",
+  "why": "Easy to inspect and version selected non-sensitive records",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Easy to inspect and version selected non-sensitive records"
+    ],
+    "cons": [
+      "Concurrent updates and recovery need more custom handling"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:21.454Z",
+  "updatedAt": "2026-11-23T11:51:21.516Z"
+}

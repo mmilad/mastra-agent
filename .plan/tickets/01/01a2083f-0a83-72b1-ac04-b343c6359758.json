@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-0a83-72b1-ac04-b343c6359758",
+  "number": 4,
+  "title": "ChatGPT app itself",
+  "kind": "option",
+  "description": "ChatGPT app itself. Benefit: Matches an app-based assistant workflow if that is the intended target. Tradeoff: No direct ACP endpoint verified in this planning pass and requires feasibility research. Proposed option for user review.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083e-c0be-7826-9e66-3ce2639d684d",
+  "why": "Matches an app-based assistant workflow if that is the intended target",
+  "size": "m",
+  "option": {
+    "pros": [
+      "Matches an app-based assistant workflow if that is the intended target"
+    ],
+    "cons": [
+      "No direct ACP endpoint verified in this planning pass and requires feasibility research"
+    ],
+    "scores": {}
+  },
+  "createdAt": "2026-11-23T11:51:18.915Z",
+  "updatedAt": "2026-11-23T11:51:19.001Z"
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-4e86-7baa-82bb-6572a772e587",
+  "number": 34,
+  "title": "Add worker registry, queue limits and evidence reporting",
+  "kind": "task",
+  "description": "Represent named worker configurations, enabled capabilities, health and active sessions. Prevent concurrent writers to the same workspace. Configure queue/concurrency, elapsed-time and retry limits. Record provider-reported usage where available and mark unknown usage honestly. Show meaningful progress changes and final artifact/test evidence without flooding the conversation.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "why": "The assistant needs a trustworthy answer to who is working and whether the result is usable.",
+  "acceptance": [
+    {
+      "text": "A second write task waits for the first workspace lease",
+      "met": false
+    },
+    {
+      "text": "Worker unavailability is visible before dispatch",
+      "met": false
+    },
+    {
+      "text": "Timeout and cancellation release owned resources",
+      "met": false
+    },
+    {
+      "text": "A claimed success without required evidence stays unverified",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/tasks/",
+    "src/workers/",
+    "src/reporting/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:36.326Z",
+  "updatedAt": "2026-11-23T11:51:36.326Z"
+}

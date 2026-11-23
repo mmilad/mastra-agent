@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-693e-75da-83b0-1b48fb69ceb3",
+  "number": 42,
+  "title": "Evaluate MCP connectors and remote A2A collaboration",
+  "kind": "task",
+  "description": "MCP would expose additional tools/resources. A2A would be evaluated for remote independent agent collaboration when that need exists. ACP remains the initial client-to-worker boundary. Do not treat these protocols as interchangeable or add all three simply for completeness.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "later",
+    "not-mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-6555-727d-b37e-cdbf1e84bd47",
+  "why": "Broader protocols should solve a demonstrated interoperability problem.",
+  "acceptance": [
+    {
+      "text": "An unmet use case identifies the required protocol",
+      "met": false
+    },
+    {
+      "text": "Compatibility, ownership and auth are documented before adoption",
+      "met": false
+    }
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:43.166Z",
+  "updatedAt": "2026-11-23T11:51:43.166Z"
+}

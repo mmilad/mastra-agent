@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2083f-42b4-7bcd-9620-fc044f0f3fea",
+  "number": 30,
+  "title": "Persist conversations and scoped memory",
+  "kind": "task",
+  "description": "Implement the selected storage policy with distinct user, project and conversation identities. Separate user-confirmed preferences, project facts, raw messages and generated summaries. Track source, time and correction history. Provide inspect, correct, forget and export operations. Store credentials outside conversational memory.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-3fec-7eeb-a267-fb62f439d56c",
+  "why": "Memory must remain understandable, correctable and isolated.",
+  "acceptance": [
+    {
+      "text": "Two projects cannot retrieve each other’s private context by default",
+      "met": false
+    },
+    {
+      "text": "Restart restores the selected conversation",
+      "met": false
+    },
+    {
+      "text": "Correction replaces stale preferred facts in retrieval",
+      "met": false
+    },
+    {
+      "text": "Forget removes applicable source and derived memory",
+      "met": false
+    },
+    {
+      "text": "Export excludes credentials",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/context/",
+    "src/storage/",
+    "tests/context/"
+  ],
+  "size": "m",
+  "createdAt": "2026-11-23T11:51:33.300Z",
+  "updatedAt": "2026-11-23T11:51:33.300Z"
+}

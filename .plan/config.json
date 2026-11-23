@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "projectId": "01a2081f-2e04-71e8-ad66-4b85fc83447c",
+  "name": "mastra",
+  "key": "MAST",
+  "statuses": [
+    "todo",
+    "in_progress",
+    "done",
+    "cancelled"
+  ],
+  "properties": {},
+  "createdAt": "2026-11-23T11:16:30.852Z"
+}
