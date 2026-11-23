@@ -5,7 +5,7 @@
   "title": "Integrate plantool through structured CLI operations",
   "kind": "task",
   "description": "Start with read-only goal, ticket, decision and context lookups using plantool JSON output and explicit project cwd. Add scoped create/update actions only under the autonomy policy. Use subprocess argument arrays, validate outputs, preserve person-owned decisions and avoid duplicate tickets. Never edit .plan records directly or copy the whole runtime event log into tickets.",
-  "status": "todo",
+  "status": "in_progress",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -16,19 +16,19 @@
   "acceptance": [
     {
       "text": "Lookup returns the correct project and ticket references",
-      "met": false
+      "met": true
     },
     {
       "text": "Read-only scope cannot mutate a plan",
-      "met": false
+      "met": true
     },
     {
       "text": "Authorized updates appear in the planning web UI",
-      "met": false
+      "met": true
     },
     {
       "text": "Person-owned choices remain pending until the person chooses",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -37,5 +37,10 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:37.915Z",
-  "updatedAt": "2026-11-23T11:51:37.915Z"
+  "updatedAt": "2026-11-23T15:49:12.281Z",
+  "assignee": {
+    "agent": "codex",
+    "claimedAt": "2026-11-23T15:41:51.891Z",
+    "expiresAt": "2026-11-23T17:41:51.891Z"
+  }
 }

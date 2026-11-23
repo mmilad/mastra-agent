@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20911-8c05-7ff7-8934-5d49988751ad",
+  "ticketId": "01a2083f-3cd3-70b8-86be-f1db40720220",
+  "body": "Added an in-memory per-project task registry with bounded structured briefs, stable IDs, progress, one-active-task behavior, targeted cancellation, approval/question resume, five-minute expiry and explicit user-token confirmation. Added assistant tools for start/status/cancel/approval and an interactive terminal conversation. The assistant now returns after creating a task and waits for the user before polling.",
+  "author": "codex",
+  "createdAt": "2026-11-23T15:41:14.629Z"
+}

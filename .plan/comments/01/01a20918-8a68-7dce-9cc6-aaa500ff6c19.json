@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20918-8a68-7dce-9cc6-aaa500ff6c19",
+  "ticketId": "01a2083f-54bb-7238-aa2c-d89f0a131f68",
+  "body": "Implemented and verified the in-assistant Plantool integration: scoped JSON lookup via argument-array subprocess with the Mastra project root as cwd; explicit latest-user authorization for task creation, ticket updates, and comments; duplicate-title reuse; and protection for person-owned decisions. Verified with 5 Plantool tests, TypeScript check, 15 task/policy tests, and Plantool validate/check. This note is visible in plantool serve.",
+  "author": "codex",
+  "createdAt": "2026-11-23T15:48:52.968Z"
+}

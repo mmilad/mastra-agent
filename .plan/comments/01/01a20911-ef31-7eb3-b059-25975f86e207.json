@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20911-ef31-7eb3-b059-25975f86e207",
+  "ticketId": "01a2083f-336e-784d-8652-645af1d11517",
+  "body": "Completed the supervised M1 delegation slice: a local Ollama assistant starts one bounded Codex task, returns its ID promptly, supports status/cancel/approval, and reports unverified worker output honestly.",
+  "author": "codex",
+  "createdAt": "2026-11-23T15:41:40.017Z"
+}

@@ -40,6 +40,17 @@ input.on('line', (line) => {
   if (message.method === 'session/prompt') {
     promptRequestId = message.id;
     const text = message.params.prompt[0].text;
+    if (text.includes('FAKE_WAIT_TEST')) {
+      send({
+        jsonrpc: '2.0',
+        method: 'session/update',
+        params: {
+          sessionId: 'fake-session',
+          update: { sessionUpdate: 'agent_message_chunk', content: { type: 'text', text: 'FAKE_WORKER_STARTED' } },
+        },
+      });
+      return;
+    }
     if (process.env.FAKE_PERMISSION_PATH && text.includes('FAKE_PERMISSION_TEST')) {
       send({
         jsonrpc: '2.0',

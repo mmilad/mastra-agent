@@ -5,7 +5,7 @@
   "title": "Connect the assistant to bounded delegation",
   "kind": "task",
   "description": "Extend the Mastra assistant with narrow delegate, status and cancel operations. A task brief includes objective, workspace, constraints, acceptance criteria, context references and a stable task identifier. Ask only when missing information materially blocks the task. Keep a user conversation responsive while the worker runs. Do not let the supervisor directly edit code in this first slice.",
-  "status": "in_progress",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -16,19 +16,19 @@
   "acceptance": [
     {
       "text": "A goal creates one bounded worker task",
-      "met": false
+      "met": true
     },
     {
       "text": "Status questions do not start another task",
-      "met": false
+      "met": true
     },
     {
       "text": "Cancellation reaches the correct worker",
-      "met": false
+      "met": true
     },
     {
       "text": "Final reply distinguishes produced output from verified acceptance",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -38,10 +38,21 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:31.795Z",
-  "updatedAt": "2026-11-23T15:21:05.046Z",
-  "assignee": {
-    "agent": "codex",
-    "claimedAt": "2026-11-23T15:21:05.035Z",
-    "expiresAt": "2026-11-23T17:21:05.035Z"
-  }
+  "updatedAt": "2026-11-23T15:41:14.623Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added an in-memory per-project task registry with bounded structured briefs, stable IDs, progress, one-active-task behavior, targeted cancellation, approval/question resume, five-minute expiry and explicit user-token confirmation. Added assistant tools for start/status/cancel/approval and an interactive terminal conversation. The assistant now returns after creating a task and waits for the user before polling.",
+    "verifiedBy": "npm run check; npm run test:acp (7 passed); npm run test:policy (15 passed); live local Ollama smoke returned MASTRA_SMOKE_OK through existing Mastra server; live Codex read-only package.json delegation returned task ID 14c9c30d-5203-4772-8ea4-6017adc27065 and completed; subsequent user status query used getTaskStatus only; background smoke task 8ccb59ad-9402-4cab-89ed-f96ae35ac7b0 returned immediately and later completed; git diff --check",
+    "changedFiles": [
+      "README.md",
+      "src/mastra/agents/assistant.ts",
+      "src/mastra/tools/delegate-to-codex.ts",
+      "src/mastra/tools/managed-tasks.ts",
+      "src/mastra/tools/task-registry.ts",
+      "src/run.ts",
+      "tests/acp/fake-agent.mjs",
+      "tests/policy/task-registry.test.mjs"
+    ]
+  },
+  "completedAt": "2026-11-23T15:41:14.623Z"
 }

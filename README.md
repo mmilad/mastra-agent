@@ -31,14 +31,24 @@ Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
 
 ## Run
 
+Start an interactive terminal conversation (it keeps one memory thread while
+you ask for task status, approve a request, or cancel a task. Type `:exit` to
+close it; any tasks still active in that terminal process are cancelled:
+
+```sh
+npm run chat
+```
+
+For a one-shot response:
+
 ```sh
 npm run chat -- "Say hello in one sentence."
 ```
 
-Each terminal invocation is still a separate one-shot conversation. Mastra
-Studio saves chat threads and messages in `mastra.db` at the project root, so
-they remain available after restarting Studio. The assistant loads the latest
-20 messages when continuing a thread. For the interactive test interface:
+Mastra Studio saves chat threads and messages in `mastra.db` at the project
+root, so they remain available after restarting Studio. The assistant loads
+the latest 20 messages when continuing a thread. For the interactive test
+interface:
 
 ```sh
 npm run dev
@@ -64,6 +74,13 @@ expires after five minutes. Resume with that request's token and approve or deny
 applies only to that task and exact operation. Worker text cannot approve
 requests. Cursor `ask_question` requests also suspend the run; resume with an
 answer. Denial, cancellation, and expired approval produce visible outcomes.
+
+The assistant returns a task ID as soon as it starts work. Ask for status or
+cancel using that ID. If an approval is needed, reply exactly `approve <token>`
+or `deny <token>`; for a worker question, reply `answer <token>: <your answer>`.
+Task records currently live in memory and are lost if the Mastra process exits;
+conversation messages remain saved. Recovery of interrupted tasks is a later
+planned item.
 
 ## Check
 

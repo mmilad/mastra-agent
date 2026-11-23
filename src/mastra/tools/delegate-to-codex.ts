@@ -26,7 +26,7 @@ const resumeSchema = z.object({
   answer: z.string().optional(),
 });
 
-function findProjectRoot(start: string): string {
+export function findProjectRoot(start: string): string {
   let current = resolve(start);
   while (true) {
     if (
@@ -43,8 +43,27 @@ function findProjectRoot(start: string): string {
   }
 }
 
+function formatWorkerQuestion(params: Record<string, unknown>): string {
+  const question = [params.question, params.prompt, params.message, params.title]
+    .find((value): value is string => typeof value === 'string' && value.length > 0);
+  const options = Array.isArray(params.options)
+    ? params.options
+        .map((option) => {
+          if (typeof option === 'string') return option;
+          if (!option || typeof option !== 'object') return '';
+          const value = option as Record<string, unknown>;
+          return [value.label, value.title, value.name].find((item): item is string => typeof item === 'string') ?? '';
+        })
+        .filter(Boolean)
+    : [];
+  if (question) return `${question}${options.length ? `\nOptions: ${options.join('; ')}` : ''}`.slice(0, 3000);
+  return JSON.stringify(params).slice(0, 3000);
+}
+
 type DelegationContext = {
   abortSignal?: AbortSignal;
+  onProgress?: (text: string) => void;
+  onApprovalRequested?: (payload: z.infer<typeof approvalPayloadSchema>) => Promise<void>;
   agent?: {
     suspend?: (payload: z.infer<typeof approvalPayloadSchema>) => Promise<void>;
     resumeData?: unknown;
@@ -101,11 +120,27 @@ export async function runCodexDelegation(
     const update = message.params.update as Record<string, unknown> | undefined;
     if (update?.sessionUpdate !== 'agent_message_chunk') return;
     const content = update.content as Record<string, unknown> | undefined;
-    if (typeof content?.text === 'string') response += content.text;
+    if (typeof content?.text === 'string') {
+      response += content.text;
+      context.onProgress?.(content.text);
+    }
   });
   try {
     sessionId = await client.newSession(projectRoot);
     const userAnswer = resume?.answer?.trim();
+    const pauseForApproval = async (payload: z.infer<typeof approvalPayloadSchema>) => {
+      if (agentContext?.suspend) {
+        await agentContext.suspend(payload);
+      } else if (context.onApprovalRequested) {
+        await context.onApprovalRequested(payload);
+      } else {
+        return false;
+      }
+      approvalPending = true;
+      // Cancellation releases the ACP prompt while its approval state is persisted.
+      void client.cancel(sessionId);
+      return true;
+    };
     client.setClientRequestHandler(async ({ method, params }) => {
       if (method === 'session/request_permission') {
         const scope = inspectPermissionRequest(projectRoot, method, params);
@@ -119,11 +154,6 @@ export async function runCodexDelegation(
           if ((choice as { outcome?: { outcome?: string } }).outcome?.outcome === 'cancelled') permissionRejected = true;
           return choice;
         }
-        if (!agentContext?.suspend) {
-          permissionRejected = true;
-          return choosePermissionOption(params, false);
-        }
-
         const payload = {
           approvalToken: randomUUID(),
           projectRoot,
@@ -134,10 +164,10 @@ export async function runCodexDelegation(
           summary: `${scope.summary}. ${scope.reason ?? 'This action requires approval.'}`,
           expiresAt: Date.now() + approvalTtlMs,
         };
-        await agentContext.suspend(payload);
-        approvalPending = true;
-        // Cancellation releases the ACP prompt while Mastra persists the suspension.
-        void client.cancel(sessionId);
+        if (!(await pauseForApproval(payload))) {
+          permissionRejected = true;
+          return choosePermissionOption(params, false);
+        }
         return new Promise<never>(() => {});
       }
 
@@ -146,21 +176,18 @@ export async function runCodexDelegation(
           questionRepeated = true;
           return { outcome: { outcome: 'cancelled' } };
         }
-        if (!agentContext?.suspend) {
-          questionRepeated = true;
-          return { outcome: { outcome: 'cancelled' } };
-        }
         const payload = {
           approvalToken: randomUUID(),
           projectRoot,
           taskFingerprint: inputTaskFingerprint,
           kind: 'question' as const,
-          summary: JSON.stringify(params).slice(0, 3000),
+          summary: formatWorkerQuestion(params),
           expiresAt: Date.now() + approvalTtlMs,
         };
-        await agentContext.suspend(payload);
-        approvalPending = true;
-        void client.cancel(sessionId);
+        if (!(await pauseForApproval(payload))) {
+          questionRepeated = true;
+          return { outcome: { outcome: 'cancelled' } };
+        }
         return new Promise<never>(() => {});
       }
 

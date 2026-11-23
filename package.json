@@ -12,7 +12,8 @@
     "check": "tsc --noEmit",
     "test:policy": "node --experimental-strip-types --test tests/policy/*.test.mjs",
     "test:acp": "node --experimental-strip-types --test tests/acp/client.test.mjs",
-    "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs"
+    "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs",
+    "test:plantool": "node --experimental-strip-types --test tests/tools/*.test.mjs"
   },
   "dependencies": {
     "@agentclientprotocol/codex-acp": "2.10.0",

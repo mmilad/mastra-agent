@@ -5,7 +5,7 @@
   "title": "M1 — Complete one supervised delegated task",
   "kind": "feature",
   "description": "Deliver the smallest assistant loop: accept a goal, form a bounded brief, select an enabled worker, report progress, answer a user status request and return evidence. One active worker per project initially. Build the common boundary once and verify each requested worker separately.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "m1",
@@ -17,10 +17,16 @@
   "acceptance": [
     {
       "text": "A user delegates one task through one conversation and can inspect the result",
-      "met": false
+      "met": true
     }
   ],
   "size": "l",
   "createdAt": "2026-11-23T11:51:29.390Z",
-  "updatedAt": "2026-11-23T11:51:29.390Z"
+  "updatedAt": "2026-11-23T15:41:40.011Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Completed the supervised M1 delegation slice: a local Ollama assistant starts one bounded Codex task, returns its ID promptly, supports status/cancel/approval, and reports unverified worker output honestly.",
+    "verifiedBy": "MAST-26, MAST-27, and MAST-28 complete; live local assistant-to-Codex read-only delegation returned and completed; follow-up status tool inspected the same task; 7 ACP tests, 15 task/policy tests, and TypeScript check passed."
+  },
+  "completedAt": "2026-11-23T15:41:40.011Z"
 }
