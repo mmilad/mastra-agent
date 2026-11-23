@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2091a-11fa-7542-a9ef-efc8981914c9",
+  "ticketId": "01a2083f-54bb-7238-aa2c-d89f0a131f68",
+  "body": "Integrated Plantool lookup, task create/update, and comment tools into the assistant. Verified argument-array JSON calls use the explicit project root, lookups expose only read operations, writes require an explicit latest-user request, exact-title duplicates are reused, and person-owned decisions/options are protected. Added five integration tests; project checks and Plantool validation pass. Commit ce1ece7.",
+  "author": "codex",
+  "createdAt": "2026-11-23T15:50:33.210Z"
+}
