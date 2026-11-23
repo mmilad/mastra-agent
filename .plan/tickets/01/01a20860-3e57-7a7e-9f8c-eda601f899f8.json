@@ -14,23 +14,23 @@
   "acceptance": [
     {
       "text": "Assistant exposes the delegation tool in Mastra Studio",
-      "met": false
+      "met": true
     },
     {
       "text": "Qwen3.5 produces a structured tool call that executes",
-      "met": false
+      "met": true
     },
     {
       "text": "A delegated task can create a file inside the project workspace",
-      "met": false
+      "met": true
     },
     {
       "text": "Codex is confined to the project workspace",
-      "met": false
+      "met": true
     },
     {
       "text": "README documents the Studio smoke-test prompt",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -46,7 +46,7 @@
     "environment": "Ollama running locally and Codex authenticated with ChatGPT login"
   },
   "createdAt": "2026-11-23T12:27:34.871Z",
-  "updatedAt": "2026-11-23T13:49:51.390Z",
+  "updatedAt": "2026-11-23T13:50:56.963Z",
   "assignee": null,
   "outcome": {
     "summary": "Implemented workspace-scoped Codex ACP delegation, switched to Qwen3.5, and verified file creation and readback from both the registered Mastra Agent and Mastra Studio. The Studio run exposed its process working directory under src/mastra/public; the handoff now resolves the project root by walking up to package.json plus src/mastra.",
