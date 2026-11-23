@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2084e-33ab-7fe8-b00b-693bd8681606",
+  "ticketId": "01a2083f-3084-7c96-9dc4-c5f63243ec0c",
+  "body": "Codex ACP 2.10.0 worked with the existing ChatGPT login in a disposable fixture. ACP v1 initialization and session creation succeeded; auth status was ChatGPT account (identifier omitted); a harmless prompt streamed exactly OK and ended end_turn. Live capabilities and versions recorded in the ticket comment.",
+  "author": "codex",
+  "createdAt": "2026-11-23T12:07:52.491Z"
+}

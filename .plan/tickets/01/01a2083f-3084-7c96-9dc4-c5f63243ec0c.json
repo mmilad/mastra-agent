@@ -4,8 +4,8 @@
   "number": 24,
   "title": "Verify the selected OpenAI worker path",
   "kind": "task",
-  "description": "After the target decision, test the selected route in an isolated fixture. For Codex, evaluate the maintained @agentclientprotocol/codex-acp adapter, pin the tested version and use its supported login flow. The installed Codex binary reports 0.171.0-alpha.13, so do not assume adapter compatibility or that an app-bundled executable is a stable deployment dependency. If direct ChatGPT is selected, first establish an actually supported API/protocol path rather than pretending Codex is the same target.",
-  "status": "todo",
+  "description": "Verify the selected OpenAI worker path in an isolated fixture. Target selected by the user: Codex authenticated with ChatGPT login. The maintained @agentclientprotocol/codex-acp adapter wraps the Codex App Server over ACP. Check the live adapter handshake, auth status, session behavior and harmless response; record adapter and Codex versions.",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "m0",
@@ -16,20 +16,20 @@
   "why": "The OpenAI target and transport must be explicit.",
   "acceptance": [
     {
-      "text": "Record supported target, adapter and binary versions",
-      "met": false
+      "text": "Record the adapter version and active Codex runtime version",
+      "met": true
     },
     {
-      "text": "Authentication requirement and session behavior are demonstrated",
-      "met": false
+      "text": "ChatGPT login status and authentication methods are identified without exposing account identifiers",
+      "met": true
     },
     {
-      "text": "An unsupported route is reported as blocked with evidence",
-      "met": false
+      "text": "A harmless prompt completes through an ACP session",
+      "met": true
     },
     {
-      "text": "No worker support is claimed from documentation alone",
-      "met": false
+      "text": "Capabilities are recorded from the live handshake, not only documentation",
+      "met": true
     }
   ],
   "files": [
@@ -39,5 +39,19 @@
   "size": "s",
   "evaluation": true,
   "createdAt": "2026-11-23T11:51:28.644Z",
-  "updatedAt": "2026-11-23T11:51:28.644Z"
+  "updatedAt": "2026-11-23T12:08:22.436Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Codex ACP 2.10.0 worked with the existing ChatGPT login in a disposable fixture. ACP v1 initialization and session creation succeeded; auth status was ChatGPT account (identifier omitted); a harmless prompt streamed exactly OK and ended end_turn. Live capabilities and versions recorded in the ticket comment.",
+    "verifiedBy": "A live ACP session completed an authenticated harmless prompt using the adapter and user-selected ChatGPT login.",
+    "changedFiles": [
+      ".plan/tickets/01/01a2083e-c0be-7826-9e66-3ce2639d684d.json",
+      ".plan/tickets/01/01a2083f-09e6-7024-b06e-ade8099737ef.json",
+      ".plan/tickets/01/01a2083f-0a83-72b1-ac04-b343c6359758.json",
+      ".plan/tickets/01/01a2083f-0b41-7cca-bdea-8c54daaad6c7.json",
+      ".plan/tickets/01/01a2083f-3084-7c96-9dc4-c5f63243ec0c.json",
+      ".plan/comments/01/01a2084d-f34f-7528-aeeb-a9cca9d23228.json"
+    ]
+  },
+  "completedAt": "2026-11-23T12:07:52.484Z"
 }

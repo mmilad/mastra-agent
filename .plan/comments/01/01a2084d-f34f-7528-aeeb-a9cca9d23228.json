@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2084d-f34f-7528-aeeb-a9cca9d23228",
+  "ticketId": "01a2083f-3084-7c96-9dc4-c5f63243ec0c",
+  "body": "2026-11-23 isolated Codex ACP probe in /private/tmp/mastra-acp-fixture. Selected target decision MAST-2 was confirmed by the user as Codex with ChatGPT login. Installed Codex CLI: 0.171.0-alpha.13; codex login status: Logged in using ChatGPT. Published adapter: @agentclientprotocol/codex-acp 2.10.0, launched with npx -y @agentclientprotocol/codex-acp and no CODEX_PATH override. initialize negotiated ACP v1; advertised ChatGPT and API key auth, session load/resume/list/close/delete/fork/title support, image and embedded context, and HTTP MCP. Session creation succeeded; ChatGPT account auth status was reported (account identifiers intentionally omitted); harmless prompt streamed and returned exactly OK with stopReason=end_turn. Test used only /private/tmp/mastra-acp-fixture and modified no project files. This confirms the selected route locally. Adapter cancellation, permission, process restart and behavior under missing login remain untested; see MAST-23 for analogous Cursor permission/cancel work.",
+  "author": "codex",
+  "createdAt": "2026-11-23T12:07:36.015Z"
+}

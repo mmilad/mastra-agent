@@ -5,7 +5,7 @@
   "title": "Codex worker with ChatGPT login",
   "kind": "option",
   "description": "Codex worker with ChatGPT login. Benefit: Documented ACP adapter and reusable coding-agent harness. Tradeoff: Adapter compatibility and login still require local verification. Proposed option for user review.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,6 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:18.758Z",
-  "updatedAt": "2026-11-23T11:51:18.836Z"
+  "updatedAt": "2026-11-23T12:05:58.493Z",
+  "completedAt": "2026-11-23T12:05:58.493Z"
 }

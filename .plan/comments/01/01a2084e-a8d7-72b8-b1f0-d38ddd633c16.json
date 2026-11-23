@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2084e-a8d7-72b8-b1f0-d38ddd633c16",
+  "ticketId": "01a2083f-3084-7c96-9dc4-c5f63243ec0c",
+  "body": "Version note: the adapter package declares @openai/codex ^0.171.0 and was launched without CODEX_PATH; the standalone Codex CLI on this machine reports 0.171.0-alpha.13. The exact resolved Codex version bundled in the npx cache was not independently inspected, so retain that distinction when pinning dependencies.",
+  "author": "codex",
+  "createdAt": "2026-11-23T12:08:22.488Z"
+}

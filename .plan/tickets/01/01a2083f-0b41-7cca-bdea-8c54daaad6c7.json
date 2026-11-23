@@ -5,7 +5,7 @@
   "title": "Codex first, ChatGPT app later",
   "kind": "option",
   "description": "Codex first, ChatGPT app later. Benefit: Provides an initial documented path while retaining the broader ambition. Tradeoff: Direct app integration remains a separate later investigation. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:19.105Z",
-  "updatedAt": "2026-11-23T11:51:19.211Z"
+  "updatedAt": "2026-11-23T12:05:58.491Z"
 }
