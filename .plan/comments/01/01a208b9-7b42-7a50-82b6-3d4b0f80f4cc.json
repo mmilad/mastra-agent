@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a208b9-7b42-7a50-82b6-3d4b0f80f4cc",
+  "ticketId": "01a2083f-42b4-7bcd-9620-fc044f0f3fea",
+  "body": "Prototype update (2026-11-23): enabled Mastra Studio thread persistence using project-local LibSQL storage (mastra.db) and agent Memory loading the latest 20 messages. This addresses basic cross-run conversation history only. Project isolation, inspect/correct/forget/export lifecycle remain open and this ticket is not complete. Smoke checked thread save/read/delete against the configured store.",
+  "author": "codex",
+  "createdAt": "2026-11-23T14:05:03.170Z"
+}

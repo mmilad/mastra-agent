@@ -4,4 +4,9 @@ dist/
 .env
 .env.*
 !.env.example
+*.db
+*.db-*
+*.duckdb
+*.duckdb-*
+*.duckdb.*
 *.tsbuildinfo

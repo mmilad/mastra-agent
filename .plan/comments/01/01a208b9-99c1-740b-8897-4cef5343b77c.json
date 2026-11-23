@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a208b9-99c1-740b-8897-4cef5343b77c",
+  "ticketId": "01a20860-3e57-7a7e-9f8c-eda601f899f8",
+  "body": "Workspace handoff detail (2026-11-23): delegateToCodex resolves the Mastra project root, starts ACP with process cwd set to that root, and calls session/new with cwd set to the same root. Codex runs in workspace-write mode; no additional directories are granted. A Studio smoke task created/read a temporary file in that workspace successfully.",
+  "author": "codex",
+  "createdAt": "2026-11-23T14:05:10.977Z"
+}

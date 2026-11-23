@@ -1,8 +1,11 @@
 # Minimal Mastra assistant
 
 One TypeScript assistant that runs locally with Ollama and delegates project
-tasks to the locally authenticated Codex agent through ACP. Codex can edit files
-inside this project workspace; memory, MCP and A2A are not configured.
+tasks to the locally authenticated Codex agent through ACP. Conversation
+threads persist in a local SQLite database, and Studio observability data uses
+a separate local DuckDB file. Codex receives this project root as
+its ACP workspace and starts in workspace-write mode; the handoff does not grant
+access to other folders.
 
 ## Setup
 
@@ -32,7 +35,10 @@ Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
 npm run chat -- "Say hello in one sentence."
 ```
 
-Each terminal invocation is a new conversation. For an interactive test interface:
+Each terminal invocation is still a separate one-shot conversation. Mastra
+Studio saves chat threads and messages in `mastra.db` at the project root, so
+they remain available after restarting Studio. The assistant loads the latest
+20 messages when continuing a thread. For the interactive test interface:
 
 ```sh
 npm run dev
@@ -44,8 +50,8 @@ Stop the server with Ctrl+C.
 To test delegation in Studio, ask: “Create `hello.txt` in the project root with
 a friendly greeting.” Codex needs to be logged in locally (`codex login status`
 should report a ChatGPT login). The assistant returns Codex’s result in the
-same conversation. Each task starts a new Codex session with write access scoped
-to this project workspace.
+same conversation. Each task starts a new Codex worker session with the project
+root passed as ACP `cwd`, and write access scoped to that workspace.
 
 ## Check
 
@@ -65,6 +71,8 @@ npm run chat -- "Reply with exactly: OK"
 - `src/mastra/agents/assistant.ts`: assistant instructions and model.
 - `src/mastra/tools/delegate-to-codex.ts`: workspace-scoped ACP handoff to Codex.
 - `src/mastra/index.ts`: registers the assistant with Mastra.
+- `mastra.db`: local persisted Studio threads and messages (ignored by Git).
+- `mastra-observability.duckdb`: local Studio logs and traces (ignored by Git).
 - `src/run.ts`: single-message terminal runner.
 - `.env.example`: configuration template, without credentials.
 - `package.json`, `package-lock.json`, `tsconfig.json`, `.gitignore`: project setup.
