@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2084b-9ff1-7681-86a7-ab3568188262",
+  "ticketId": "01a2083f-2e02-70d9-aa40-7d51edc37d8a",
+  "body": "2026-11-23 Cursor ACP probe, isolated in /private/tmp/mastra-acp-fixture with no project files modified. Cursor CLI version 2026.11.17-f532c45; command: agent acp; ACP JSON-RPC over newline-delimited stdio. initialize negotiated protocolVersion 1 and advertised cursor_login, loadSession, image support, session list, HTTP/SSE MCP capability, and modes agent/plan/ask. session/new succeeded with cwd set to the temporary fixture and mcpServers empty. One harmless prompt (Reply with exactly OK. Do not use tools.) streamed user_message_chunk, agent_thought_chunk and agent_message_chunk OK and completed with stopReason=end_turn. session/load succeeded and replayed history. Caveat: agent status reported Not logged in, yet prompt returned OK; investigate auth/account context before claiming dependable auth. Permission denial and cancellation were not tested. Do not mark task complete until those criteria are met.",
+  "author": "codex",
+  "createdAt": "2026-11-23T12:05:03.602Z"
+}
