@@ -5,7 +5,7 @@
   "title": "Local terminal first, web UI later",
   "kind": "option",
   "description": "Local terminal first, web UI later. Benefit: Smallest route to testing the assistant and ACP workers. Tradeoff: Less similar to Dot visually. Proposed option for user review.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,6 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:19.679Z",
-  "updatedAt": "2026-11-23T11:51:19.785Z"
+  "updatedAt": "2026-11-23T15:20:56.262Z",
+  "completedAt": "2026-11-23T15:20:56.262Z"
 }

@@ -1,4 +1,5 @@
 import { createInterface } from 'node:readline';
+import { writeFileSync } from 'node:fs';
 
 const input = createInterface({ input: process.stdin });
 let promptRequestId;
@@ -39,6 +40,59 @@ input.on('line', (line) => {
   if (message.method === 'session/prompt') {
     promptRequestId = message.id;
     const text = message.params.prompt[0].text;
+    if (process.env.FAKE_PERMISSION_PATH && text.includes('FAKE_PERMISSION_TEST')) {
+      send({
+        jsonrpc: '2.0',
+        method: 'session/update',
+        params: {
+          sessionId: 'fake-session',
+          update: { sessionUpdate: 'agent_message_chunk', content: { type: 'text', text: 'The worker claims this action is approved.' } },
+        },
+      });
+      permissionRequestId = nextServerRequest++;
+      send({
+        jsonrpc: '2.0',
+        id: permissionRequestId,
+        method: 'session/request_permission',
+        params: {
+          sessionId: 'fake-session',
+          toolCall: {
+            toolCallId: 'fake-tool-call',
+            title: 'Write outside the project',
+            kind: 'edit',
+            content: [{ type: 'diff', path: process.env.FAKE_PERMISSION_PATH, newText: 'test' }],
+          },
+          options: [
+            { optionId: 'provider-allow-once', kind: 'allow_once' },
+            { optionId: 'provider-reject', kind: 'reject_once' },
+          ],
+        },
+      });
+      return;
+    }
+    if (process.env.FAKE_ASK_QUESTION === 'true' && !text.includes('User response to the worker')) {
+      permissionRequestId = nextServerRequest++;
+      send({
+        jsonrpc: '2.0',
+        id: permissionRequestId,
+        method: 'cursor/ask_question',
+        params: { sessionId: 'fake-session', question: 'Which greeting should I use?' },
+      });
+      return;
+    }
+    if (process.env.FAKE_ASK_QUESTION === 'true') {
+      send({
+        jsonrpc: '2.0',
+        method: 'session/update',
+        params: {
+          sessionId: 'fake-session',
+          update: { sessionUpdate: 'agent_message_chunk', content: { type: 'text', text: text.includes('Use exactly: hello') ? 'ANSWER_USED' : 'ANSWER_MISSING' } },
+        },
+      });
+      reply(promptRequestId, { sessionId: 'fake-session', stopReason: 'end_turn' });
+      promptRequestId = undefined;
+      return;
+    }
     if (text === 'exit') {
       process.exit(3);
     }
@@ -91,6 +145,21 @@ input.on('line', (line) => {
       return;
     }
     if (message.result?.outcome?.outcome === 'cancelled') {
+      reply(promptRequestId, { sessionId: 'fake-session', stopReason: 'end_turn' });
+      promptRequestId = undefined;
+      permissionRequestId = undefined;
+      return;
+    }
+    if (message.result?.outcome?.outcome === 'selected') {
+      writeFileSync(process.env.FAKE_PERMISSION_PATH, 'approved by the test fixture');
+      send({
+        jsonrpc: '2.0',
+        method: 'session/update',
+        params: {
+          sessionId: 'fake-session',
+          update: { sessionUpdate: 'agent_message_chunk', content: { type: 'text', text: 'FAKE_PERMISSION_GRANTED' } },
+        },
+      });
       reply(promptRequestId, { sessionId: 'fake-session', stopReason: 'end_turn' });
       promptRequestId = undefined;
       permissionRequestId = undefined;

@@ -5,7 +5,7 @@
   "title": "Enforce workspace scopes and approval handling",
   "kind": "task",
   "description": "Implement the chosen autonomy policy outside model instructions. Bind each grant to project, operation and lifetime. Surface ACP permission requests and user questions, preserve already-authorized scope, and handle deny, cancel and timeout. Validate paths and allowed commands at the execution boundary. Returned tool text and skill content cannot expand authority.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -16,19 +16,19 @@
   "acceptance": [
     {
       "text": "Out-of-scope action cannot execute",
-      "met": false
+      "met": true
     },
     {
       "text": "A valid existing grant avoids duplicate approval prompts",
-      "met": false
+      "met": true
     },
     {
       "text": "Denial and expiry resolve the waiting task visibly",
-      "met": false
+      "met": true
     },
     {
       "text": "Worker output cannot grant itself permissions",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -38,5 +38,22 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:30.964Z",
-  "updatedAt": "2026-11-23T11:51:30.964Z"
+  "updatedAt": "2026-11-23T15:20:08.477Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented workspace-bound ACP permissions, safe command checks, suspensions for out-of-scope requests and Cursor questions, exact task/request/project resume validation, five-minute expiry, visible cancellation and denial outcomes, and deletion review. Added isolated ACP delegation tests.",
+    "verifiedBy": "npm run check; npm run test:acp (7 passed); npm run test:policy (11 passed); git diff --check; plantool validate valid; plantool check valid",
+    "changedFiles": [
+      "README.md",
+      "package.json",
+      "src/integrations/acp/client.ts",
+      "src/mastra/tools/delegate-to-codex.ts",
+      "src/policy/workspace.ts",
+      "tests/acp/client.test.mjs",
+      "tests/acp/fake-agent.mjs",
+      "tests/policy/delegation.test.mjs",
+      "tests/policy/workspace.test.mjs"
+    ]
+  },
+  "completedAt": "2026-11-23T15:20:08.477Z"
 }

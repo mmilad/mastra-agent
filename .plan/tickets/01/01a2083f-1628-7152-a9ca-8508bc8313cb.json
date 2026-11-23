@@ -5,7 +5,7 @@
   "title": "Scoped execution with exceptional approvals",
   "kind": "option",
   "description": "Scoped execution with exceptional approvals. Benefit: Balances useful autonomy with visible control over consequential actions. Tradeoff: Requires clear scopes, expiry and provider permission mapping. Proposed option for user review.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,6 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:21.896Z",
-  "updatedAt": "2026-11-23T11:51:21.949Z"
+  "updatedAt": "2026-11-23T14:53:53.414Z",
+  "completedAt": "2026-11-23T14:53:53.414Z"
 }

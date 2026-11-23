@@ -5,7 +5,7 @@
   "title": "Keep a configurable hosted model for the prototype",
   "kind": "option",
   "description": "Keep a configurable hosted model for the prototype. Benefit: Fastest way to measure supervision reliability using the starter. Tradeoff: Requires a provider key and sends selected context to that provider. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:20.714Z",
-  "updatedAt": "2026-11-23T11:51:20.816Z"
+  "updatedAt": "2026-11-23T15:20:56.318Z"
 }

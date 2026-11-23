@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a208fe-3a23-7bc3-9bf2-5129e4bfc421",
+  "ticketId": "01a2083f-3994-7caf-bed8-3148c96b6d35",
+  "body": "Implemented workspace-bound ACP permissions, safe command checks, suspensions for out-of-scope requests and Cursor questions, exact task/request/project resume validation, five-minute expiry, visible cancellation and denial outcomes, and deletion review. Added isolated ACP delegation tests.",
+  "author": "codex",
+  "createdAt": "2026-11-23T15:20:08.483Z"
+}

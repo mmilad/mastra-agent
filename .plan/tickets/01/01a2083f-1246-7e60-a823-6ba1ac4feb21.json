@@ -5,7 +5,7 @@
   "title": "Local model from the start",
   "kind": "option",
   "description": "Local model from the start. Benefit: Can keep supervisor inference on the machine. Tradeoff: Hardware fit and reliable tool selection must be measured. Proposed option for user review.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,6 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:20.902Z",
-  "updatedAt": "2026-11-23T11:51:20.957Z"
+  "updatedAt": "2026-11-23T15:20:56.322Z",
+  "completedAt": "2026-11-23T15:20:56.322Z"
 }

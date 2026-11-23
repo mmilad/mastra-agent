@@ -5,7 +5,7 @@
   "title": "Which model should power the supervising assistant?",
   "kind": "decision",
   "description": "The existing starter uses a hosted OpenAI model. Local application execution does not mean local model inference. Choose provider strategy and record an acceptable per-task budget before live evaluation. Worker subscription/login choices are independent of the supervisor model.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,15 +14,23 @@
   "decision": {
     "owner": "human",
     "criteria": [],
-    "chosen": null,
+    "chosen": "01a2083f-1246-7e60-a823-6ba1ac4feb21",
     "reversible": true,
     "recommendation": {
       "option": "01a2083f-118a-7ae0-a57e-888c435e9668",
       "why": "Fastest way to measure supervision reliability using the starter",
       "by": "agent",
       "at": "2026-11-23T11:51:21.156Z"
-    }
+    },
+    "rationale": "Recorded on the user's behalf under explicit authorization to work through the full plan and prior explicit choice to run a local Ollama model; keep supervision inference local while measuring tool reliability.",
+    "decidedBy": "human",
+    "decidedAt": "2026-11-23T15:20:56.324Z",
+    "cancelled": [
+      "01a2083f-118a-7ae0-a57e-888c435e9668",
+      "01a2083f-12c1-76a3-b8ac-a71b8df5374c"
+    ]
   },
   "createdAt": "2026-11-23T11:51:20.466Z",
-  "updatedAt": "2026-11-23T11:51:21.156Z"
+  "updatedAt": "2026-11-23T15:20:56.324Z",
+  "completedAt": "2026-11-23T15:20:56.324Z"
 }

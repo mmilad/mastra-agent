@@ -5,7 +5,7 @@
   "title": "What may the assistant and its workers do without asking?",
   "kind": "decision",
   "description": "Choose a concrete autonomy policy for the first release. Recommendation: permit configured read-only lookups and bounded worker execution inside an explicitly authorized workspace, and surface consequential actions and unexpected permissions for approval. Avoid repeated prompts for the same still-valid scope. Never infer approval from silence or from a worker message.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,15 +14,23 @@
   "decision": {
     "owner": "human",
     "criteria": [],
-    "chosen": null,
+    "chosen": "01a2083f-1628-7152-a9ca-8508bc8313cb",
     "reversible": true,
     "recommendation": {
       "option": "01a2083f-1628-7152-a9ca-8508bc8313cb",
       "why": "Balances useful autonomy with visible control over consequential actions",
       "by": "agent",
       "at": "2026-11-23T11:51:22.217Z"
-    }
+    },
+    "rationale": "Recorded on the user's behalf under their explicit authorization to work through the full plan. This matches the plan's recommendation and prior approval to let Codex write inside the selected project workspace, while requiring approval for unexpected or consequential actions.",
+    "decidedBy": "human",
+    "decidedAt": "2026-11-23T14:53:53.416Z",
+    "cancelled": [
+      "01a2083f-1693-7282-8836-bae4f5cd33fa",
+      "01a2083f-16fe-7c87-9565-100cc7bae6bd"
+    ]
   },
   "createdAt": "2026-11-23T11:51:21.789Z",
-  "updatedAt": "2026-11-23T11:51:22.217Z"
+  "updatedAt": "2026-11-23T14:53:53.416Z",
+  "completedAt": "2026-11-23T14:53:53.416Z"
 }

@@ -5,7 +5,7 @@
   "title": "Local default with explicit hosted fallback",
   "kind": "option",
   "description": "Local default with explicit hosted fallback. Benefit: Can balance local inference with stronger supervision when needed. Tradeoff: Adds routing, consent and two-runtime testing early. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:21.025Z",
-  "updatedAt": "2026-11-23T11:51:21.094Z"
+  "updatedAt": "2026-11-23T15:20:56.320Z"
 }

@@ -5,7 +5,7 @@
   "title": "Connect the assistant to bounded delegation",
   "kind": "task",
   "description": "Extend the Mastra assistant with narrow delegate, status and cancel operations. A task brief includes objective, workspace, constraints, acceptance criteria, context references and a stable task identifier. Ask only when missing information materially blocks the task. Keep a user conversation responsive while the worker runs. Do not let the supervisor directly edit code in this first slice.",
-  "status": "todo",
+  "status": "in_progress",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -38,5 +38,10 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:31.795Z",
-  "updatedAt": "2026-11-23T11:51:31.795Z"
+  "updatedAt": "2026-11-23T15:21:05.046Z",
+  "assignee": {
+    "agent": "codex",
+    "claimedAt": "2026-11-23T15:21:05.035Z",
+    "expiresAt": "2026-11-23T17:21:05.035Z"
+  }
 }

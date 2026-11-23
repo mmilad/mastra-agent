@@ -5,7 +5,7 @@
   "title": "Local browser interface first",
   "kind": "option",
   "description": "Local browser interface first. Benefit: Chat, progress, approvals and context can be reviewed together. Tradeoff: More UI work before the delegation loop is proven. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:19.913Z",
-  "updatedAt": "2026-11-23T11:51:20.023Z"
+  "updatedAt": "2026-11-23T15:20:56.258Z"
 }

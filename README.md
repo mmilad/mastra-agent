@@ -53,6 +53,18 @@ should report a ChatGPT login). The assistant returns Codex’s result in the
 same conversation. Each task starts a new Codex worker session with the project
 root passed as ACP `cwd`, and write access scoped to that workspace.
 
+File operations whose paths are inside the project are allowed within that
+workspace grant. The worker may run `pwd`, common read-only inspection commands,
+`git status|diff|log|show|rev-parse`, and this project's `npm run check`,
+`npm run test:acp`, or `npm run test:policy`. Live provider tests and file
+deletion require review. Unknown commands, shell composition, missing paths, and
+paths outside the project require review. An out-of-scope ACP permission
+request suspends the tool run and shows the operation, project, and that it
+expires after five minutes. Resume with that request's token and approve or deny; approval
+applies only to that task and exact operation. Worker text cannot approve
+requests. Cursor `ask_question` requests also suspend the run; resume with an
+answer. Denial, cancellation, and expired approval produce visible outcomes.
+
 ## Check
 
 ```sh
@@ -64,15 +76,16 @@ npm run check
 `src/integrations/acp/client.ts` owns ACP process startup, protocol negotiation,
 streamed updates, bounded requests, cancellation, and optional session loading.
 Codex and Cursor have separate launch definitions in `providers.ts`. Session
-loading is rejected unless the provider advertises it. Pending permission and
-Cursor question/plan requests are cancelled by default; unknown blocking
-requests receive a clear unsupported-method error. The user approval flow is
-tracked separately in Plantool MAST-27.
+loading is rejected unless the provider advertises it. Delegation policy lives
+in `src/policy/workspace.ts`; ACP permissions and Cursor questions suspend the
+Mastra tool and resume against validated, task-bound data. Unsupported requests
+are cancelled rather than silently accepted.
 
 Run the local protocol tests with:
 
 ```sh
 npm run test:acp
+npm run test:policy
 ```
 
 To run the same harmless session-and-prompt contract against the installed
@@ -93,8 +106,9 @@ npm run chat -- "Reply with exactly: OK"
 
 - `src/mastra/agents/assistant.ts`: assistant instructions and model.
 - `src/mastra/tools/delegate-to-codex.ts`: workspace-scoped ACP handoff to Codex.
+- `src/policy/workspace.ts`: path, command, and approval scope checks.
 - `src/integrations/acp/client.ts`, `src/integrations/acp/providers.ts`: shared ACP client and provider launch settings.
-- `tests/acp/`: isolated protocol fixture and opt-in live provider contract checks.
+- `tests/acp/`, `tests/policy/`: protocol fixture, opt-in live provider contract checks, and permission-flow tests.
 - `src/mastra/index.ts`: registers the assistant with Mastra.
 - `mastra.db`: local persisted Studio threads and messages (ignored by Git).
 - `mastra-observability.duckdb`: local Studio logs and traces (ignored by Git).

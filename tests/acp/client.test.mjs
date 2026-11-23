@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
-import { AcpWorkerClient } from '../../src/integrations/acp/client.ts';
+import { ACP_UNHANDLED, AcpWorkerClient } from '../../src/integrations/acp/client.ts';
 
 const fixture = fileURLToPath(new URL('./fake-agent.mjs', import.meta.url));
 const cwd = '/private/tmp';
@@ -55,6 +55,15 @@ test('unknown blocking requests fail clearly instead of leaving the prompt pendi
   const result = await client.prompt(sessionId, 'unknown-request');
   assert.equal(rejection.method, 'provider/unknown_blocking');
   assert.match(rejection.error.message, /Unsupported blocking ACP client request/);
+  assert.equal(result.stopReason, 'end_turn');
+});
+
+test('a custom handler can explicitly leave an unknown ACP request unsupported', async (t) => {
+  const client = await startFake();
+  t.after(() => client.close());
+  client.setClientRequestHandler(() => ACP_UNHANDLED);
+  const sessionId = await client.newSession(cwd);
+  const result = await client.prompt(sessionId, 'unknown-request');
   assert.equal(result.stopReason, 'end_turn');
 });
 

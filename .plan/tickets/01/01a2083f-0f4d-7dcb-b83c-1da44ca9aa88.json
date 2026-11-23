@@ -5,7 +5,7 @@
   "title": "Desktop application first",
   "kind": "option",
   "description": "Desktop application first. Benefit: Closest to a persistent desktop companion. Tradeoff: Packaging and application lifecycle significantly expand scope. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:20.141Z",
-  "updatedAt": "2026-11-23T11:51:20.227Z"
+  "updatedAt": "2026-11-23T15:20:56.260Z"
 }

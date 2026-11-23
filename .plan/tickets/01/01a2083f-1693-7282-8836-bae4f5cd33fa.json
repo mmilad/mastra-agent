@@ -5,7 +5,7 @@
   "title": "Read-only first, approve every change",
   "kind": "option",
   "description": "Read-only first, approve every change. Benefit: Easiest initial permission boundary to understand. Tradeoff: Frequent interruptions reduce the assistant experience. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:22.003Z",
-  "updatedAt": "2026-11-23T11:51:22.055Z"
+  "updatedAt": "2026-11-23T14:53:53.408Z"
 }

@@ -35,9 +35,11 @@ export type AcpUpdate = {
   params: JsonObject;
 };
 
+export const ACP_UNHANDLED = Symbol('ACP_UNHANDLED');
+
 export type AgentClientRequestHandler = (
   request: AgentClientRequest,
-) => unknown | Promise<unknown>;
+) => unknown | typeof ACP_UNHANDLED | Promise<unknown | typeof ACP_UNHANDLED>;
 
 type RpcMessage = {
   id?: string | number | null;
@@ -303,6 +305,13 @@ export class AcpWorkerClient {
       const result = await Promise.race([handler, cancelled]);
       if (result === Symbol.for('acp.cancelled')) {
         this.respondToAgentRequest(message.id, request, this.cancellationResponse(request.method));
+      } else if (result === ACP_UNHANDLED) {
+        this.send({
+          jsonrpc: '2.0',
+          id: message.id,
+          error: { code: -32601, message: `Unsupported blocking ACP client request: ${request.method}` },
+        });
+        request.responded = true;
       } else {
         this.respondToAgentRequest(message.id, request, result);
       }

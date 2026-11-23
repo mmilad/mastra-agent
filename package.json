@@ -10,6 +10,7 @@
     "dev": "mastra dev",
     "chat": "node --env-file-if-exists=.env src/run.ts",
     "check": "tsc --noEmit",
+    "test:policy": "node --experimental-strip-types --test tests/policy/*.test.mjs",
     "test:acp": "node --experimental-strip-types --test tests/acp/client.test.mjs",
     "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs"
   },
