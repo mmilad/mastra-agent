@@ -1,0 +1,56 @@
+# Minimal Mastra assistant
+
+One TypeScript assistant, with no tools, memory, delegation, MCP, or A2A.
+Runs locally; the default model is hosted by OpenAI.
+
+## Setup
+
+Requires Node.js 22.18+ (Node.js 24 LTS recommended).
+
+```sh
+npm install
+cp .env.example .env
+```
+
+Set `OPENAI_API_KEY` in `.env`. Model requests use your provider account and may incur charges.
+The default model is `openai/gpt-4.1-mini`. Set `MASTRA_MODEL` to another
+Mastra `provider/model` identifier and supply that provider's environment variable
+if you want to change it. `.env` is ignored by Git.
+
+## Run
+
+```sh
+npm run chat -- "Say hello in one sentence."
+```
+
+Each terminal invocation is a new conversation. For an interactive test interface:
+
+```sh
+npm run dev
+```
+
+Open http://localhost:4111, select **Assistant**, and send a message.
+Stop the server with Ctrl+C.
+
+## Check
+
+```sh
+npm run check
+```
+
+This checks TypeScript without an API key. To test a real model response after
+setting your key:
+
+```sh
+npm run chat -- "Reply with exactly: OK"
+```
+
+## Files
+
+- `src/mastra/agents/assistant.ts`: assistant instructions and model.
+- `src/mastra/index.ts`: registers the assistant with Mastra.
+- `src/run.ts`: single-message terminal runner.
+- `.env.example`: configuration template, without credentials.
+- `package.json`, `package-lock.json`, `tsconfig.json`, `.gitignore`: project setup.
+
+Based on the [Mastra setup guide](https://mastra.ai/docs).
