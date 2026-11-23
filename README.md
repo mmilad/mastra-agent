@@ -12,10 +12,11 @@ npm install
 cp .env.example .env
 ```
 
-Set `OPENAI_API_KEY` in `.env`. Model requests use your provider account and may incur charges.
-The default model is `openai/gpt-4.1-mini`. Set `MASTRA_MODEL` to another
-Mastra `provider/model` identifier and supply that provider's environment variable
-if you want to change it. `.env` is ignored by Git.
+The default setup uses local Ollama at `http://127.0.0.1:11434/v1` with the
+`llama3` model. Start it with `ollama run llama3`, then copy `.env.example` to
+`.env`. Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
+`ASSISTANT_MODEL`. The local Ollama server ignores the placeholder API key.
+`.env` is ignored by Git. No OpenAI API key is needed for this local setup.
 
 ## Run
 
