@@ -1,8 +1,6 @@
 import { mastra } from './mastra/index.ts';
 
 const prompt = process.argv.slice(2).join(' ').trim();
-const model = process.env.ASSISTANT_MODEL || 'llama3';
-
 if (!prompt) {
   console.error('Usage: npm run chat -- "Your message"');
   process.exitCode = 1;

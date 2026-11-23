@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a208ab-91a4-79f3-99e7-253540a0bfba",
+  "ticketId": "01a20860-3e57-7a7e-9f8c-eda601f899f8",
+  "body": "Implemented workspace-scoped Codex ACP delegation, switched to Qwen3.5, and verified file creation and readback from both the registered Mastra Agent and Mastra Studio. The Studio run exposed its process working directory under src/mastra/public; the handoff now resolves the project root by walking up to package.json plus src/mastra.",
+  "author": "local",
+  "createdAt": "2026-11-23T13:49:51.396Z"
+}

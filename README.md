@@ -1,7 +1,8 @@
 # Minimal Mastra assistant
 
-One TypeScript assistant, with no tools, memory, delegation, MCP, or A2A.
-Runs locally; the default model is hosted by OpenAI.
+One TypeScript assistant that runs locally with Ollama and delegates project
+tasks to the locally authenticated Codex agent through ACP. Codex can edit files
+inside this project workspace; memory, MCP and A2A are not configured.
 
 ## Setup
 
@@ -12,9 +13,16 @@ npm install
 cp .env.example .env
 ```
 
-The default setup uses local Ollama at `http://127.0.0.1:11434/v1` with the
-`llama3` model. Start it with `ollama run llama3`, then copy `.env.example` to
-`.env`. Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
+The default setup uses local Ollama at `http://127.0.0.1:11434/v1` with
+`qwen3.5:9b`, which supports structured tool calls. Pull and start the model,
+then copy `.env.example` to `.env`:
+
+```sh
+ollama run qwen3.5:9b
+cp .env.example .env
+```
+
+Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
 `ASSISTANT_MODEL`. The local Ollama server ignores the placeholder API key.
 `.env` is ignored by Git. No OpenAI API key is needed for this local setup.
 
@@ -33,6 +41,12 @@ npm run dev
 Open http://localhost:4111, select **Assistant**, and send a message.
 Stop the server with Ctrl+C.
 
+To test delegation in Studio, ask: “Create `hello.txt` in the project root with
+a friendly greeting.” Codex needs to be logged in locally (`codex login status`
+should report a ChatGPT login). The assistant returns Codex’s result in the
+same conversation. Each task starts a new Codex session with write access scoped
+to this project workspace.
+
 ## Check
 
 ```sh
@@ -49,6 +63,7 @@ npm run chat -- "Reply with exactly: OK"
 ## Files
 
 - `src/mastra/agents/assistant.ts`: assistant instructions and model.
+- `src/mastra/tools/delegate-to-codex.ts`: workspace-scoped ACP handoff to Codex.
 - `src/mastra/index.ts`: registers the assistant with Mastra.
 - `src/run.ts`: single-message terminal runner.
 - `.env.example`: configuration template, without credentials.

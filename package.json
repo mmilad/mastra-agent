@@ -12,6 +12,7 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
+    "@agentclientprotocol/codex-acp": "2.10.0",
     "@mastra/core": "1.85.0",
     "zod": "4.6.7"
   },

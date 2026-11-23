@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2089b-6a61-7066-9b75-0e732d85e880",
+  "ticketId": "01a20860-3e57-7a7e-9f8c-eda601f899f8",
+  "body": "Correction after rechecking: both `ollama --version` and the active local API report 0.40.17; Qwen2.5-Coder advertises tools capability. The prior 0.16.1 reading was stale/incorrect for this current run. Mastra.generate still returns the JSON-shaped delegate request only in response.text, with toolCalls=[] and toolResults=[]; direct calls to both /v1/chat/completions and /api/chat likewise return message.content text. Explicit Mastra toolChoice=required did not change that. Thus the model/tool capability is present, but this request is not being emitted as a structured tool call and Codex is not run. Direct ACP tool execution independently passed read-only.",
+  "author": "codex",
+  "createdAt": "2026-11-23T13:32:12.769Z"
+}

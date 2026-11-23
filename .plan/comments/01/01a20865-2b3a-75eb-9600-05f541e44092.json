@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20865-2b3a-75eb-9600-05f541e44092",
+  "ticketId": "01a20860-3e57-7a7e-9f8c-eda601f899f8",
+  "body": "Read-only ACP tool-level smoke test passed: adapter launched, authenticated with the existing Codex ChatGPT login, read README.md, and returned three suggestions; no files were changed. The full Mastra → model → tool route is not verified. llama3 returned an explicit does-not-support-tools error. qwen2.5-coder:7b is marked as tool-capable by installed Ollama but Mastra received plain assistant text and reported zero structured tool calls/results, so that response must not be treated as delegation. The local Ollama is 0.16.1; recommend updating before retrying the assistant path.",
+  "author": "codex",
+  "createdAt": "2026-11-23T12:32:57.658Z"
+}
