@@ -5,7 +5,7 @@
   "title": "Add worker registry, queue limits and evidence reporting",
   "kind": "task",
   "description": "Add a worker registry with per-project concurrency limits, a bounded queue, and an evidence record per task (files changed, commands run, verification output). Only one active task per project exists today; queue limits and evidence reporting do not.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -38,5 +38,22 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:36.326Z",
-  "updatedAt": "2026-11-24T14:21:25.130Z"
+  "updatedAt": "2026-11-24T15:18:25.552Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Per-project FIFO queue for write tasks, identical retries reuse the active task, preflight before dispatch, per-task timeout with reason, git-based changed-file evidence; success stays unverified.",
+    "verifiedBy": "npm run check; test:context 11/11; test:policy 18/18 (1 symlink skipped); test:acp 7/7; test:plantool 5/5",
+    "changedFiles": [
+      "src/mastra/tools/delegate-to-codex.ts",
+      "src/mastra/tools/task-registry.ts",
+      "tests/acp/fake-agent.mjs",
+      "tests/context/task-store.test.mjs",
+      "tests/policy/task-registry.test.mjs",
+      "tests/policy/worker-registry.test.mjs"
+    ],
+    "commits": [
+      "b953040"
+    ]
+  },
+  "completedAt": "2026-11-24T15:18:25.552Z"
 }

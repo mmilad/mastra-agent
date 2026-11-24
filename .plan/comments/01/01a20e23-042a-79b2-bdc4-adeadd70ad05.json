@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e23-042a-79b2-bdc4-adeadd70ad05",
+  "ticketId": "01a2083f-4e86-7baa-82bb-6572a772e587",
+  "body": "Per-project FIFO queue for write tasks, identical retries reuse the active task, preflight before dispatch, per-task timeout with reason, git-based changed-file evidence; success stays unverified.",
+  "author": "claude",
+  "createdAt": "2026-11-24T15:18:25.578Z"
+}
