@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20deb-e651-755a-9fb4-86733f599a37",
+  "ticketId": "01a2083f-42b4-7bcd-9620-fc044f0f3fea",
+  "body": "Update (2026-11-24, branch fix/windows-test-cleanup): npm run test:context is green on Windows 11 (5/5). The cleanup now closes libSQL stores, waits briefly, then removes the folder; failed removal of a temp folder no longer fails the test.",
+  "author": "claude",
+  "createdAt": "2026-11-24T14:18:13.457Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20deb-e724-7ebc-bf5f-11fee110105e",
+  "ticketId": "01a2083f-54bb-7238-aa2c-d89f0a131f68",
+  "body": "Update (2026-11-24, branch fix/windows-test-cleanup): all Windows-relevant suites are green: policy 14/15 (1 symlink test skipped without Developer Mode), context 5/5, ACP 7/7, plantool 5/5.",
+  "author": "claude",
+  "createdAt": "2026-11-24T14:18:13.668Z"
+}
