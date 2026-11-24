@@ -1,9 +1,9 @@
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { findWorkspaceRoot } from '../context/scope.ts';
-import { buildKnowledgeIndex, knowledgeDatabaseUrl } from './index-store.ts';
+import { syncProjectKnowledge } from './sync.ts';
 
-const applicationRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const projectRoot = findWorkspaceRoot();
-const result = await buildKnowledgeIndex({ projectRoot, databaseUrl: knowledgeDatabaseUrl(applicationRoot) });
-console.log(`Indexed ${result.files} files into ${result.chunks} chunks (index ${result.indexName}) for ${projectRoot}.`);
+const result = await syncProjectKnowledge(projectRoot);
+console.log(
+  `Synced project knowledge for ${projectRoot}: ${result.written} written, ${result.unchanged} unchanged, ${result.removed} removed.`,
+);
+process.exit(0);
