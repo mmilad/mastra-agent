@@ -5,7 +5,7 @@
   "title": "No, Codex only for the pilot",
   "kind": "option",
   "description": "",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -16,5 +16,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-24T14:21:25.581Z",
-  "updatedAt": "2026-11-24T14:21:25.581Z"
+  "updatedAt": "2026-11-24T14:39:12.914Z"
 }

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "number": 49,
+  "title": "Wire Cursor ACP as a second worker tool",
+  "kind": "task",
+  "description": "Decision MAST-48: Cursor must work before the pilot. Expose Cursor ACP (cursor agent --sandbox enabled acp, already verified in M0) as a worker tool next to Codex. Reuse the shared ACP client and the workspace permission policy; Cursor questions already suspend the task. Add a contract test against the fake agent and an opt-in live check.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-5190-7d47-8d7d-7b76af53f822",
+  "acceptance": [
+    {
+      "text": "A delegate tool can choose Codex or Cursor per task",
+      "met": false
+    },
+    {
+      "text": "Cursor permissions and questions go through the same approval flow as Codex",
+      "met": false
+    },
+    {
+      "text": "Deterministic tests cover Cursor launch settings and question handling",
+      "met": false
+    },
+    {
+      "text": "Opt-in live Cursor check passes",
+      "met": false
+    }
+  ],
+  "createdAt": "2026-11-24T14:39:11.403Z",
+  "updatedAt": "2026-11-24T14:39:11.403Z"
+}

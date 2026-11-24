@@ -5,7 +5,7 @@
   "title": "Is Cursor required as a second worker for the first pilot?",
   "kind": "decision",
   "description": "",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,8 +14,15 @@
   "decision": {
     "owner": "human",
     "criteria": [],
-    "chosen": null
+    "chosen": "01a20dee-d4d2-72a9-a825-c7d24c887b1d",
+    "rationale": "both should work and claude should work too",
+    "decidedBy": "human",
+    "decidedAt": "2026-11-24T14:23:49.329Z",
+    "cancelled": [
+      "01a20dee-d4cd-7941-bc53-ca9f3344a793"
+    ]
   },
   "createdAt": "2026-11-24T14:21:25.572Z",
-  "updatedAt": "2026-11-24T14:21:25.572Z"
+  "updatedAt": "2026-11-24T14:23:49.330Z",
+  "completedAt": "2026-11-24T14:23:49.330Z"
 }

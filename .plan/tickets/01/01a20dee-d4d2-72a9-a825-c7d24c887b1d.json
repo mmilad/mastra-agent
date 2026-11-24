@@ -5,7 +5,7 @@
   "title": "Yes, wire Cursor before the pilot",
   "kind": "option",
   "description": "",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -16,5 +16,6 @@
     "scores": {}
   },
   "createdAt": "2026-11-24T14:21:25.586Z",
-  "updatedAt": "2026-11-24T14:21:25.586Z"
+  "updatedAt": "2026-11-24T14:39:12.683Z",
+  "completedAt": "2026-11-24T14:23:49.320Z"
 }

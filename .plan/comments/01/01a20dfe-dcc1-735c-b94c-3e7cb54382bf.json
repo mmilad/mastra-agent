@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20dfe-dcc1-735c-b94c-3e7cb54382bf",
+  "ticketId": "01a2083f-4b79-7005-b9f5-c8659c958c09",
+  "body": "Task registry persisted to assistant-tasks.db; active tasks are marked interrupted on restart and never replayed.",
+  "author": "claude",
+  "createdAt": "2026-11-24T14:38:56.193Z"
+}
