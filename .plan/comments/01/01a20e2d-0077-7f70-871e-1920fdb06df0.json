@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e2d-0077-7f70-871e-1920fdb06df0",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Started the shared managed-task provider selection: task briefs now carry a worker choice, and dispatch/preflight route through the existing shared ACP client and permission handling. Deterministic coverage and an opt-in live Cursor run remain outstanding. Claim creation failed because the host denied writes to .git/plantool/claims.lock.",
+  "author": "local",
+  "createdAt": "2026-11-24T15:29:19.991Z"
+}

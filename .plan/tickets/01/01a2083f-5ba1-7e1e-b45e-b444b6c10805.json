@@ -5,7 +5,7 @@
   "title": "Load inspectable Agent Skills on demand",
   "kind": "task",
   "description": "Use the Agent Skills SKILL.md format for a small configured set of local skills. Discover metadata first and load the body only when relevant. Record source/version, allow disable and show why a skill was selected. Validate referenced paths and apply the same execution scopes to any scripts. Detect conflicting instructions. A loaded skill is not permission to run every bundled command.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -16,19 +16,19 @@
   "acceptance": [
     {
       "text": "An irrelevant skill is not fully injected",
-      "met": false
+      "met": true
     },
     {
       "text": "A relevant skill is traceable to its source",
-      "met": false
+      "met": true
     },
     {
       "text": "A disabled or invalid skill is not executed",
-      "met": false
+      "met": true
     },
     {
       "text": "Skill instructions cannot override user constraints or expand authority",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -37,5 +37,20 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:39.681Z",
-  "updatedAt": "2026-11-23T11:51:39.681Z"
+  "updatedAt": "2026-11-24T17:24:03.023Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added progressive-disclosure Agent Skills support: metadata-only discovery from project-local SKILL.md folders, explicit per-task loading with reason/source/version, disabled and invalid skill rejection, thread-level declared-conflict detection, path validation for referenced resources, and an untrusted-instructions boundary. Bundled scripts are never executed by the loader.",
+    "verifiedBy": "npm run check; node --experimental-strip-types --test tests/skills/*.test.mjs",
+    "changedFiles": [
+      "src/skills/registry.ts",
+      "src/mastra/tools/skills.ts",
+      "src/mastra/agents/assistant.ts",
+      "tests/skills/registry.test.mjs",
+      "README.md",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "completedAt": "2026-11-24T17:24:03.023Z"
 }

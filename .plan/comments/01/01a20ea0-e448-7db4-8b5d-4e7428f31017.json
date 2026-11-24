@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20ea0-e448-7db4-8b5d-4e7428f31017",
+  "ticketId": "01a2083f-6209-79b8-a0b3-24225bd51c90",
+  "body": "Deterministic local verification completed 2026-11-24: npm run check, test:policy (21 pass, 1 symlink-permission skip), test:context (12/12), test:acp (7/7), test:acp:providers default mode (1 pass, 2 live-provider skips), and test:plantool (9/9) all passed. Coverage includes permission denial/expiry, user question resume, cancellation, timeout and FIFO release, identical retry reuse, interrupted-task restart without replay, cross-project memory isolation, and bounded lookup traversal. Live provider checks and user pilot remain outstanding; MAST-49 still blocks MAST-40.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:35:54.952Z"
+}

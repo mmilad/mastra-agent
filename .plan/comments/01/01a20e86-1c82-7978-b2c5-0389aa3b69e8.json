@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e86-1c82-7978-b2c5-0389aa3b69e8",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Update: the shared workspace task tool now accepts worker=codex|cursor (default Codex), persists the choice in its task brief, selects matching preflight/launch settings, and reports the worker in status. Deterministic tests cover provider launch settings, managed registry dispatch, Cursor questions, and out-of-scope permission approval. TypeScript check and deterministic policy/provider tests pass. The live authenticated Cursor contract remains opt-in and unrun. The claim succeeded after setting PLANTOOL_HOME to the writable session temp directory; the earlier claim-lock error is obsolete.",
+  "author": "local",
+  "createdAt": "2026-11-24T17:06:39.874Z"
+}

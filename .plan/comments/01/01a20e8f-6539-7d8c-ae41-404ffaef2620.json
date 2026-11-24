@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e8f-6539-7d8c-ae41-404ffaef2620",
+  "ticketId": "01a2083f-5880-7707-be73-fa476f18d0eb",
+  "body": "Added bounded read-only local project search, byte-paginated file reads, and explicit-scope memory lookup with source references. Sensitive paths, excluded directories, traversal and binary files are rejected; search reports incomplete scans and errors.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:16:48.313Z"
+}

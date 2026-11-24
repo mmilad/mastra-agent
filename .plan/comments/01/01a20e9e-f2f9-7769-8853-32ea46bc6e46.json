@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e9e-f2f9-7769-8853-32ea46bc6e46",
+  "ticketId": "01a20e16-31d5-76ca-855e-654c3e360bc9",
+  "body": "Configured a 10,000-token conversation history budget with 2,000-token trimming, a 20-message cap, and bounded thread-scoped working memory for objective, constraints, unresolved work, decisions, and compact summary. Updated assistant guidance and README.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:33:47.641Z"
+}

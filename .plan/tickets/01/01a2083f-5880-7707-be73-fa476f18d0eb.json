@@ -5,7 +5,7 @@
   "title": "Add bounded local lookup tools",
   "kind": "task",
   "description": "Add allowlisted project-file search/read and scoped memory retrieval with schemas, output limits and source references. An external web lookup is optional until a provider is selected. Keep execution timeout, cancellation and permission handling consistent across tools. Do not expose unrestricted shell access to the supervising model.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -16,19 +16,19 @@
   "acceptance": [
     {
       "text": "A lookup cites its actual source",
-      "met": false
+      "met": true
     },
     {
       "text": "Oversized output is bounded with a follow-up path",
-      "met": false
+      "met": true
     },
     {
       "text": "Path escape and unrelated workspace reads are rejected",
-      "met": false
+      "met": true
     },
     {
       "text": "Tool errors are visible and do not become invented answers",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -37,5 +37,19 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:38.880Z",
-  "updatedAt": "2026-11-23T11:51:38.880Z"
+  "updatedAt": "2026-11-24T17:16:48.295Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added bounded read-only local project search, byte-paginated file reads, and explicit-scope memory lookup with source references. Sensitive paths, excluded directories, traversal and binary files are rejected; search reports incomplete scans and errors.",
+    "verifiedBy": "npm run check; npm run test:plantool; npm run test:context",
+    "changedFiles": [
+      "src/mastra/tools/local-lookup.ts",
+      "src/mastra/agents/assistant.ts",
+      "src/context/memory-store.ts",
+      "src/mastra/index.ts",
+      "tests/tools/local-lookup.test.mjs",
+      "tests/context/memory-store.test.mjs"
+    ]
+  },
+  "completedAt": "2026-11-24T17:16:48.295Z"
 }

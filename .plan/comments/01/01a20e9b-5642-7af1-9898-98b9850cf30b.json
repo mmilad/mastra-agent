@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e9b-5642-7af1-9898-98b9850cf30b",
+  "ticketId": "01a20e99-227f-73f8-ba74-ccaea06eca5e",
+  "body": "Replaced process-local skill conflict tracking with transactional SQLite state keyed by project and thread. Added regression coverage for process restart and workspace isolation.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:29:50.914Z"
+}

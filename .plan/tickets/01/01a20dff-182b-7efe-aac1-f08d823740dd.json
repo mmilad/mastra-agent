@@ -5,7 +5,7 @@
   "title": "Wire Cursor ACP as a second worker tool",
   "kind": "task",
   "description": "Decision MAST-48: Cursor must work before the pilot. Expose Cursor ACP (cursor agent --sandbox enabled acp, already verified in M0) as a worker tool next to Codex. Reuse the shared ACP client and the workspace permission policy; Cursor questions already suspend the task. Add a contract test against the fake agent and an opt-in live check.",
-  "status": "todo",
+  "status": "in_progress",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -13,15 +13,15 @@
   "acceptance": [
     {
       "text": "A delegate tool can choose Codex or Cursor per task",
-      "met": false
+      "met": true
     },
     {
       "text": "Cursor permissions and questions go through the same approval flow as Codex",
-      "met": false
+      "met": true
     },
     {
       "text": "Deterministic tests cover Cursor launch settings and question handling",
-      "met": false
+      "met": true
     },
     {
       "text": "Opt-in live Cursor check passes",
@@ -29,5 +29,11 @@
     }
   ],
   "createdAt": "2026-11-24T14:39:11.403Z",
-  "updatedAt": "2026-11-24T14:39:11.403Z"
+  "updatedAt": "2026-11-24T17:06:39.753Z",
+  "why": "The pilot must exercise both worker implementations named in the confirmed decision; until Cursor is selectable through the same managed task and approval path, the assistant cannot claim the planned two-worker pilot capability.",
+  "assignee": {
+    "agent": "codex",
+    "claimedAt": "2026-11-24T16:58:17.743Z",
+    "expiresAt": "2026-11-24T17:58:17.743Z"
+  }
 }

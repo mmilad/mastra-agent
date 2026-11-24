@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e96-0762-7255-92ce-33d01b95c9ce",
+  "ticketId": "01a2083f-5ba1-7e1e-b45e-b444b6c10805",
+  "body": "Added progressive-disclosure Agent Skills support: metadata-only discovery from project-local SKILL.md folders, explicit per-task loading with reason/source/version, disabled and invalid skill rejection, thread-level declared-conflict detection, path validation for referenced resources, and an untrusted-instructions boundary. Bundled scripts are never executed by the loader.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:24:03.042Z"
+}

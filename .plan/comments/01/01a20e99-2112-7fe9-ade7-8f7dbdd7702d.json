@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e99-2112-7fe9-ade7-8f7dbdd7702d",
+  "ticketId": "01a20d64-5d18-77f3-84f9-60d27387667d",
+  "body": "Specified workspace-scoped intake, event mapping, durable notification and intake-ledger boundaries, routing, ordering, recovery and endpoint security in docs/mastra-signals.md after checking installed @mastra/core 1.85.0 API and official Mastra documentation.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:27:26.226Z"
+}

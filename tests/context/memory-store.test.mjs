@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { test } from 'node:test';
 import { LibSQLStore } from '@mastra/libsql';
 import { Memory } from '@mastra/memory';
@@ -35,7 +36,7 @@ test('the selected terminal conversation is restored from durable storage after 
   const directory = await mkdtemp(join(tmpdir(), 'mastra-conversation-'));
   const databasePath = join(directory, 'mastra.db');
   const projectRoot = join(directory, 'project');
-  const firstStorage = new LibSQLStore({ id: 'memory-test-first', url: `file:${databasePath}` });
+  const firstStorage = new LibSQLStore({ id: 'memory-test-first', url: pathToFileURL(databasePath).href });
   await firstStorage.init();
   const firstMemory = new Memory({ storage: firstStorage });
   const firstId = await selectConversation(firstMemory, projectRoot);
@@ -43,7 +44,7 @@ test('the selected terminal conversation is restored from durable storage after 
     messages: [{ id: 'message-1', threadId: firstId, resourceId: firstMemory && (await firstMemory.getThreadById({ threadId: firstId }))?.resourceId, role: 'user', type: 'text', content: { format: 2, parts: [{ type: 'text', text: 'keep this thread' }] }, createdAt: new Date() }],
   });
 
-  const secondStorage = new LibSQLStore({ id: 'memory-test-second', url: `file:${databasePath}` });
+  const secondStorage = new LibSQLStore({ id: 'memory-test-second', url: pathToFileURL(databasePath).href });
   await secondStorage.init();
   t.after(() => closeAndRemove(directory, [firstStorage, secondStorage]));
   const secondMemory = new Memory({ storage: secondStorage });

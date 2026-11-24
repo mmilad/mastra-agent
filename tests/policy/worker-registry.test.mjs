@@ -65,6 +65,20 @@ test('missing worker fails before process start', async (t) => {
   assert.equal(starts, 0);
 });
 
+test('managed tasks preserve and dispatch the selected Cursor worker', async (t) => {
+  const project = root();
+  t.after(async () => { await closeClients(); rmSync(project, { recursive: true, force: true }); });
+  const preflightWorkers = [];
+  const registry = new TaskRegistry(startFake, undefined, {
+    preflight: async (_projectRoot, worker) => { preflightWorkers.push(worker); },
+  });
+  const started = registry.start(project, { ...brief('Cursor task'), worker: 'cursor' });
+  assert.equal(started.task.worker, 'cursor');
+  const completed = await waitFor(registry, started.task.taskId, project, 'completed');
+  assert.equal(completed.worker, 'cursor');
+  assert.deepEqual(preflightWorkers, ['cursor']);
+});
+
 test('git changes are exposed as evidence and success stays unverified', async (t) => {
   const project = root();
   t.after(async () => { await closeClients(); rmSync(project, { recursive: true, force: true }); });

@@ -39,6 +39,7 @@ const taskSnapshotSchema = z.object({
   taskId: z.string(),
   objective: z.string(),
   projectRoot: z.string(),
+  worker: z.enum(['codex', 'cursor']),
   status: taskStateSchema,
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -58,9 +59,10 @@ const taskSnapshotSchema = z.object({
 export const delegateTask = createTool({
   id: 'delegate-task',
   description:
-    'Start one bounded task with Codex in this project and return its stable task ID immediately. Use only for a new task. For status, approval, or cancellation requests, use the matching task tool instead of starting another worker.',
+    'Start one bounded task with the selected ACP worker in this project and return its stable task ID immediately. Choose Codex by default or Cursor when the user requests it or its installed project context is useful. Use only for a new task. For status, approval, or cancellation requests, use the matching task tool instead of starting another worker.',
   inputSchema: z.object({
     objective: z.string().min(1).max(4000),
+    worker: z.enum(['codex', 'cursor']).default('codex').describe('ACP worker to run for this task'),
     constraints: z.array(z.string().min(1).max(500)).max(12).default([]),
     acceptanceCriteria: z.array(z.string().min(1).max(500)).max(12).default([]),
     contextReferences: z.array(z.string().min(1).max(500)).max(12).default([]),
@@ -91,7 +93,7 @@ export const delegateTask = createTool({
       reused: result.reused,
       message: result.reused
         ? `Task ${task.taskId} is already ${task.status}. No second worker was started.`
-        : `Started task ${task.taskId}. The worker is running in the background. Tell the user this ID and finish the turn; only check status if the user asks in a later message.`,
+        : `Started ${brief.worker ?? 'codex'} task ${task.taskId}. The worker is running in the background. Tell the user this ID and finish the turn; only check status if the user asks in a later message.`,
     };
   },
 });
@@ -109,7 +111,7 @@ export const getTaskStatus = createTool({
     const projectRoot = findProjectRoot(process.cwd());
     const task = taskRegistry.get(taskId, projectRoot);
     return task
-      ? { found: true, message: `Task ${task.taskId} is ${task.status}. Worker output is unverified by the assistant.`, task }
+      ? { found: true, message: `Task ${task.taskId} is ${task.status} on ${task.worker}. Worker output is unverified by the assistant.`, task }
       : { found: false, message: 'No task with that ID exists in this project. Status checks never create tasks.' };
   },
 });

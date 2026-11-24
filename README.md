@@ -25,6 +25,13 @@ ollama run qwen3.5:9b
 cp .env.example .env
 ```
 
+For Mastra Studio, configure Ollama with at least a 16K context window. Ollama
+defaults to 4,096 tokens; the model's larger native context is not allocated
+automatically. Check the active allocation with `ollama ps`. On Windows, change
+the context length in Ollama's Settings, then quit and relaunch Ollama so the
+server and model use the new value. The assistant itself keeps up to 6,000 input
+tokens and allows 2,048 output tokens per model step.
+
 Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
 `ASSISTANT_MODEL`. The local Ollama server ignores the placeholder API key.
 `.env` is ignored by Git. No OpenAI API key is needed for this local setup.
@@ -56,9 +63,12 @@ remain in the SQLite database. Project scope is derived from the selected worksp
 so conversations and project facts from another workspace are not retrieved.
 
 Mastra Studio saves chat threads and messages in `mastra.db` at the project
-root, so they remain available after restarting Studio. The assistant loads
-the latest 20 messages when continuing a thread. For the interactive test
-interface:
+root, so they remain available after restarting Studio. The assistant loads at
+most the latest 20 messages and trims older history when its configured
+6,000-token context budget is exceeded. Studio and direct calls allow up to
+2,048 output tokens per model step. Thread working memory keeps a bounded
+snapshot of the objective, constraints, unresolved work, and decisions across
+turns. For the interactive test interface:
 
 ```sh
 npm run dev
@@ -93,12 +103,25 @@ to the current project and requires tool approval. Exports contain memory record
 only, not raw chat transcripts or credentials. Credentials are rejected when
 they match common API key, bearer token, or provider token formats.
 
+Agent Skills use the standard folder format under `.agents/skills/<name>/SKILL.md`.
+The assistant first discovers each skill's metadata, then loads a matching body
+with its source, optional `metadata.version`, and the reason it was selected. To
+choose another project-relative skill folder or disable skills, create
+`.mastra/skills.json`, for example `{"directory":"skills","disabled":["release-notes"]}`.
+Skills are untrusted guidance: declared `metadata.conflicts` prevent conflicting
+skills from loading together, and bundled scripts are never executed by the
+loader. Loaded-skill conflict state is stored per project and thread in
+`mastra.db`, so conflicts are still enforced when a thread resumes after a
+process restart. Skill text cannot grant tools or permissions.
+
 The assistant returns a task ID as soon as it starts work. Ask for status or
 cancel using that ID. If an approval is needed, reply exactly `approve <token>`
 or `deny <token>`; for a worker question, reply `answer <token>: <your answer>`.
-Task records currently live in memory and are lost if the Mastra process exits;
-conversation messages remain saved. Recovery of interrupted tasks is a later
-planned item.
+Task records and approvals are persisted in `assistant-tasks.db`. Active tasks
+are marked interrupted after a process restart and are not automatically
+replayed. The per-project queue, timeout, cancellation outcome, and changed-file
+evidence are recorded with each task; a reported success remains unverified
+until required evidence exists.
 
 ## Check
 

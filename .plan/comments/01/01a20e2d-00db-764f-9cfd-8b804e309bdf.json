@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e2d-00db-764f-9cfd-8b804e309bdf",
+  "ticketId": "01a20d64-5d18-77f3-84f9-60d27387667d",
+  "body": "Moved into M3 after MAST-33 and MAST-34 were completed, matching the roadmap sequence: specify typed signal intake before expanding beyond the reliable worker-task loop. The roadmap text now reflects this order.",
+  "author": "local",
+  "createdAt": "2026-11-24T15:29:20.091Z"
+}

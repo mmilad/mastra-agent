@@ -7,6 +7,13 @@ import { codexAcpLaunch, cursorAcpLaunch } from '../../src/integrations/acp/prov
 const enabled = process.env.RUN_ACP_PROVIDER_TESTS === '1';
 const cwd = tmpdir();
 
+test('Cursor launch uses the sandboxed ACP command in the selected workspace', () => {
+  const launch = cursorAcpLaunch(cwd);
+  assert.equal(launch.command, process.env.CURSOR_AGENT_COMMAND ?? 'cursor');
+  assert.deepEqual(launch.args, ['agent', '--sandbox', 'enabled', 'acp']);
+  assert.equal(launch.cwd, cwd);
+});
+
 async function verifyProviderContract(launch) {
   const client = await AcpWorkerClient.start(launch);
   let responseText = '';

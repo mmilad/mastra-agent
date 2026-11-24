@@ -1,6 +1,7 @@
 import { createClient, type Client, type InValue } from '@libsql/client';
 import { randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { assistantDatabasePath, findWorkspaceRoot, projectScopeId } from './scope.ts';
 
 export type MemoryScope = 'user' | 'project';
@@ -51,7 +52,7 @@ export class ScopedMemoryStore {
     const projectRoot = resolve(options.projectRoot ?? findWorkspaceRoot());
     const path = resolve(options.databasePath ?? assistantDatabasePath());
     this.projectId = projectScopeId(projectRoot);
-    this.client = createClient({ url: `file:${path}` });
+    this.client = createClient({ url: pathToFileURL(path).href });
   }
 
   private init(): Promise<void> {

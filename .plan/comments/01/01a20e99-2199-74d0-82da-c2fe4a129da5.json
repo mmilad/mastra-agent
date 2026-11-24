@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e99-2199-74d0-82da-c2fe4a129da5",
+  "ticketId": "01a2083f-4b79-7005-b9f5-c8659c958c09",
+  "body": "Boundary reaffirmed by MAST-45 design: task lifecycle, approvals, interrupted-run recovery, and no automatic replay remain authoritative here. Intake dedupe/dispatch state and Mastra notifications must not become task truth. See docs/mastra-signals.md.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:27:26.361Z"
+}

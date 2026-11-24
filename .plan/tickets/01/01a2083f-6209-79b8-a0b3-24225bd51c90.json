@@ -16,7 +16,7 @@
   "acceptance": [
     {
       "text": "All deterministic failure scenarios pass",
-      "met": false
+      "met": true
     },
     {
       "text": "Both supported workers complete an authenticated live smoke test",
@@ -24,7 +24,7 @@
     },
     {
       "text": "No silent task loss, duplicate side effect or cross-project leakage in the scenarios",
-      "met": false
+      "met": true
     },
     {
       "text": "Every pilot result records evidence and any user intervention",
@@ -42,5 +42,5 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:41.321Z",
-  "updatedAt": "2026-11-23T11:51:41.321Z"
+  "updatedAt": "2026-11-24T17:35:54.834Z"
 }

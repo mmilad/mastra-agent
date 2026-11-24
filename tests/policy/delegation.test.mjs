@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 import { AcpWorkerClient } from '../../src/integrations/acp/client.ts';
-import { runCodexDelegation } from '../../src/mastra/tools/delegate-to-codex.ts';
+import { runCodexDelegation, runWorkerDelegation } from '../../src/mastra/tools/delegate-to-codex.ts';
 
 const fakeAgent = fileURLToPath(new URL('../acp/fake-agent.mjs', import.meta.url));
 const openClients = [];
@@ -17,8 +17,9 @@ function project() {
   return root;
 }
 
-function startFakeAgent(extraEnv = {}) {
+function startFakeAgent(extraEnv = {}, onLaunch = () => {}) {
   return async (launch) => trackClient(await AcpWorkerClient.start({
+    ...onLaunch(launch),
     ...launch,
     command: process.execPath,
     args: [fakeAgent],
@@ -123,6 +124,59 @@ test('surfaces a provider question and includes the answer only after explicit r
   }, dependencies);
   assert.equal(resumed.stopReason, 'end_turn');
   assert.match(resumed.response, /ANSWER_USED/);
+});
+
+test('Cursor question handling uses the shared suspend and resume flow', async (t) => {
+  const root = project();
+  t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
+  const task = 'FAKE_ASK_QUESTION choose a greeting';
+  const suspensions = [];
+  let cursorLaunch;
+  const dependencies = {
+    startClient: startFakeAgent({ FAKE_ASK_QUESTION: 'true' }, (launch) => { cursorLaunch = launch; }),
+  };
+  const pending = await runWorkerDelegation(task, root, 'cursor', {
+    agent: { suspend: async (payload) => suspensions.push(payload) },
+  }, dependencies);
+
+  assert.equal(pending, undefined);
+  assert.equal(cursorLaunch.command, process.env.CURSOR_AGENT_COMMAND ?? 'cursor');
+  assert.deepEqual(cursorLaunch.args, ['agent', '--sandbox', 'enabled', 'acp']);
+  assert.equal(suspensions[0]?.kind, 'question');
+
+  const question = suspensions[0];
+  const resumed = await runWorkerDelegation(task, root, 'cursor', {
+    agent: {
+      suspend: async () => assert.fail('the answer should resolve the existing question'),
+      suspendPayload: question,
+      resumeData: { approvalToken: question.approvalToken, approved: true, answer: 'Use exactly: hello' },
+    },
+  }, dependencies);
+  assert.equal(resumed.stopReason, 'end_turn');
+  assert.match(resumed.response, /ANSWER_USED/);
+});
+
+test('Cursor permission requests use the shared scoped approval policy', async (t) => {
+  const root = project();
+  const outside = mkdtempSync(join(tmpdir(), 'mastra-cursor-outside-'));
+  t.after(async () => {
+    await closeClients();
+    rmSync(root, { recursive: true, force: true });
+    rmSync(outside, { recursive: true, force: true });
+  });
+  const outsidePath = join(outside, 'cursor-outside.txt');
+  const suspensions = [];
+  const pending = await runWorkerDelegation(
+    'FAKE_PERMISSION_TEST create a file', root, 'cursor',
+    { agent: { suspend: async (payload) => suspensions.push(payload) } },
+    { startClient: startFakeAgent({ FAKE_PERMISSION_PATH: outsidePath }) },
+  );
+
+  assert.equal(pending, undefined);
+  assert.equal(existsSync(outsidePath), false);
+  assert.equal(suspensions[0]?.kind, 'permission');
+  assert.equal(suspensions[0]?.projectRoot, root);
+  assert.match(suspensions[0]?.summary, /outside the authorized project workspace/);
 });
 
 test('returns a visible result when the caller cancels before dispatch', async (t) => {

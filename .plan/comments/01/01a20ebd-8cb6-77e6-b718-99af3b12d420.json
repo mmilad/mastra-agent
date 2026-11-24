@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20ebd-8cb6-77e6-b718-99af3b12d420",
+  "ticketId": "01a20e16-31d5-76ca-855e-654c3e360bc9",
+  "body": "Configured a 6,000-token conversation history budget with 1,500-token trimming, a 20-message cap, and bounded thread-scoped working memory; added a default 2,048-token model output limit for Studio and direct calls.",
+  "author": "codex",
+  "createdAt": "2026-11-24T18:07:13.078Z"
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e99-227f-73f8-ba74-ccaea06eca5e",
+  "number": 51,
+  "title": "Persist Agent Skills conflict state across thread restarts",
+  "kind": "bug",
+  "description": "The skill registry tracks loaded skill conflicts only in process memory. When a conversation/thread resumes after an assistant process restart, the registry forgets previously loaded skills and can load a conflicting skill. Persist or reconstruct loaded skill identifiers per thread from durable conversation/context state; preserve current selection reasoning and trust boundaries. Add a restart/resume regression test.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-5ba1-7e1e-b45e-b444b6c10805",
+  "createdAt": "2026-11-24T17:27:26.591Z",
+  "updatedAt": "2026-11-24T17:29:50.894Z",
+  "acceptance": [
+    {
+      "text": "Loaded skill conflict state persists across fresh registry instances for the same workspace and thread",
+      "met": true
+    },
+    {
+      "text": "a conflicting skill is refused after simulated restart.",
+      "met": true
+    },
+    {
+      "text": "Different threads and workspaces remain isolated",
+      "met": false
+    },
+    {
+      "text": "selection reasons and skill trust boundaries are preserved.",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/skills/registry.ts; src/skills/skill-state-store.ts; tests/skills/registry.test.mjs"
+  ],
+  "repro": {
+    "steps": [
+      "Load a skill with a declared conflict",
+      "create a new registry/store instance for the same workspace and thread to simulate restart",
+      "try loading the conflicting skill."
+    ],
+    "expected": "The conflicting skill remains blocked after restart because loaded skill IDs are durable per workspace and thread.",
+    "actual": "Conflict tracking currently lives only in a process-local Map and resets when the process restarts."
+  },
+  "assignee": null,
+  "outcome": {
+    "summary": "Replaced process-local skill conflict tracking with transactional SQLite state keyed by project and thread. Added regression coverage for process restart and workspace isolation.",
+    "verifiedBy": "npm run check; node --experimental-strip-types --test tests/skills/registry.test.mjs (6/6 passed).",
+    "changedFiles": [
+      "src/skills/registry.ts src/skills/skill-state-store.ts tests/skills/registry.test.mjs"
+    ]
+  },
+  "completedAt": "2026-11-24T17:29:50.894Z"
+}

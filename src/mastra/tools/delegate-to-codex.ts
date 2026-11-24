@@ -4,7 +4,7 @@ import { dirname, join, resolve } from 'node:path';
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { ACP_UNHANDLED, AcpWorkerClient, type AcpLaunch } from '../../integrations/acp/client.ts';
-import { codexAcpLaunch } from '../../integrations/acp/providers.ts';
+import { codexAcpLaunch, cursorAcpLaunch } from '../../integrations/acp/providers.ts';
 import { choosePermissionOption, inspectPermissionRequest, taskFingerprint } from '../../policy/workspace.ts';
 
 const approvalTtlMs = 5 * 60 * 1000;
@@ -81,6 +81,18 @@ export async function runCodexDelegation(
   context: DelegationContext = {},
   dependencies: DelegationDependencies = {},
 ) {
+  return runWorkerDelegation(task, projectRoot, 'codex', context, dependencies);
+}
+
+export type WorkerProvider = 'codex' | 'cursor';
+
+export async function runWorkerDelegation(
+  task: string,
+  projectRoot: string,
+  worker: WorkerProvider,
+  context: DelegationContext = {},
+  dependencies: DelegationDependencies = {},
+) {
   const agentContext = context.agent;
   const inputTaskFingerprint = taskFingerprint(task);
   const suspendedPayload = agentContext?.suspendPayload
@@ -100,7 +112,7 @@ export async function runCodexDelegation(
     return { response: 'The approval request expired. Start the delegation again if you still want this action.', stopReason: 'approval_expired' };
   }
   if (resume && !resume.approved && suspendedPayload?.kind === 'permission') {
-    return { response: 'Codex permission was denied. No out-of-scope action was authorized.', stopReason: 'permission_denied' };
+    return { response: `${worker} permission was denied. No out-of-scope action was authorized.`, stopReason: 'permission_denied' };
   }
   if (resume && suspendedPayload?.kind === 'question' && !resume.approved) {
     return { response: 'The worker question was cancelled. No further delegation was performed.', stopReason: 'question_cancelled' };
@@ -108,9 +120,10 @@ export async function runCodexDelegation(
   if (resume && suspendedPayload?.kind === 'question' && !resume.answer?.trim()) {
     return { response: 'No answer was provided to the worker. Start the delegation again when you are ready.', stopReason: 'question_unanswered' };
   }
-  if (context.abortSignal?.aborted) return { response: 'Codex delegation was cancelled.', stopReason: 'cancelled' };
+  if (context.abortSignal?.aborted) return { response: `${worker} delegation was cancelled.`, stopReason: 'cancelled' };
 
-  const client = await (dependencies.startClient ?? AcpWorkerClient.start)(codexAcpLaunch(projectRoot));
+  const launch = worker === 'cursor' ? cursorAcpLaunch(projectRoot) : codexAcpLaunch(projectRoot);
+  const client = await (dependencies.startClient ?? AcpWorkerClient.start)(launch);
   let response = '';
   let sessionId = '';
   let approvalPending = false;
@@ -208,22 +221,22 @@ export async function runCodexDelegation(
 
     if (approvalPending) return undefined;
     if (permissionRejected) {
-      return { response: 'Codex permission was cancelled because the request could not be safely authorized.', stopReason: 'permission_unavailable' };
+      return { response: `${worker} permission was cancelled because the request could not be safely authorized.`, stopReason: 'permission_unavailable' };
     }
     if (questionRepeated) {
       return { response: 'The worker asked another question after the supplied answer. Delegation stopped for review.', stopReason: 'question_repeated' };
     }
     if (promptResponse.stopReason === 'cancelled') {
-      return { response: 'Codex delegation was cancelled.', stopReason: 'cancelled' };
+      return { response: `${worker} delegation was cancelled.`, stopReason: 'cancelled' };
     }
 
     return {
-      response: response.trim() || 'Codex finished without a text response.',
+      response: response.trim() || `${worker} finished without a text response.`,
       stopReason: String(promptResponse.stopReason ?? 'unknown'),
     };
   } catch (error) {
     if (context.abortSignal?.aborted) {
-      return { response: 'Codex delegation was cancelled.', stopReason: 'cancelled' };
+      return { response: `${worker} delegation was cancelled.`, stopReason: 'cancelled' };
     }
     throw error;
   } finally {

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e99-220a-7f61-8360-583f1addcf74",
+  "ticketId": "01a2083f-4e86-7baa-82bb-6572a772e587",
+  "body": "Boundary reaffirmed by MAST-45 design: workspace write-task queue/lease, worker limits, preflight, timeout/cancellation, and evidence remain authoritative here. Signal thread leases do not replace worker-task concurrency controls. See docs/mastra-signals.md.",
+  "author": "codex",
+  "createdAt": "2026-11-24T17:27:26.474Z"
+}

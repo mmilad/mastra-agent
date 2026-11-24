@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { AcpLaunch, AcpWorkerClient } from '../../integrations/acp/client.ts';
 import { taskStore, type StoredTask, type TaskStore } from '../../context/task-store.ts';
-import { runCodexDelegation } from './delegate-to-codex.ts';
+import { runWorkerDelegation, type WorkerProvider } from './delegate-to-codex.ts';
 import type { HandoffPackage } from '../../context/handoff.ts';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -11,6 +11,7 @@ import { join } from 'node:path';
 const execFileAsync = promisify(execFile);
 
 export type TaskBrief = {
+  worker?: WorkerProvider;
   objective: string;
   constraints: string[];
   acceptanceCriteria: string[];
@@ -64,10 +65,11 @@ type ClientFactory = (launch: AcpLaunch) => Promise<AcpWorkerClient>;
 
 export type TaskSnapshot = Omit<TaskRecord, 'brief' | 'taskText' | 'controller' | 'expiryTimer'> & {
   brief: TaskBrief;
+  worker: WorkerProvider;
   acceptanceVerified: false;
 };
 
-type RegistryOptions = { timeoutMs?: number; preflight?: (projectRoot: string) => Promise<void> };
+type RegistryOptions = { timeoutMs?: number; preflight?: (projectRoot: string, worker: WorkerProvider) => Promise<void> };
 
 const activeStates = new Set<TaskStatus>(['queued', 'running', 'waiting_approval', 'waiting_input', 'cancelling']);
 
@@ -90,11 +92,12 @@ function buildTaskText(brief: TaskBrief, projectRoot: string, handoff: HandoffPa
 
 function snapshot(record: TaskRecord): TaskSnapshot {
   const { controller: _controller, expiryTimer: _expiryTimer, taskText: _taskText, ...visible } = record;
-  return { ...visible, acceptanceVerified: false };
+  return { ...visible, worker: record.brief.worker ?? 'codex', acceptanceVerified: false };
 }
 
-async function defaultPreflight(projectRoot: string): Promise<void> {
-  const launch = (await import('../../integrations/acp/providers.ts')).codexAcpLaunch(projectRoot);
+async function defaultPreflight(projectRoot: string, worker: WorkerProvider): Promise<void> {
+  const providers = await import('../../integrations/acp/providers.ts');
+  const launch = worker === 'cursor' ? providers.cursorAcpLaunch(projectRoot) : providers.codexAcpLaunch(projectRoot);
   const executable = launch.command.includes('/') || launch.command.includes('\\')
     ? existsSync(launch.command)
     : (process.env.PATH ?? '').split(process.platform === 'win32' ? ';' : ':')
@@ -131,7 +134,7 @@ export class TaskRegistry {
 
   private readonly store?: TaskStore;
   private readonly timeoutMs: number;
-  private readonly preflight: (projectRoot: string) => Promise<void>;
+  private readonly preflight: (projectRoot: string, worker: WorkerProvider) => Promise<void>;
 
   constructor(startClient?: ClientFactory, store?: TaskStore, options: RegistryOptions = {}) {
     this.store = store;
@@ -289,15 +292,16 @@ export class TaskRegistry {
     let beforeFiles: string[] = [];
     try {
       if (!resumption) {
-        await this.preflight(record.projectRoot);
+        await this.preflight(record.projectRoot, record.brief.worker ?? 'codex');
         beforeFiles = await gitFiles(record.projectRoot);
         record.evidence.changedFiles = [];
         timeout = setTimeout(() => record.controller.abort(new Error('Task timed out')), this.timeoutMs);
         timeout.unref?.();
       }
-      const result = await runCodexDelegation(
+      const result = await runWorkerDelegation(
         record.taskText,
         record.projectRoot,
+        record.brief.worker ?? 'codex',
         {
           abortSignal: record.controller.signal,
           onProgress: (text) => {
