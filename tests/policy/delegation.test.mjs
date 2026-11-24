@@ -8,6 +8,9 @@ import { AcpWorkerClient } from '../../src/integrations/acp/client.ts';
 import { runCodexDelegation } from '../../src/mastra/tools/delegate-to-codex.ts';
 
 const fakeAgent = fileURLToPath(new URL('../acp/fake-agent.mjs', import.meta.url));
+const openClients = [];
+function trackClient(client) { openClients.push(client); return client; }
+async function closeClients() { await Promise.all(openClients.splice(0).map((client) => client.close())); }
 
 function project() {
   const root = mkdtempSync(join(tmpdir(), 'mastra-delegation-'));
@@ -15,19 +18,20 @@ function project() {
 }
 
 function startFakeAgent(extraEnv = {}) {
-  return async (launch) => AcpWorkerClient.start({
+  return async (launch) => trackClient(await AcpWorkerClient.start({
     ...launch,
     command: process.execPath,
     args: [fakeAgent],
     env: { ...process.env, ...extraEnv },
     requestTimeoutMs: 3000,
-  });
+  }));
 }
 
 test('holds an out-of-workspace permission, then honors only its matching approval', async (t) => {
   const root = project();
   const outside = mkdtempSync(join(tmpdir(), 'mastra-outside-'));
-  t.after(() => {
+  t.after(async () => {
+    await closeClients();
     rmSync(root, { recursive: true, force: true });
     rmSync(outside, { recursive: true, force: true });
   });
@@ -63,7 +67,7 @@ test('holds an out-of-workspace permission, then honors only its matching approv
 
 test('denial and expiry return visible outcomes without starting a worker', async (t) => {
   const root = project();
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
   const task = 'FAKE_PERMISSION_TEST create the requested file';
   const approval = {
     approvalToken: 'review-token',
@@ -99,7 +103,7 @@ test('denial and expiry return visible outcomes without starting a worker', asyn
 
 test('surfaces a provider question and includes the answer only after explicit resume', async (t) => {
   const root = project();
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
   const task = 'FAKE_ASK_QUESTION choose a greeting';
   const suspensions = [];
   const dependencies = { startClient: startFakeAgent({ FAKE_ASK_QUESTION: 'true' }) };
@@ -123,7 +127,7 @@ test('surfaces a provider question and includes the answer only after explicit r
 
 test('returns a visible result when the caller cancels before dispatch', async (t) => {
   const root = project();
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
   const controller = new AbortController();
   controller.abort();
   const result = await runCodexDelegation('FAKE_CANCEL_TEST', root, {

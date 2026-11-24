@@ -8,6 +8,9 @@ import { AcpWorkerClient } from '../../src/integrations/acp/client.ts';
 import { TaskRegistry } from '../../src/mastra/tools/task-registry.ts';
 
 const fakeAgent = fileURLToPath(new URL('../acp/fake-agent.mjs', import.meta.url));
+const openClients = [];
+function trackClient(client) { openClients.push(client); return client; }
+async function closeClients() { await Promise.all(openClients.splice(0).map((client) => client.close())); }
 
 function tempDir(prefix) {
   return mkdtempSync(join(tmpdir(), prefix));
@@ -16,13 +19,13 @@ function tempDir(prefix) {
 function startFakeAgent(extraEnv = {}, onStart = () => {}) {
   return async (launch) => {
     onStart();
-    return AcpWorkerClient.start({
+    return trackClient(await AcpWorkerClient.start({
       ...launch,
       command: process.execPath,
       args: [fakeAgent],
       env: { ...process.env, ...extraEnv },
       requestTimeoutMs: 3000,
-    });
+    }));
   };
 }
 
@@ -105,7 +108,7 @@ test('approval is bound to explicit user confirmation and the exact pending requ
 
 test('cancel targets the active task and resolves after ACP cancellation', async (t) => {
   const root = tempDir('mastra-registry-');
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
   const registry = new TaskRegistry(startFakeAgent());
   const started = registry.start(root, {
     objective: 'FAKE_WAIT_TEST wait for cancellation',
@@ -123,7 +126,7 @@ test('cancel targets the active task and resolves after ACP cancellation', async
 
 test('a worker question waits for an answer carrying its task token', async (t) => {
   const root = tempDir('mastra-registry-');
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
   const registry = new TaskRegistry(startFakeAgent({ FAKE_ASK_QUESTION: 'true' }));
   const started = registry.start(root, {
     objective: 'FAKE_ASK_QUESTION choose a greeting',

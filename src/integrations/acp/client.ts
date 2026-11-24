@@ -213,13 +213,27 @@ export class AcpWorkerClient {
     }
   }
 
-  close(): void {
-    if (this.closed) return;
-    this.lines.close();
-    if (this.process.exitCode === null && this.process.signalCode === null) {
-      this.process.kill('SIGTERM');
+  /**
+   * Terminates the worker and resolves once it has exited (or after a short
+   * grace period), so callers can safely delete its working directory on Windows.
+   */
+  close(): Promise<void> {
+    const alive = this.process.exitCode === null && this.process.signalCode === null;
+    // A client can be marked closed (for example after a suspended permission) while
+    // its process is still running, so always wait for the process when it is alive.
+    const exited = new Promise<void>((resolve) => {
+      if (!alive) return resolve();
+      this.process.once('exit', () => resolve());
+      setTimeout(resolve, 5_000).unref();
+    });
+    if (this.closed) {
+      if (alive) this.process.kill('SIGTERM');
+      return exited;
     }
+    this.lines.close();
+    if (alive) this.process.kill('SIGTERM');
     this.finish(new Error('ACP process closed by client'));
+    return exited;
   }
 
   private async request(method: string, params: JsonObject, timeoutMs = this.requestTimeoutMs): Promise<unknown> {

@@ -8,13 +8,21 @@ import { Memory } from '@mastra/memory';
 import { selectConversation } from '../../src/context/conversations.ts';
 import { ScopedMemoryStore } from '../../src/context/memory-store.ts';
 
+// libSQL on Windows keeps the database file locked for a moment after close(). Close first,
+// give the handle time to drop, then remove the folder. A temp folder that still cannot be
+// removed is left behind rather than failing the test.
+async function closeAndRemove(directory, stores) {
+  await Promise.all(stores.filter(Boolean).map((store) => store.close()));
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  await rm(directory, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }).catch(() => {});
+}
+
 test('project facts stay isolated while user preferences remain shared', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'mastra-memory-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
   const databasePath = join(directory, 'memory.db');
   const first = new ScopedMemoryStore({ databasePath, projectRoot: join(directory, 'project-a') });
   const second = new ScopedMemoryStore({ databasePath, projectRoot: join(directory, 'project-b') });
-  t.after(() => Promise.all([first.close(), second.close()]));
+  t.after(() => closeAndRemove(directory, [first, second]));
 
   await first.remember({ scope: 'user', kind: 'preference', key: 'language', value: 'English', source: 'user-confirmed' });
   await first.remember({ scope: 'project', kind: 'fact', key: 'database', value: 'SQLite', source: 'user-confirmed' });
@@ -25,7 +33,6 @@ test('project facts stay isolated while user preferences remain shared', async (
 
 test('the selected terminal conversation is restored from durable storage after restart', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'mastra-conversation-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
   const databasePath = join(directory, 'mastra.db');
   const projectRoot = join(directory, 'project');
   const firstStorage = new LibSQLStore({ id: 'memory-test-first', url: `file:${databasePath}` });
@@ -38,6 +45,7 @@ test('the selected terminal conversation is restored from durable storage after 
 
   const secondStorage = new LibSQLStore({ id: 'memory-test-second', url: `file:${databasePath}` });
   await secondStorage.init();
+  t.after(() => closeAndRemove(directory, [firstStorage, secondStorage]));
   const secondMemory = new Memory({ storage: secondStorage });
   const restoredId = await selectConversation(secondMemory, projectRoot);
   assert.equal(restoredId, firstId);
@@ -46,9 +54,8 @@ test('the selected terminal conversation is restored from durable storage after 
 
 test('corrections preserve history while retrieval uses only the current fact', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'mastra-memory-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
   const store = new ScopedMemoryStore({ databasePath: join(directory, 'memory.db'), projectRoot: directory });
-  t.after(() => store.close());
+  t.after(() => closeAndRemove(directory, [store]));
 
   const old = await store.remember({ scope: 'project', kind: 'fact', key: 'database', value: 'JSON', source: 'user-confirmed' });
   const current = await store.remember({ scope: 'project', kind: 'fact', key: 'database', value: 'SQLite', source: 'user-confirmed', correct: true });
@@ -60,9 +67,8 @@ test('corrections preserve history while retrieval uses only the current fact', 
 
 test('forgetting a source removes its derived memory and export omits credentials', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'mastra-memory-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
   const store = new ScopedMemoryStore({ databasePath: join(directory, 'memory.db'), projectRoot: directory });
-  t.after(() => store.close());
+  t.after(() => closeAndRemove(directory, [store]));
 
   const fact = await store.remember({ scope: 'project', kind: 'fact', key: 'origin', value: 'from a chat', source: 'conversation', sourceId: 'thread-1' });
   await store.remember({ scope: 'project', kind: 'summary', key: 'origin-summary', value: 'derived summary', source: 'summary', sourceId: 'thread-1', derivedFrom: [fact.id] });
@@ -81,9 +87,8 @@ test('forgetting a source removes its derived memory and export omits credential
 
 test('forgetting a correction source removes that revision and key forgetting removes all history', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'mastra-memory-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
   const store = new ScopedMemoryStore({ databasePath: join(directory, 'memory.db'), projectRoot: directory });
-  t.after(() => store.close());
+  t.after(() => closeAndRemove(directory, [store]));
 
   await store.remember({ scope: 'project', kind: 'fact', key: 'database', value: 'JSON', source: 'conversation', sourceId: 'thread-old' });
   const corrected = await store.remember({ scope: 'project', kind: 'fact', key: 'database', value: 'SQLite', source: 'correction', sourceId: 'thread-new', correct: true });
