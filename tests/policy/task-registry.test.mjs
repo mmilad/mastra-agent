@@ -57,9 +57,9 @@ test('status reads reuse one task ID and never launch another worker', async (t)
   const duplicate = registry.start(root, brief);
   assert.equal(duplicate.reused, true);
   assert.equal(duplicate.task.taskId, first.task.taskId);
-  assert.equal(starts, 1);
 
   const completed = await waitFor(registry, first.task.taskId, root, (task) => task.status === 'completed');
+  assert.equal(starts, 1);
   assert.equal(completed.acceptanceVerified, false);
   assert.match(completed.workerOutput, /FAKE_OK/);
   assert.equal(starts, 1);

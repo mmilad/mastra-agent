@@ -1,5 +1,6 @@
 import { createInterface } from 'node:readline';
 import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const input = createInterface({ input: process.stdin });
 let promptRequestId;
@@ -106,6 +107,9 @@ input.on('line', (line) => {
     }
     if (text === 'exit') {
       process.exit(3);
+    }
+    if (text.includes('FAKE_EDIT_FILE')) {
+      writeFileSync(join(process.cwd(), 'evidence-created.txt'), 'worker edit');
     }
     if (text === 'wait-permission') {
       permissionRequestId = nextServerRequest++;

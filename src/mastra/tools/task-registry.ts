@@ -3,6 +3,12 @@ import type { AcpLaunch, AcpWorkerClient } from '../../integrations/acp/client.t
 import { taskStore, type StoredTask, type TaskStore } from '../../context/task-store.ts';
 import { runCodexDelegation } from './delegate-to-codex.ts';
 import type { HandoffPackage } from '../../context/handoff.ts';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+const execFileAsync = promisify(execFile);
 
 export type TaskBrief = {
   objective: string;
@@ -47,6 +53,7 @@ export type TaskRecord = {
   approval?: PendingApproval;
   workerOutput?: string;
   workerStopReason?: string;
+  evidence: { changedFiles: string[]; verified: boolean; workerClaimedSuccess: boolean };
   error?: string;
   controller: AbortController;
   expiryTimer?: ReturnType<typeof setTimeout>;
@@ -59,6 +66,8 @@ export type TaskSnapshot = Omit<TaskRecord, 'brief' | 'taskText' | 'controller' 
   brief: TaskBrief;
   acceptanceVerified: false;
 };
+
+type RegistryOptions = { timeoutMs?: number; preflight?: (projectRoot: string) => Promise<void> };
 
 const activeStates = new Set<TaskStatus>(['queued', 'running', 'waiting_approval', 'waiting_input', 'cancelling']);
 
@@ -84,22 +93,58 @@ function snapshot(record: TaskRecord): TaskSnapshot {
   return { ...visible, acceptanceVerified: false };
 }
 
+async function defaultPreflight(projectRoot: string): Promise<void> {
+  const launch = (await import('../../integrations/acp/providers.ts')).codexAcpLaunch(projectRoot);
+  const executable = launch.command.includes('/') || launch.command.includes('\\')
+    ? existsSync(launch.command)
+    : (process.env.PATH ?? '').split(process.platform === 'win32' ? ';' : ':')
+        .some((directory) => existsSync(join(directory, launch.command)) || process.platform === 'win32' && existsSync(join(directory, `${launch.command}.exe`)));
+  if (!executable) throw new Error(`Worker command not found: ${launch.command}`);
+  try {
+    await execFileAsync(launch.command, [...launch.args, '--version'], { cwd: projectRoot, timeout: 3000, windowsHide: true });
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === 'ENOENT') throw new Error(`Worker command not found: ${launch.command}`);
+    // Some ACP adapters do not implement --version. Spawn/authentication validation remains in ACP startup.
+    if (code === 'ETIMEDOUT') throw new Error(`Worker preflight timed out: ${launch.command} --version`);
+  }
+}
+
+async function gitFiles(projectRoot: string): Promise<string[]> {
+  try {
+    const { stdout } = await execFileAsync('git', ['status', '--porcelain'], { cwd: projectRoot, timeout: 3000, windowsHide: true });
+    return stdout.split(/\r?\n/).filter(Boolean).map((line) => line.slice(3)).sort();
+  } catch { return []; }
+}
+
+async function changedFiles(projectRoot: string, before: string[]): Promise<string[]> {
+  const after = await gitFiles(projectRoot);
+  return [...new Set([...before, ...after])].filter((file) => before.includes(file) !== after.includes(file)).sort();
+}
+
 export class TaskRegistry {
   private readonly records = new Map<string, TaskRecord>();
   private readonly activeByWorkspace = new Map<string, string>();
+  private readonly queues = new Map<string, string[]>();
   private readonly latestByWorkspace = new Map<string, string>();
   private readonly startClient?: ClientFactory;
 
   private readonly store?: TaskStore;
+  private readonly timeoutMs: number;
+  private readonly preflight: (projectRoot: string) => Promise<void>;
 
-  constructor(startClient?: ClientFactory, store?: TaskStore) {
+  constructor(startClient?: ClientFactory, store?: TaskStore, options: RegistryOptions = {}) {
     this.store = store;
     this.startClient = startClient;
+    const configuredTimeout = Number(process.env.TASK_TIMEOUT_MS ?? 15 * 60 * 1000);
+    this.timeoutMs = options.timeoutMs ?? (Number.isFinite(configuredTimeout) && configuredTimeout > 0 ? configuredTimeout : 15 * 60 * 1000);
+    this.preflight = options.preflight ?? defaultPreflight;
     for (const stored of store?.loadAll() ?? []) {
       const wasActive = activeStates.has(stored.status as TaskStatus);
       const record: TaskRecord = {
         ...stored,
         brief: stored.brief as TaskBrief,
+        evidence: { changedFiles: [], verified: false, workerClaimedSuccess: false },
         status: wasActive ? 'interrupted' : stored.status as TaskStatus,
         error: wasActive ? 'The assistant restarted before this task finished. It was not resumed automatically; check the workspace before retrying.' : stored.error,
         approval: wasActive ? undefined : stored.approval as PendingApproval | undefined,
@@ -107,35 +152,44 @@ export class TaskRegistry {
       };
       this.records.set(record.taskId, record);
       this.latestByWorkspace.set(record.projectRoot, record.taskId);
-      if (wasActive) this.activeByWorkspace.set(record.projectRoot, record.taskId);
+      if (wasActive && stored.status !== 'queued') this.activeByWorkspace.set(record.projectRoot, record.taskId);
       if (wasActive) this.persist(record);
     }
   }
 
-  start(projectRoot: string, brief: TaskBrief, handoff: HandoffPackage): { task: TaskSnapshot; reused: boolean } {
-    const currentId = this.activeByWorkspace.get(projectRoot);
-    const current = currentId ? this.records.get(currentId) : undefined;
-    if (current && activeStates.has(current.status)) return { task: snapshot(current), reused: true };
-
+  start(projectRoot: string, brief: TaskBrief, handoff?: HandoffPackage): { task: TaskSnapshot; reused: boolean } {
+    // An identical request while the same task is active is a retry: return that task instead of queueing a copy.
+    const activeId = this.activeByWorkspace.get(projectRoot);
+    const activeRecord = activeId ? this.records.get(activeId) : undefined;
+    if (activeRecord && activeStates.has(activeRecord.status) && JSON.stringify(activeRecord.brief) === JSON.stringify(brief)) {
+      return { task: snapshot(activeRecord), reused: true };
+    }
     const now = new Date().toISOString();
     const record: TaskRecord = {
       taskId: randomUUID(),
       objective: brief.objective,
       projectRoot,
       brief: structuredClone(brief),
-      handoff: structuredClone(handoff),
-      taskText: buildTaskText(brief, projectRoot, handoff),
-      status: 'queued',
+      ...(handoff ? { handoff: structuredClone(handoff) } : {}),
+      taskText: handoff ? buildTaskText(brief, projectRoot, handoff) : brief.objective,
+      status: this.activeByWorkspace.has(projectRoot) ? 'queued' : 'running',
       createdAt: now,
       updatedAt: now,
       progress: [],
+      evidence: { changedFiles: [], verified: false, workerClaimedSuccess: false },
       controller: new AbortController(),
     };
     this.records.set(record.taskId, record);
-    this.activeByWorkspace.set(projectRoot, record.taskId);
     this.latestByWorkspace.set(projectRoot, record.taskId);
     this.persist(record);
-    void this.run(record);
+    if (record.status === 'queued') {
+      const queue = this.queues.get(projectRoot) ?? [];
+      queue.push(record.taskId);
+      this.queues.set(projectRoot, queue);
+    } else {
+      this.activeByWorkspace.set(projectRoot, record.taskId);
+      void this.run(record);
+    }
     return { task: snapshot(record), reused: false };
   }
 
@@ -231,7 +285,16 @@ export class TaskRegistry {
     record.updatedAt = new Date().toISOString();
     this.persist(record);
     let progressText = '';
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let beforeFiles: string[] = [];
     try {
+      if (!resumption) {
+        await this.preflight(record.projectRoot);
+        beforeFiles = await gitFiles(record.projectRoot);
+        record.evidence.changedFiles = [];
+        timeout = setTimeout(() => record.controller.abort(new Error('Task timed out')), this.timeoutMs);
+        timeout.unref?.();
+      }
       const result = await runCodexDelegation(
         record.taskText,
         record.projectRoot,
@@ -272,10 +335,13 @@ export class TaskRegistry {
       if (!result) {
         this.finish(record, 'failed', 'Worker returned no result and no pending approval.');
       } else if (result.stopReason === 'cancelled' || record.status === 'cancelling') {
-        this.finish(record, 'cancelled', result.response);
+        const abortReason = record.controller.signal.reason;
+        this.finish(record, 'cancelled', record.controller.signal.aborted && abortReason instanceof Error ? abortReason.message : result.response);
       } else if (result.stopReason === 'end_turn') {
         record.workerOutput = result.response;
         record.workerStopReason = result.stopReason;
+        record.evidence.workerClaimedSuccess = true;
+        record.evidence.changedFiles = await changedFiles(record.projectRoot, beforeFiles);
         this.finish(record, 'completed');
       } else {
         record.workerOutput = result.response;
@@ -283,10 +349,18 @@ export class TaskRegistry {
         this.finish(record, 'failed', `Worker stopped with reason ${result.stopReason}: ${result.response}`);
       }
     } catch (error) {
+      if (timeout) clearTimeout(timeout);
+      record.evidence.changedFiles = await changedFiles(record.projectRoot, beforeFiles);
       if (record.controller.signal.aborted) {
-        this.finish(record, 'cancelled', 'Worker was cancelled.');
+        this.finish(record, 'cancelled', record.controller.signal.reason instanceof Error ? record.controller.signal.reason.message : 'Worker was cancelled.');
       } else {
         this.finish(record, 'failed', error instanceof Error ? error.message : String(error));
+      }
+    } finally {
+      if (timeout) clearTimeout(timeout);
+      if (this.activeByWorkspace.get(record.projectRoot) === record.taskId && !activeStates.has(record.status)) {
+        this.activeByWorkspace.delete(record.projectRoot);
+        this.startNext(record.projectRoot);
       }
     }
   }
@@ -307,6 +381,24 @@ export class TaskRegistry {
     if (this.activeByWorkspace.get(record.projectRoot) === record.taskId) {
       this.activeByWorkspace.delete(record.projectRoot);
     }
+    if ((record.status === 'cancelled' || record.status === 'failed' || record.status === 'completed') && !this.activeByWorkspace.has(record.projectRoot)) this.startNext(record.projectRoot);
+  }
+
+  private startNext(projectRoot: string): void {
+    if (this.activeByWorkspace.has(projectRoot)) return;
+    const queue = this.queues.get(projectRoot) ?? [];
+    while (queue.length) {
+      const next = this.records.get(queue.shift()!);
+      if (!next || next.status !== 'queued') continue;
+      this.queues.set(projectRoot, queue);
+      this.activeByWorkspace.set(projectRoot, next.taskId);
+      next.status = 'running';
+      next.updatedAt = new Date().toISOString();
+      this.persist(next);
+      void this.run(next);
+      return;
+    }
+    this.queues.delete(projectRoot);
   }
 
   private persist(record: TaskRecord): void {

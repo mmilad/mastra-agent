@@ -108,6 +108,7 @@ export async function runCodexDelegation(
   if (resume && suspendedPayload?.kind === 'question' && !resume.answer?.trim()) {
     return { response: 'No answer was provided to the worker. Start the delegation again when you are ready.', stopReason: 'question_unanswered' };
   }
+  if (context.abortSignal?.aborted) return { response: 'Codex delegation was cancelled.', stopReason: 'cancelled' };
 
   const client = await (dependencies.startClient ?? AcpWorkerClient.start)(codexAcpLaunch(projectRoot));
   let response = '';
@@ -226,7 +227,7 @@ export async function runCodexDelegation(
     }
     throw error;
   } finally {
-    client.close();
+    await client.close();
   }
 }
 

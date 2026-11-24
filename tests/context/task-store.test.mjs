@@ -12,7 +12,7 @@ function cleanup(path) {
 }
 const brief = { objective: 'Persist this task', constraints: [], acceptanceCriteria: [], contextReferences: [] };
 
-test('tasks remain visible after a registry restart', (t) => {
+test('tasks remain visible after a registry restart', async (t) => {
   const dir = tempDir();
   const db = join(dir, 'assistant-tasks.db');
   t.after(() => cleanup(dir));
@@ -20,6 +20,8 @@ test('tasks remain visible after a registry restart', (t) => {
   // A worker that never finishes keeps the task active, so the restart must mark it interrupted.
   const first = new TaskRegistry(() => new Promise(() => {}), firstStore);
   const saved = first.start(dir, brief).task;
+  // Let the registry finish its asynchronous preflight before the store closes.
+  await new Promise((resolve) => setTimeout(resolve, 300));
   firstStore.close();
   const secondStore = new SqliteTaskStore(db);
   const second = new TaskRegistry(undefined, secondStore);
