@@ -8,6 +8,7 @@ import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { assistantDatabasePath } from '../context/scope.ts';
 import { assistant } from './agents/assistant.ts';
+import { LocalFilesystem, Workspace } from '@mastra/core/workspace';
 import { projectKnowledge } from '../knowledge/project-knowledge.ts';
 import { knowledgeAnswer } from './workflows/knowledge-answer.ts';
 
@@ -21,6 +22,15 @@ export const mastra = new Mastra({
   agents: { assistant },
   workflows: { knowledgeAnswer },
   knowledge: { projectDocs: projectKnowledge },
+  // Read-only Plantool repository. contained: false is needed because Mastra's containment check
+  // rejects every file on Windows; the agent can then read paths outside this folder.
+  workspace: new Workspace({
+    filesystem: new LocalFilesystem({
+      basePath: process.env.PLANTOOL_WORKSPACE || resolve(projectRoot, '..', 'planus-manus'),
+      readOnly: true,
+      contained: false,
+    }),
+  }),
   // Studio's Knowledge browser needs these routes; they list Knowledge instances registered here.
   server: { apiRoutes: [...KNOWLEDGE_ROUTES] },
   // Keep conversations in LibSQL and route Studio observability features to DuckDB.
