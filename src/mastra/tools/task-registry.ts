@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import type { AcpLaunch, AcpWorkerClient } from '../../integrations/acp/client.ts';
 import { taskStore, type StoredTask, type TaskStore } from '../../context/task-store.ts';
 import { runCodexDelegation } from './delegate-to-codex.ts';
+import type { HandoffPackage } from '../../context/handoff.ts';
 
 export type TaskBrief = {
   objective: string;
@@ -38,6 +39,7 @@ export type TaskRecord = {
   projectRoot: string;
   brief: TaskBrief;
   taskText: string;
+  handoff?: HandoffPackage;
   status: TaskStatus;
   createdAt: string;
   updatedAt: string;
@@ -60,7 +62,7 @@ export type TaskSnapshot = Omit<TaskRecord, 'brief' | 'taskText' | 'controller' 
 
 const activeStates = new Set<TaskStatus>(['queued', 'running', 'waiting_approval', 'waiting_input', 'cancelling']);
 
-function buildTaskText(brief: TaskBrief, projectRoot: string): string {
+function buildTaskText(brief: TaskBrief, projectRoot: string, handoff: HandoffPackage): string {
   const lines = [
     `Objective: ${brief.objective}`,
     `Authorized workspace: ${projectRoot}`,
@@ -70,6 +72,9 @@ function buildTaskText(brief: TaskBrief, projectRoot: string): string {
     ...(brief.acceptanceCriteria.length ? brief.acceptanceCriteria.map((item) => `- ${item}`) : ['- Report the result and what you verified.']),
     'Context references:',
     ...(brief.contextReferences.length ? brief.contextReferences.map((item) => `- ${item}`) : ['- None supplied.']),
+    '',
+    'Handoff package (supplemental project context):',
+    JSON.stringify(handoff, null, 2),
   ];
   return lines.join('\n');
 }
@@ -107,7 +112,7 @@ export class TaskRegistry {
     }
   }
 
-  start(projectRoot: string, brief: TaskBrief): { task: TaskSnapshot; reused: boolean } {
+  start(projectRoot: string, brief: TaskBrief, handoff: HandoffPackage): { task: TaskSnapshot; reused: boolean } {
     const currentId = this.activeByWorkspace.get(projectRoot);
     const current = currentId ? this.records.get(currentId) : undefined;
     if (current && activeStates.has(current.status)) return { task: snapshot(current), reused: true };
@@ -118,7 +123,8 @@ export class TaskRegistry {
       objective: brief.objective,
       projectRoot,
       brief: structuredClone(brief),
-      taskText: buildTaskText(brief, projectRoot),
+      handoff: structuredClone(handoff),
+      taskText: buildTaskText(brief, projectRoot, handoff),
       status: 'queued',
       createdAt: now,
       updatedAt: now,

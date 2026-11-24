@@ -2,6 +2,18 @@ import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { findProjectRoot } from './delegate-to-codex.ts';
 import { taskRegistry } from './task-registry.ts';
+import { buildHandoffPackage } from '../../context/handoff.ts';
+import { ScopedMemoryStore } from '../../context/memory-store.ts';
+
+const handoffStores = new Map<string, ScopedMemoryStore>();
+function getHandoffStore(root: string): ScopedMemoryStore {
+  let store = handoffStores.get(root);
+  if (!store) {
+    store = new ScopedMemoryStore({ projectRoot: root });
+    handoffStores.set(root, store);
+  }
+  return store;
+}
 
 const taskStateSchema = z.enum([
   'queued',
@@ -36,6 +48,11 @@ const taskSnapshotSchema = z.object({
   workerStopReason: z.string().optional(),
   error: z.string().optional(),
   acceptanceVerified: z.literal(false),
+  handoff: z.object({
+    objective: z.string(), constraints: z.array(z.string()), acceptanceCriteria: z.array(z.string()),
+    facts: z.array(z.object({ id: z.string(), revision: z.number(), key: z.string(), value: z.string() })),
+    omittedFactCount: z.number(), error: z.string().optional(),
+  }).optional(),
 });
 
 export const delegateTask = createTool({
@@ -57,7 +74,15 @@ export const delegateTask = createTool({
   }),
   execute: async (brief) => {
     const projectRoot = findProjectRoot(process.cwd());
-    const result = taskRegistry.start(projectRoot, brief);
+    let handoff;
+    try {
+      const records = await getHandoffStore(projectRoot).list({ scope: 'project' });
+      handoff = buildHandoffPackage(brief, projectRoot, records, Number(process.env.HANDOFF_CHAR_BUDGET) || 6000);
+    } catch (error) {
+      handoff = buildHandoffPackage(brief, projectRoot, [], Number(process.env.HANDOFF_CHAR_BUDGET) || 6000);
+      handoff.error = error instanceof Error ? error.message : String(error);
+    }
+    const result = taskRegistry.start(projectRoot, brief, handoff);
     const task = result.task;
     return {
       taskId: task.taskId,
