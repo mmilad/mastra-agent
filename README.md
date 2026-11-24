@@ -187,3 +187,8 @@ M0 and M1 are implemented; conversation persistence and scoped memory are in pla
 `plantool next` shows ready tasks and `plantool context MAST-23` shows the first
 compatibility investigation. Run `plantool validate` and `plantool check`
 after changing the plan.
+
+Run `plantool` commands only in this main checkout, not in git worktrees. plantool
+registers every folder where a command runs, and a worktree gets its own `.plan`
+copy, so plan edits there can end up on a feature branch. Use worktrees for code
+changes only. After removing a worktree, run `plantool projects prune`.
