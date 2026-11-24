@@ -9,6 +9,7 @@ const taskStateSchema = z.enum([
   'waiting_approval',
   'waiting_input',
   'cancelling',
+  'interrupted',
   'completed',
   'failed',
   'cancelled',

@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { AcpLaunch, AcpWorkerClient } from '../../integrations/acp/client.ts';
+import { taskStore, type StoredTask, type TaskStore } from '../../context/task-store.ts';
 import { runCodexDelegation } from './delegate-to-codex.ts';
 
 export type TaskBrief = {
@@ -17,7 +18,8 @@ export type TaskStatus =
   | 'cancelling'
   | 'completed'
   | 'failed'
-  | 'cancelled';
+  | 'cancelled'
+  | 'interrupted';
 
 export type PendingApproval = {
   approvalToken: string;
@@ -83,8 +85,26 @@ export class TaskRegistry {
   private readonly latestByWorkspace = new Map<string, string>();
   private readonly startClient?: ClientFactory;
 
-  constructor(startClient?: ClientFactory) {
+  private readonly store?: TaskStore;
+
+  constructor(startClient?: ClientFactory, store?: TaskStore) {
+    this.store = store;
     this.startClient = startClient;
+    for (const stored of store?.loadAll() ?? []) {
+      const wasActive = activeStates.has(stored.status as TaskStatus);
+      const record: TaskRecord = {
+        ...stored,
+        brief: stored.brief as TaskBrief,
+        status: wasActive ? 'interrupted' : stored.status as TaskStatus,
+        error: wasActive ? 'The assistant restarted before this task finished. It was not resumed automatically; check the workspace before retrying.' : stored.error,
+        approval: wasActive ? undefined : stored.approval as PendingApproval | undefined,
+        controller: new AbortController(),
+      };
+      this.records.set(record.taskId, record);
+      this.latestByWorkspace.set(record.projectRoot, record.taskId);
+      if (wasActive) this.activeByWorkspace.set(record.projectRoot, record.taskId);
+      if (wasActive) this.persist(record);
+    }
   }
 
   start(projectRoot: string, brief: TaskBrief): { task: TaskSnapshot; reused: boolean } {
@@ -108,6 +128,7 @@ export class TaskRegistry {
     this.records.set(record.taskId, record);
     this.activeByWorkspace.set(projectRoot, record.taskId);
     this.latestByWorkspace.set(projectRoot, record.taskId);
+    this.persist(record);
     void this.run(record);
     return { task: snapshot(record), reused: false };
   }
@@ -130,6 +151,7 @@ export class TaskRegistry {
     } else {
       record.status = 'cancelling';
       record.updatedAt = new Date().toISOString();
+      this.persist(record);
       record.controller.abort(new Error('Task cancelled by the user'));
     }
     return { ok: true, message: `Cancellation requested for task ${taskId}.`, task: snapshot(record) };
@@ -191,6 +213,7 @@ export class TaskRegistry {
     record.status = 'running';
     record.progress = [...record.progress, `Resuming after the user approved ${approval.operation ?? 'the pending request'}.`].slice(-20);
     record.updatedAt = new Date().toISOString();
+    this.persist(record);
     if (record.expiryTimer) clearTimeout(record.expiryTimer);
     record.expiryTimer = undefined;
     void this.run(record, { approval, resume });
@@ -200,6 +223,7 @@ export class TaskRegistry {
   private async run(record: TaskRecord, resumption?: { approval: PendingApproval; resume: ResumeDecision }): Promise<void> {
     if (!resumption) record.status = 'running';
     record.updatedAt = new Date().toISOString();
+    this.persist(record);
     let progressText = '';
     try {
       const result = await runCodexDelegation(
@@ -211,11 +235,13 @@ export class TaskRegistry {
             progressText = `${progressText}${text}`.slice(-1200);
             record.progress = [progressText];
             record.updatedAt = new Date().toISOString();
+            this.persist(record);
           },
           onApprovalRequested: async (approval) => {
             record.approval = approval;
             record.status = approval.kind === 'permission' ? 'waiting_approval' : 'waiting_input';
             record.updatedAt = new Date().toISOString();
+            this.persist(record);
             const delay = Math.max(0, approval.expiresAt - Date.now());
             record.expiryTimer = setTimeout(() => this.expireApproval(record), delay);
             record.expiryTimer.unref?.();
@@ -271,10 +297,15 @@ export class TaskRegistry {
     record.error = error;
     record.approval = undefined;
     record.updatedAt = new Date().toISOString();
+    this.persist(record);
     if (this.activeByWorkspace.get(record.projectRoot) === record.taskId) {
       this.activeByWorkspace.delete(record.projectRoot);
     }
   }
+
+  private persist(record: TaskRecord): void {
+    this.store?.upsert(record as StoredTask);
+  }
 }
 
-export const taskRegistry = new TaskRegistry();
+export const taskRegistry = new TaskRegistry(undefined, taskStore);
