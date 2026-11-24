@@ -22,8 +22,9 @@ export const mastra = new Mastra({
   agents: { assistant },
   workflows: { knowledgeAnswer },
   knowledge: { projectDocs: projectKnowledge },
-  // Read-only Plantool repository. contained: false is needed because Mastra's containment check
-  // rejects every file on Windows; the agent can then read paths outside this folder.
+  // Read-only workspace over the parent folder of this project, so all sibling projects are visible.
+  // Override with PLANTOOL_WORKSPACE. contained: false is needed because Mastra's containment check
+  // rejects every file on Windows; the agent can then read paths outside the base folder.
   workspace: new Workspace({
     filesystem: new LocalFilesystem({
       basePath: process.env.PLANTOOL_WORKSPACE || resolve(projectRoot, '..'),
