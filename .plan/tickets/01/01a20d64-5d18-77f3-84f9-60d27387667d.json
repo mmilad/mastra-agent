@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20d64-5d18-77f3-84f9-60d27387667d",
+  "number": 45,
+  "title": "Define workspace-scoped Mastra signal intake",
+  "kind": "task",
+  "description": "Research and specify how the assistant accepts typed input events through Mastra Signals. Define a validated envelope and map user_prompt, agent/worker responses and progress, CI runs, and other external events to the appropriate Mastra APIs. Clarify workspace-to-resourceId and conversation-to-threadId routing, behavior when a workspace has multiple conversations, per-thread ordering, persistence and crash boundaries, deduplication/coalescing, notification delivery policy, endpoint authentication/webhook verification, and how the assistant reads durable notification payloads. Keep durable worker task lifecycle and side-effect reconciliation in the application task store; Mastra Signals are the thread input/delivery layer, not the task system of record. Verify the design against the installed @mastra/core 1.85.0 API and document any version-specific limitations. Sources: https://mastra.ai/docs/signals/overview, https://mastra.ai/docs/signals/sending-signals, https://mastra.ai/docs/signals/notifications, https://mastra.ai/docs/signals/running-across-processes.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "why": "Typed user and external events need consistent workspace routing, delivery, ordering, deduplication and recovery rules before implementation.",
+  "acceptance": [
+    {
+      "text": "Workspace and thread routing is specified, including the multiple-conversations-per-workspace case",
+      "met": false
+    },
+    {
+      "text": "Each signal category has a documented mapping to Mastra APIs and payload visibility",
+      "met": false
+    },
+    {
+      "text": "Ordering, deduplication, crash recovery, retries and per-workspace writer limits have explicit ownership",
+      "met": false
+    },
+    {
+      "text": "Endpoint authentication and external webhook verification are specified",
+      "met": false
+    },
+    {
+      "text": "The design is checked against the installed Mastra version and leaves MAST-33 and MAST-34 implementable without overlapping sources of truth",
+      "met": false
+    }
+  ],
+  "todos": [
+    {
+      "text": "Inspect installed Mastra 1.85.0 Signals and notification APIs",
+      "met": false
+    },
+    {
+      "text": "Define the normalized event envelope and signal mapping",
+      "met": false
+    },
+    {
+      "text": "Document thread routing, ordering, persistence, idempotency and endpoint security",
+      "met": false
+    },
+    {
+      "text": "Update MAST-33 and MAST-34 boundaries based on the design",
+      "met": false
+    }
+  ],
+  "size": "m",
+  "createdBy": "codex",
+  "createdAt": "2026-11-24T11:50:10.968Z",
+  "updatedAt": "2026-11-24T11:50:10.968Z"
+}

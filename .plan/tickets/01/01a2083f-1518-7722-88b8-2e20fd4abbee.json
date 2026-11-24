@@ -5,7 +5,7 @@
   "title": "Hosted database",
   "kind": "option",
   "description": "Hosted database. Benefit: Can support multiple devices later. Tradeoff: Introduces infrastructure, credentials and remote data storage. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:21.624Z",
-  "updatedAt": "2026-11-23T11:51:21.678Z"
+  "updatedAt": "2026-11-23T16:08:53.179Z"
 }

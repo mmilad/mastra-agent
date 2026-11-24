@@ -5,7 +5,7 @@
   "title": "Local durable database with explicit export",
   "kind": "option",
   "description": "Local durable database with explicit export. Benefit: Supports restart recovery without operating a server. Tradeoff: Backups and retention still need a clear policy. Proposed option for user review.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,6 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:21.336Z",
-  "updatedAt": "2026-11-23T11:51:21.393Z"
+  "updatedAt": "2026-11-23T16:08:53.180Z",
+  "completedAt": "2026-11-23T16:08:53.180Z"
 }

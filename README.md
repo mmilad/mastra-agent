@@ -31,8 +31,8 @@ Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
 
 ## Run
 
-Start an interactive terminal conversation (it keeps one memory thread while
-you ask for task status, approve a request, or cancel a task. Type `:exit` to
+Start an interactive terminal conversation. It resumes the selected conversation
+after restart and scopes conversation history to this project. Type `:exit` to
 close it; any tasks still active in that terminal process are cancelled:
 
 ```sh
@@ -44,6 +44,16 @@ For a one-shot response:
 ```sh
 npm run chat -- "Say hello in one sentence."
 ```
+
+Use `ASSISTANT_PROJECT_ROOT=/path/to/project` to select another local workspace.
+The assistant keeps one local SQLite database for user preferences and separates
+project facts and conversation threads by the selected workspace root. Use
+`npm run chat -- --new` to start a separate conversation, `npm run chat -- --list`
+to list this project's conversations, and `npm run chat -- --thread <id>` to
+select a conversation. In interactive mode, `:new`, `:threads`, and `:use <id>`
+do the same. The selected thread pointer is local under `.mastra/`; its messages
+remain in the SQLite database. Project scope is derived from the selected workspace root,
+so conversations and project facts from another workspace are not retrieved.
 
 Mastra Studio saves chat threads and messages in `mastra.db` at the project
 root, so they remain available after restarting Studio. The assistant loads
@@ -74,6 +84,14 @@ expires after five minutes. Resume with that request's token and approve or deny
 applies only to that task and exact operation. Worker text cannot approve
 requests. Cursor `ask_question` requests also suspend the run; resume with an
 answer. Denial, cancellation, and expired approval produce visible outcomes.
+
+The `manage-memory` tool supports recall, inspection with history, saving an
+explicitly requested preference or project fact, correcting it, forgetting it,
+and exporting allowlisted memory fields. User preferences have a global scope;
+project facts use the current workspace scope. Conversation deletion is limited
+to the current project and requires tool approval. Exports contain memory records
+only, not raw chat transcripts or credentials. Credentials are rejected when
+they match common API key, bearer token, or provider token formats.
 
 The assistant returns a task ID as soon as it starts work. Ask for status or
 cancel using that ID. If an approval is needed, reply exactly `approve <token>`
@@ -122,6 +140,8 @@ npm run chat -- "Reply with exactly: OK"
 ## Files
 
 - `src/mastra/agents/assistant.ts`: assistant instructions and model.
+- `src/context/`: project identity, durable conversation selection, and scoped memory records.
+- `src/mastra/tools/memory.ts`: inspect, correct, forget, and export operations for context.
 - `src/mastra/tools/delegate-to-codex.ts`: workspace-scoped ACP handoff to Codex.
 - `src/policy/workspace.ts`: path, command, and approval scope checks.
 - `src/integrations/acp/client.ts`, `src/integrations/acp/providers.ts`: shared ACP client and provider launch settings.

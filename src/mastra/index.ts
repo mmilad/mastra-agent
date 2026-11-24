@@ -4,10 +4,10 @@ import { DuckDBStore } from '@mastra/duckdb';
 import { LibSQLStore } from '@mastra/libsql';
 import { MastraStorageExporter, Observability } from '@mastra/observability';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { assistantDatabasePath } from '../context/scope.ts';
 import { assistant } from './agents/assistant.ts';
 
-const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const projectRoot = dirname(assistantDatabasePath());
 const observabilityStore = new DuckDBStore({
   id: 'assistant-observability',
   path: resolve(projectRoot, 'mastra-observability.duckdb'),
@@ -20,7 +20,7 @@ export const mastra = new Mastra({
     id: 'assistant-storage',
     default: new LibSQLStore({
       id: 'assistant-conversations',
-      url: `file:${resolve(projectRoot, 'mastra.db')}`,
+      url: `file:${assistantDatabasePath()}`,
     }),
     domains: {
       observability: observabilityStore.observability,

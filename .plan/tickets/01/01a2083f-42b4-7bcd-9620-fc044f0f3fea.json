@@ -5,7 +5,7 @@
   "title": "Persist conversations and scoped memory",
   "kind": "task",
   "description": "Implement the selected storage policy with distinct user, project and conversation identities. Separate user-confirmed preferences, project facts, raw messages and generated summaries. Track source, time and correction history. Provide inspect, correct, forget and export operations. Store credentials outside conversational memory.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -16,23 +16,23 @@
   "acceptance": [
     {
       "text": "Two projects cannot retrieve each other’s private context by default",
-      "met": false
+      "met": true
     },
     {
       "text": "Restart restores the selected conversation",
-      "met": false
+      "met": true
     },
     {
       "text": "Correction replaces stale preferred facts in retrieval",
-      "met": false
+      "met": true
     },
     {
       "text": "Forget removes applicable source and derived memory",
-      "met": false
+      "met": true
     },
     {
       "text": "Export excludes credentials",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -42,5 +42,29 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:33.300Z",
-  "updatedAt": "2026-11-23T11:51:33.300Z"
+  "updatedAt": "2026-11-23T16:31:41.996Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented project-scoped SQLite memory, resumable terminal conversations, correction history, inspection and physical forget with derived-record cleanup, plus allowlisted credential-filtered exports. Independent review found and helped resolve global-scope and deletion-lineage issues.",
+    "verifiedBy": "npm run check; npm run test:context (5/5); npm run test:acp (7/7); npm run test:policy (15/15); npm run test:plantool (5/5)",
+    "changedFiles": [
+      ".plan/comments/01/01a20929-c24a-74b3-a53c-942e55250133.json",
+      ".plan/tickets/01/01a2083f-1380-74c1-8ddc-f2cede604c7a.json",
+      ".plan/tickets/01/01a2083f-13f8-7142-a368-ff1f6fb840d4.json",
+      ".plan/tickets/01/01a2083f-146e-7d00-8210-a81f44156556.json",
+      ".plan/tickets/01/01a2083f-1518-7722-88b8-2e20fd4abbee.json",
+      ".plan/tickets/01/01a2083f-42b4-7bcd-9620-fc044f0f3fea.json",
+      "README.md",
+      "package-lock.json",
+      "package.json",
+      "src/mastra/agents/assistant.ts",
+      "src/mastra/index.ts",
+      "src/mastra/tools/delegate-to-codex.ts",
+      "src/run.ts",
+      "src/context/",
+      "src/mastra/tools/memory.ts",
+      "tests/context/"
+    ]
+  },
+  "completedAt": "2026-11-23T16:31:41.996Z"
 }

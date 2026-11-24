@@ -245,7 +245,7 @@ export const delegateToCodex = createTool({
   suspendSchema: approvalPayloadSchema,
   resumeSchema,
   execute: async ({ task }, context) => {
-    const projectRoot = findProjectRoot(process.cwd());
+    const projectRoot = findProjectRoot(process.env.ASSISTANT_PROJECT_ROOT ?? process.cwd());
     return runCodexDelegation(task, projectRoot, context);
   },
 });

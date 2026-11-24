@@ -5,7 +5,7 @@
   "title": "Local readable files",
   "kind": "option",
   "description": "Local readable files. Benefit: Easy to inspect and version selected non-sensitive records. Tradeoff: Concurrent updates and recovery need more custom handling. Proposed option for user review.",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -22,5 +22,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-23T11:51:21.454Z",
-  "updatedAt": "2026-11-23T11:51:21.516Z"
+  "updatedAt": "2026-11-23T16:08:53.177Z"
 }

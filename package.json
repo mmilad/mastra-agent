@@ -11,11 +11,13 @@
     "chat": "node --env-file-if-exists=.env src/run.ts",
     "check": "tsc --noEmit",
     "test:policy": "node --experimental-strip-types --test tests/policy/*.test.mjs",
+    "test:context": "node --experimental-strip-types --test tests/context/*.test.mjs",
     "test:acp": "node --experimental-strip-types --test tests/acp/client.test.mjs",
     "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs",
     "test:plantool": "node --experimental-strip-types --test tests/tools/*.test.mjs"
   },
   "dependencies": {
+    "@libsql/client": "0.18.0",
     "@agentclientprotocol/codex-acp": "2.10.0",
     "@mastra/core": "1.85.0",
     "@mastra/duckdb": "^1.19.1",

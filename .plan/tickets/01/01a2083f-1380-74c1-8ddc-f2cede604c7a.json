@@ -5,7 +5,7 @@
   "title": "How should conversation and task state be stored?",
   "kind": "decision",
   "description": "Propose local SQLite-compatible storage supported by Mastra for conversation and runtime records. Plantool .plan remains the planning source of truth, not a runtime event database. Decide retention, backup/export, forget behavior and the boundary between global preferences and project knowledge before persistence implementation.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,15 +14,23 @@
   "decision": {
     "owner": "human",
     "criteria": [],
-    "chosen": null,
+    "chosen": "01a2083f-13f8-7142-a368-ff1f6fb840d4",
     "reversible": true,
     "recommendation": {
       "option": "01a2083f-13f8-7142-a368-ff1f6fb840d4",
       "why": "Supports restart recovery without operating a server",
       "by": "agent",
       "at": "2026-11-23T11:51:21.734Z"
-    }
+    },
+    "rationale": "The person commented on MAST-14: “sqlite is fine for now.” This selects the existing local durable database option for the initial local-first prototype; explicit export remains part of the selected option, while retention and forget controls use reversible local defaults and can be refined later.",
+    "decidedBy": "human",
+    "decidedAt": "2026-11-23T16:08:53.183Z",
+    "cancelled": [
+      "01a2083f-146e-7d00-8210-a81f44156556",
+      "01a2083f-1518-7722-88b8-2e20fd4abbee"
+    ]
   },
   "createdAt": "2026-11-23T11:51:21.216Z",
-  "updatedAt": "2026-11-23T11:51:21.734Z"
+  "updatedAt": "2026-11-23T16:08:53.183Z",
+  "completedAt": "2026-11-23T16:08:53.183Z"
 }
