@@ -7,6 +7,7 @@ import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { assistantDatabasePath } from '../context/scope.ts';
 import { assistant } from './agents/assistant.ts';
+import { knowledgeAnswer } from './workflows/knowledge-answer.ts';
 
 const projectRoot = dirname(assistantDatabasePath());
 const observabilityStore = new DuckDBStore({
@@ -16,6 +17,7 @@ const observabilityStore = new DuckDBStore({
 
 export const mastra = new Mastra({
   agents: { assistant },
+  workflows: { knowledgeAnswer },
   // Keep conversations in LibSQL and route Studio observability features to DuckDB.
   storage: new MastraCompositeStore({
     id: 'assistant-storage',
