@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20dee-d4d2-72a9-a825-c7d24c887b1d",
+  "number": 48,
+  "title": "Yes, wire Cursor before the pilot",
+  "kind": "option",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a20dee-d4c4-7ace-b55b-4af6cf262244",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-24T14:21:25.586Z",
+  "updatedAt": "2026-11-24T14:21:25.586Z"
+}

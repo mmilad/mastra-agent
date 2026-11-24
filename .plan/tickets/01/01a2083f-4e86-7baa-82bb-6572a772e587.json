@@ -4,7 +4,7 @@
   "number": 34,
   "title": "Add worker registry, queue limits and evidence reporting",
   "kind": "task",
-  "description": "Represent named worker configurations, enabled capabilities, health and active sessions. Prevent concurrent writers to the same workspace with an application-level workspace lease. Configure task queue/concurrency, elapsed-time and retry limits; distinguish this durable worker task queue from Mastra Signals’ per-thread input queue and notification inbox. Signals may route user prompts, worker updates and CI events to the workspace’s selected assistant thread, with bounded delivery/coalescing so event bursts do not flood runs. Do not treat Mastra thread ordering as a workspace-wide FIFO guarantee. Record provider-reported usage where available and mark unknown usage honestly. Show meaningful progress changes and final artifact/test evidence without flooding the conversation.",
+  "description": "Add a worker registry with per-project concurrency limits, a bounded queue, and an evidence record per task (files changed, commands run, verification output). Only one active task per project exists today; queue limits and evidence reporting do not.",
   "status": "todo",
   "priority": "normal",
   "labels": [
@@ -38,5 +38,5 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:36.326Z",
-  "updatedAt": "2026-11-24T11:50:12.063Z"
+  "updatedAt": "2026-11-24T14:21:25.130Z"
 }

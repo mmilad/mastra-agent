@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20dee-d4c4-7ace-b55b-4af6cf262244",
+  "number": 46,
+  "title": "Is Cursor required as a second worker for the first pilot?",
+  "kind": "decision",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Cursor ACP was verified in M0 but no tool exposes it. This decides whether M4 includes a Cursor worker tool.",
+  "decision": {
+    "owner": "human",
+    "criteria": [],
+    "chosen": null
+  },
+  "createdAt": "2026-11-24T14:21:25.572Z",
+  "updatedAt": "2026-11-24T14:21:25.572Z"
+}

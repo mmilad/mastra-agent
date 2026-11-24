@@ -4,7 +4,7 @@
   "number": 33,
   "title": "Persist task lifecycle and recover interrupted runs",
   "kind": "task",
-  "description": "Persist task ID, worker/session ID, workspace, timestamps, progress references and states queued, running, waiting_for_user, succeeded, failed, cancelled and interrupted. The application task store is authoritative for worker lifecycle, approvals, side-effect status and restart reconciliation. Treat Mastra Signals as per-thread input and delivery only: durable notifications may wake or inform a thread, but do not replace task records or guarantee exactly-once worker execution. Reconcile actual worker state before resuming; never replay a side-effecting prompt with uncertain completion. Use idempotency keys and bounded retries only for demonstrably safe operations. A Mastra in-memory queue is not crash durable; persist inputs whose loss is unacceptable and record enough routing data to re-deliver safely.",
+  "description": "Move the task registry from memory into the local SQLite database so task lifecycle, approvals and worker outcomes survive a Mastra restart. On startup, reconcile tasks that were running: mark them interrupted and never replay a worker run automatically. Today the registry is in memory only (src/mastra/tools/task-registry.ts).",
   "status": "todo",
   "priority": "normal",
   "labels": [
@@ -15,19 +15,19 @@
   "why": "Lost processes and duplicate side effects are the main failure cases in delegation.",
   "acceptance": [
     {
-      "text": "Injected crash produces a recoverable or visibly interrupted task",
+      "text": "Tasks and approvals are stored in SQLite",
       "met": false
     },
     {
-      "text": "A repeated task ID does not launch a second worker",
+      "text": "Restart shows previous tasks with their last known state",
       "met": false
     },
     {
-      "text": "Unknown completion stays uncertain until checked",
+      "text": "Interrupted runs are marked interrupted and not re-run automatically",
       "met": false
     },
     {
-      "text": "Waiting tasks survive restart without granting approval",
+      "text": "A test covers restart during a waiting approval",
       "met": false
     }
   ],
@@ -38,5 +38,5 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:35.545Z",
-  "updatedAt": "2026-11-24T11:50:12.015Z"
+  "updatedAt": "2026-11-24T14:21:24.916Z"
 }

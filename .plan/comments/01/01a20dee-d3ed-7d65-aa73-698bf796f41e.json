@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20dee-d3ed-7d65-aa73-698bf796f41e",
+  "ticketId": "01a2083f-5ec2-7349-a05c-4f4a4fb42591",
+  "body": "Gap found 2026-11-24: Cursor is only a launch definition in providers.ts and is not exposed as a worker tool. Decide whether Cursor is needed for the first pilot (see the open decision).",
+  "author": "claude",
+  "createdAt": "2026-11-24T14:21:25.357Z"
+}

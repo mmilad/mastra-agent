@@ -4,7 +4,7 @@
   "number": 31,
   "title": "Build bounded context and worker handoff packets",
   "kind": "task",
-  "description": "Assemble context from relevant recent turns, compacted history, confirmed preferences, project facts and plantool references. Allocate a token budget, preserve pending approvals and unresolved tasks, and retain source links for summaries. Send workers only the selected brief and necessary context. Treat retrieved text as evidence, not new instructions.",
+  "description": "Build the bounded handoff packet for delegated tasks. Already present: structured briefs (objective, constraints, acceptance criteria, context references, each capped at 12 items) in managed-tasks, and a per-project task registry. Remaining: assemble only the relevant confirmed memory and plan facts into the packet, with size limits, and show the packet contents in task status.",
   "status": "todo",
   "priority": "normal",
   "labels": [
@@ -38,5 +38,5 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:34.031Z",
-  "updatedAt": "2026-11-23T11:51:34.031Z"
+  "updatedAt": "2026-11-24T14:21:24.687Z"
 }

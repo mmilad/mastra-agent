@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20dee-e2ec-75c0-803f-6260fd6d5a3a",
+  "ticketId": "01a20d64-5d18-77f3-84f9-60d27387667d",
+  "body": "Recommendation 2026-11-24: defer this until the single-process task persistence (MAST-33) works. The roadmap says a local single process needs no orchestration framework, and Signals only pay off across processes or for durable async events. Keep it off the critical path for the pilot.",
+  "author": "claude",
+  "createdAt": "2026-11-24T14:21:29.196Z"
+}
