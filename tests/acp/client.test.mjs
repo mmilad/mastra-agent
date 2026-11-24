@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
 import { test } from 'node:test';
 import { ACP_UNHANDLED, AcpWorkerClient } from '../../src/integrations/acp/client.ts';
 
 const fixture = fileURLToPath(new URL('./fake-agent.mjs', import.meta.url));
-const cwd = '/private/tmp';
+const cwd = tmpdir();
 
 async function startFake(env = {}) {
   return AcpWorkerClient.start({

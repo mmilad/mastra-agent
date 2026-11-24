@@ -9,7 +9,7 @@ access to other folders.
 
 ## Setup
 
-Requires Node.js 22.18+ (Node.js 24 LTS recommended).
+Requires Node.js 22.18.x or Node.js 24.11.0+ (Node.js 24 LTS recommended).
 
 ```sh
 npm install
@@ -104,6 +104,17 @@ planned item.
 
 ```sh
 npm run check
+```
+
+`npm run check` runs only the TypeScript compiler (`tsc --noEmit`); it does not
+run tests. The available test scripts are:
+
+```sh
+npm run test:policy
+npm run test:context
+npm run test:acp
+npm run test:acp:providers
+npm run test:plantool
 ```
 
 ## ACP adapter

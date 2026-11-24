@@ -1,12 +1,35 @@
 import { execFileSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { findProjectRoot } from './delegate-to-codex.ts';
 
 type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
 
+let windowsPlantoolLaunch: { file: string; prefix: string[] } | undefined;
+
+/**
+ * On Windows, plantool is installed as a .cmd shim. Node refuses to spawn .cmd
+ * files without a shell, and a shell would let ticket text reach cmd.exe. Run the
+ * shim's Node entry script directly with process.execPath instead.
+ */
+function plantoolLaunch(): { file: string; prefix: string[] } {
+  if (process.platform !== 'win32') return { file: 'plantool', prefix: [] };
+  if (!windowsPlantoolLaunch) {
+    const shim = execFileSync('where.exe', ['plantool.cmd'], { encoding: 'utf8' })
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .find(Boolean);
+    if (!shim) throw new Error('plantool.cmd was not found on PATH.');
+    const entry = join(dirname(shim), 'node_modules', '@mmilad', 'plantool', 'bin', 'plantool.js');
+    windowsPlantoolLaunch = { file: process.execPath, prefix: [entry] };
+  }
+  return windowsPlantoolLaunch;
+}
+
 export function runPlantoolJson(projectRoot: string, args: string[]): JsonValue {
-  const stdout = execFileSync('plantool', [...args, '--format', 'json'], {
+  const launch = plantoolLaunch();
+  const stdout = execFileSync(launch.file, [...launch.prefix, ...args, '--format', 'json'], {
     cwd: projectRoot,
     encoding: 'utf8',
     timeout: 10_000,

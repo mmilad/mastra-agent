@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { tmpdir } from 'node:os';
 import { AcpWorkerClient } from '../../src/integrations/acp/client.ts';
 import { codexAcpLaunch, cursorAcpLaunch } from '../../src/integrations/acp/providers.ts';
 
 const enabled = process.env.RUN_ACP_PROVIDER_TESTS === '1';
-const cwd = '/private/tmp';
+const cwd = tmpdir();
 
 async function verifyProviderContract(launch) {
   const client = await AcpWorkerClient.start(launch);

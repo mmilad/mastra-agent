@@ -60,7 +60,15 @@ test('resolves symlinks before deciding whether a path is in scope', (t) => {
     rmSync(root, { recursive: true, force: true });
     rmSync(outside, { recursive: true, force: true });
   });
-  symlinkSync(outside, join(root, 'linked'));
+  try {
+    symlinkSync(outside, join(root, 'linked'));
+  } catch (error) {
+    if (['EPERM', 'EACCES', 'ENOTSUP'].includes(error?.code)) {
+      t.skip(`Symlink creation is not permitted in this environment (${error.code}).`);
+      return;
+    }
+    throw error;
+  }
   const scope = inspectPermissionRequest(root, 'session/request_permission', {
     toolCall: { kind: 'edit', content: [{ type: 'diff', path: join(root, 'linked', 'new.txt') }] },
   });
