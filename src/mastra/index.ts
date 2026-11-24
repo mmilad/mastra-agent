@@ -26,7 +26,7 @@ export const mastra = new Mastra({
   // rejects every file on Windows; the agent can then read paths outside this folder.
   workspace: new Workspace({
     filesystem: new LocalFilesystem({
-      basePath: process.env.PLANTOOL_WORKSPACE || resolve(projectRoot, '..', 'planus-manus'),
+      basePath: process.env.PLANTOOL_WORKSPACE || resolve(projectRoot, '..'),
       readOnly: true,
       contained: false,
     }),
