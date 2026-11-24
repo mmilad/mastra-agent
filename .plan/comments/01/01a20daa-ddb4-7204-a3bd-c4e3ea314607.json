@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20daa-ddb4-7204-a3bd-c4e3ea314607",
+  "ticketId": "01a2083f-54bb-7238-aa2c-d89f0a131f68",
+  "body": "Windows fix (branch fix/windows-portability): plantool now runs through its Node entry script instead of the .cmd shim. npm run test:plantool passes 5/5 on Windows 11 with Node 24.1. Not merged yet.",
+  "author": "claude",
+  "createdAt": "2026-11-24T13:07:11.412Z"
+}

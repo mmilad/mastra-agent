@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20daa-de82-7dcd-b9da-e5bb2ee30129",
+  "ticketId": "01a2083f-42b4-7bcd-9620-fc044f0f3fea",
+  "body": "Windows check (2026-11-24): npm run test:context is not green on Windows. Tests close libSQL stores before deleting temp folders, but the database file stays locked briefly, and the corrections test can hang when it runs after another test in the same file. Root cause not yet found. The policy delegation tests fail with EPERM because the ACP child process keeps the temp folder open; the tests need to close the client before cleanup.",
+  "author": "claude",
+  "createdAt": "2026-11-24T13:07:11.618Z"
+}

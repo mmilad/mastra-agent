@@ -182,8 +182,8 @@ plantool serve
 ```
 
 Open http://127.0.0.1:4000 and select **mastra**. Start with **MAST-1**,
-**Assistant roadmap and review guide**, and the five open decisions.
-The roadmap is a proposal for review; its features are not implemented yet.
+**Assistant roadmap and review guide**, and the recorded decisions (none are open as of 2026-11-24).
+M0 and M1 are implemented; conversation persistence and scoped memory are in place. The roadmap is a proposal for review, and M2 to M5 remain open.
 `plantool next` shows ready tasks and `plantool context MAST-23` shows the first
 compatibility investigation. Run `plantool validate` and `plantool check`
 after changing the plan.
