@@ -9,7 +9,7 @@
   "priority": "normal",
   "labels": [],
   "properties": {},
-  "parentId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "parentId": "01a2083f-6555-727d-b37e-cdbf1e84bd47",
   "why": "Typed user and external events need consistent workspace routing, delivery, ordering, deduplication and recovery rules before implementation.",
   "acceptance": [
     {
@@ -54,5 +54,5 @@
   "size": "m",
   "createdBy": "codex",
   "createdAt": "2026-11-24T11:50:10.968Z",
-  "updatedAt": "2026-11-24T11:50:10.968Z"
+  "updatedAt": "2026-11-24T14:57:05.367Z"
 }

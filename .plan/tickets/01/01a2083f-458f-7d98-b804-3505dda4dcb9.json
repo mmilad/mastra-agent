@@ -5,7 +5,7 @@
   "title": "Build bounded context and worker handoff packets",
   "kind": "task",
   "description": "Build the bounded handoff packet for delegated tasks. Already present: structured briefs (objective, constraints, acceptance criteria, context references, each capped at 12 items) in managed-tasks, and a per-project task registry. Remaining: assemble only the relevant confirmed memory and plan facts into the packet, with size limits, and show the packet contents in task status.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "mvp"
@@ -38,5 +38,20 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:34.031Z",
-  "updatedAt": "2026-11-24T14:21:24.687Z"
+  "updatedAt": "2026-11-24T15:04:27.176Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Handoff packets built from the brief and active project facts with record IDs, budget and project isolation. Conversation compaction moved to a new ticket.",
+    "verifiedBy": "npm run check; test:context 11/11; test:policy 14/14 (1 symlink skipped); test:acp 7/7; test:plantool 5/5",
+    "changedFiles": [
+      "src/context/handoff.ts",
+      "src/mastra/tools/managed-tasks.ts",
+      "src/mastra/tools/task-registry.ts",
+      "tests/context/handoff.test.mjs"
+    ],
+    "commits": [
+      "24a48ee"
+    ]
+  },
+  "completedAt": "2026-11-24T15:04:27.176Z"
 }

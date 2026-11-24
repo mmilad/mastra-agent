@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e16-31d5-76ca-855e-654c3e360bc9",
+  "number": 50,
+  "title": "Compact long conversations while preserving constraints and open work",
+  "kind": "task",
+  "description": "Acceptance criteria from MAST-31 that remain open: a long conversation stays inside a configured budget; compaction preserves constraints and unresolved work.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-3fec-7eeb-a267-fb62f439d56c",
+  "why": "Split from MAST-31: long chat history must stay inside a budget without losing constraints or unresolved work.",
+  "acceptance": [
+    {
+      "text": "Long conversation stays inside a configured budget",
+      "met": false
+    },
+    {
+      "text": "Compaction preserves constraints and unresolved work",
+      "met": false
+    }
+  ],
+  "createdAt": "2026-11-24T15:04:25.301Z",
+  "updatedAt": "2026-11-24T15:04:25.301Z"
+}
