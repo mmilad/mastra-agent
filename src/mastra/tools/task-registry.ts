@@ -17,6 +17,8 @@ export type TaskBrief = {
   constraints: string[];
   acceptanceCriteria: string[];
   contextReferences: string[];
+  conversationId?: string;
+  resourceId?: string;
 };
 
 export type TaskStatus =
@@ -147,6 +149,7 @@ export class TaskRegistry {
   private readonly store?: TaskStore;
   private readonly timeoutMs: number;
   private readonly preflight: (projectRoot: string, worker: WorkerProvider) => Promise<void>;
+  private lifecycleListener?: (record: TaskRecord, reason: 'status' | 'progress') => void;
 
   constructor(startClient?: ClientFactory, store?: TaskStore, options: RegistryOptions = {}) {
     this.store = store;
@@ -177,6 +180,14 @@ export class TaskRegistry {
     for (const projectRoot of this.queues.keys()) {
       this.startNext(projectRoot);
     }
+  }
+
+  setLifecycleListener(listener: (record: TaskRecord, reason: 'status' | 'progress') => void): void {
+    this.lifecycleListener = listener;
+  }
+
+  private emitLifecycle(record: TaskRecord, reason: 'status' | 'progress'): void {
+    this.lifecycleListener?.(record, reason);
   }
 
   async start(projectRoot: string, brief: TaskBrief, handoff?: HandoffPackage): Promise<{ task: TaskSnapshot; reused: boolean }> {
@@ -342,12 +353,14 @@ export class TaskRegistry {
             record.progress = [progressText];
             record.updatedAt = new Date().toISOString();
             this.persist(record);
+            this.emitLifecycle(record, 'progress');
           },
           onApprovalRequested: async (approval) => {
             record.approval = approval;
             record.status = approval.kind === 'permission' ? 'waiting_approval' : 'waiting_input';
             record.updatedAt = new Date().toISOString();
             this.persist(record);
+            this.emitLifecycle(record, 'status');
             const delay = Math.max(0, approval.expiresAt - Date.now());
             record.expiryTimer = setTimeout(() => this.expireApproval(record), delay);
             record.expiryTimer.unref?.();
@@ -415,6 +428,7 @@ export class TaskRegistry {
     record.approval = undefined;
     record.updatedAt = new Date().toISOString();
     this.persist(record);
+    this.emitLifecycle(record, 'status');
     if (this.activeByWorkspace.get(record.projectRoot) === record.taskId) {
       this.activeByWorkspace.delete(record.projectRoot);
     }

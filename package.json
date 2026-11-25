@@ -15,7 +15,8 @@
     "test:context": "node --experimental-strip-types --test tests/context/*.test.mjs",
     "test:acp": "node --experimental-strip-types --test tests/acp/client.test.mjs",
     "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs",
-    "test:plantool": "node --experimental-strip-types --test tests/tools/*.test.mjs"
+    "test:plantool": "node --experimental-strip-types --test tests/tools/*.test.mjs",
+    "test:signals": "node --experimental-strip-types --test tests/signals/*.test.mjs"
   },
   "dependencies": {
     "@agentclientprotocol/claude-agent-acp": "^0.112.0",

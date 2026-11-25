@@ -7,7 +7,8 @@ import { MastraStorageExporter, Observability } from '@mastra/observability';
 import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { assistantDatabasePath } from '../context/scope.ts';
-import { assistant } from './agents/assistant.ts';
+import { createAssistant } from './agents/assistant.ts';
+import { bootstrapSignals } from '../signals/bootstrap.ts';
 import { LocalFilesystem, Workspace } from '@mastra/core/workspace';
 import { projectKnowledge } from '../knowledge/project-knowledge.ts';
 import { knowledgeAnswer } from './workflows/knowledge-answer.ts';
@@ -17,6 +18,14 @@ const observabilityStore = new DuckDBStore({
   id: 'assistant-observability',
   path: resolve(projectRoot, 'mastra-observability.duckdb'),
 });
+
+const conversationStore = new LibSQLStore({
+  id: 'assistant-conversations',
+  url: pathToFileURL(assistantDatabasePath()).href,
+});
+await conversationStore.init();
+const notifications = await conversationStore.getStore('notifications');
+const assistant = createAssistant(notifications ? { notifications } : {});
 
 export const mastra = new Mastra({
   agents: { assistant },
@@ -37,10 +46,7 @@ export const mastra = new Mastra({
   // Keep conversations in LibSQL and route Studio observability features to DuckDB.
   storage: new MastraCompositeStore({
     id: 'assistant-storage',
-    default: new LibSQLStore({
-      id: 'assistant-conversations',
-      url: pathToFileURL(assistantDatabasePath()).href,
-    }),
+    default: conversationStore,
     domains: {
       observability: observabilityStore.observability,
     },
@@ -55,3 +61,5 @@ export const mastra = new Mastra({
     },
   }),
 });
+
+bootstrapSignals(mastra);

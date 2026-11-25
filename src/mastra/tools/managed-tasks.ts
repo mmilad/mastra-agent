@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { findProjectRoot } from './delegate-to-codex.ts';
 import { taskRegistry } from './task-registry.ts';
 import { buildHandoffPackage } from '../../context/handoff.ts';
+import { projectResourceId } from '../../context/scope.ts';
 import { ScopedMemoryStore } from '../../context/memory-store.ts';
 
 const handoffStores = new Map<string, ScopedMemoryStore>();
@@ -74,17 +75,22 @@ export const delegateTask = createTool({
     reused: z.boolean(),
     message: z.string(),
   }),
-  execute: async (brief) => {
+  execute: async (brief, context) => {
     const projectRoot = findProjectRoot(process.cwd());
+    const conversationId = typeof context?.agent?.threadId === 'string' ? context.agent.threadId : undefined;
+    const taskBrief = {
+      ...brief,
+      ...(conversationId ? { conversationId, resourceId: projectResourceId(projectRoot) } : {}),
+    };
     let handoff;
     try {
       const records = await getHandoffStore(projectRoot).list({ scope: 'project' });
-      handoff = buildHandoffPackage(brief, projectRoot, records, Number(process.env.HANDOFF_CHAR_BUDGET) || 6000);
+      handoff = buildHandoffPackage(taskBrief, projectRoot, records, Number(process.env.HANDOFF_CHAR_BUDGET) || 6000);
     } catch (error) {
-      handoff = buildHandoffPackage(brief, projectRoot, [], Number(process.env.HANDOFF_CHAR_BUDGET) || 6000);
+      handoff = buildHandoffPackage(taskBrief, projectRoot, [], Number(process.env.HANDOFF_CHAR_BUDGET) || 6000);
       handoff.error = error instanceof Error ? error.message : String(error);
     }
-    const result = await taskRegistry.start(projectRoot, brief, handoff);
+    const result = await taskRegistry.start(projectRoot, taskBrief, handoff);
     const task = result.task;
     return {
       taskId: task.taskId,
