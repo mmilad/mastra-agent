@@ -21,6 +21,12 @@ const maxFileBytes = 1024 * 1024;
 const maxSearchFileBytes = 128 * 1024;
 const maxSearchFiles = 500;
 const maxSearchBytes = 8 * 1024 * 1024;
+const duplicateSearchWindowMs = 30_000;
+const recentProjectSearches = new Map<string, number>();
+
+function recentSearchKey(threadId: string | undefined, query: string): string {
+  return `${threadId ?? 'no-thread'}:${query.trim().toLocaleLowerCase()}`;
+}
 
 function isWithin(root: string, candidate: string): boolean {
   const pathFromRoot = relative(root, candidate);
@@ -254,6 +260,20 @@ const localLookup = createTool({
     try {
       if (input.operation === 'search') {
         if (!input.query) return { ok: false, message: 'A search query is required.' };
+        const searchKey = recentSearchKey(
+          typeof context?.agent?.threadId === 'string' ? context.agent.threadId : undefined,
+          input.query,
+        );
+        const lastSearchAt = recentProjectSearches.get(searchKey);
+        const now = Date.now();
+        if (lastSearchAt && now - lastSearchAt < duplicateSearchWindowMs) {
+          return {
+            ok: false,
+            message:
+              'This exact search was already run in the last 30 seconds. Summarize the earlier results for the user instead of searching again.',
+          };
+        }
+        recentProjectSearches.set(searchKey, now);
         const result = await searchProjectFiles({ projectRoot, query: input.query, offset: input.offset, limit: input.limit, signal: context?.abortSignal });
         return { ok: true, message: result.incomplete ? 'Search reached its safety scan limit; results may be incomplete.' : `${result.totalMatches} match(es) found.`, data: JSON.stringify(result) };
       }
