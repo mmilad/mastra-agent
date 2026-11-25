@@ -144,8 +144,13 @@ npm run test:plantool
 
 `src/integrations/acp/client.ts` owns ACP process startup, protocol negotiation,
 streamed updates, bounded requests, cancellation, and optional session loading.
-Codex and Cursor have separate launch definitions in `providers.ts`. Session
-loading is rejected unless the provider advertises it. Delegation policy lives
+Codex, Cursor, and Claude have separate launch definitions in `providers.ts`. The
+Cursor worker runs the Cursor Agent CLI (`agent acp`, sandboxed), not the editor
+`cursor` binary; override the executable with `CURSOR_AGENT_COMMAND` when needed.
+The Claude worker runs `@agentclientprotocol/claude-agent-acp` and uses your
+Anthropic credentials: set `ANTHROPIC_API_KEY` in `.env`, or run
+`claude auth login` with the Claude Code CLI that ships with the adapter package.
+Session loading is rejected unless the provider advertises it. Delegation policy lives
 in `src/policy/workspace.ts`; ACP permissions and Cursor questions suspend the
 Mastra tool and resume against validated, task-bound data. Unsupported requests
 are cancelled rather than silently accepted.
@@ -194,7 +199,7 @@ Based on the [Mastra setup guide](https://mastra.ai/docs).
 This project plans its work with `plantool`. Before changing the plan, run:
 
 ```sh
-plantool agent onboard
+plantool --help
 ```
 
 Use `plantool` commands or its API to update records; do not edit `.plan` records

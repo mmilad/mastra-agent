@@ -140,8 +140,15 @@ test('Cursor question handling uses the shared suspend and resume flow', async (
   }, dependencies);
 
   assert.equal(pending, undefined);
-  assert.equal(cursorLaunch.command, process.env.CURSOR_AGENT_COMMAND ?? 'cursor');
-  assert.deepEqual(cursorLaunch.args, ['agent', '--sandbox', 'enabled', 'acp']);
+  const expectedCommand = process.env.CURSOR_AGENT_COMMAND ?? 'agent';
+  if (process.env.CURSOR_AGENT_COMMAND) {
+    assert.equal(cursorLaunch.command, expectedCommand);
+  } else if (process.platform === 'win32') {
+    assert.match(cursorLaunch.command, /[/\\]agent(\.cmd)?$/i);
+  } else {
+    assert.equal(cursorLaunch.command, expectedCommand);
+  }
+  assert.deepEqual(cursorLaunch.args, ['--sandbox', 'enabled', 'acp']);
   assert.equal(suspensions[0]?.kind, 'question');
 
   const question = suspensions[0];

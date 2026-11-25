@@ -19,7 +19,7 @@ test('tasks remain visible after a registry restart', async (t) => {
   const firstStore = new SqliteTaskStore(db);
   // A worker that never finishes keeps the task active, so the restart must mark it interrupted.
   const first = new TaskRegistry(() => new Promise(() => {}), firstStore);
-  const saved = first.start(dir, brief).task;
+  const saved = (await first.start(dir, brief)).task;
   // Let the registry finish its asynchronous preflight before the store closes.
   await new Promise((resolve) => setTimeout(resolve, 300));
   firstStore.close();

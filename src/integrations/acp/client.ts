@@ -1,6 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { EventEmitter } from 'node:events';
 import { createInterface, type Interface } from 'node:readline';
+import { acpSpawnSpec } from './spawn-spec.ts';
 
 export type JsonObject = Record<string, unknown>;
 
@@ -9,6 +10,8 @@ export type AcpLaunch = {
   args: string[];
   cwd: string;
   env?: NodeJS.ProcessEnv;
+  /** Needed to launch Windows command shims such as cursor.cmd. */
+  shell?: boolean | string;
   clientName?: string;
   clientVersion?: string;
   requestTimeoutMs?: number;
@@ -100,10 +103,12 @@ export class AcpWorkerClient {
   }
 
   static async start(launch: AcpLaunch): Promise<AcpWorkerClient> {
-    const child = spawn(launch.command, launch.args, {
+    const spec = acpSpawnSpec(launch);
+    const child = spawn(spec.command, spec.args, {
       cwd: launch.cwd,
       env: launch.env ?? process.env,
       stdio: ['pipe', 'pipe', 'pipe'],
+      ...(spec.windowsVerbatimArguments ? { windowsVerbatimArguments: true } : {}),
     });
     const lines = createInterface({ input: child.stdout });
     const client = new AcpWorkerClient(launch, child, lines, {

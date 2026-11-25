@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "01a212a5-1277-7164-8db5-b1275be3aade",
+  "number": 53,
+  "title": "32k-Kontext im Pilot validieren",
+  "kind": "task",
+  "description": "Halte den aktuellen Teststand fest: qwen3.5:9b, Kontextgröße 32768, lokale Ollama-Ausführung auf der RTX 4080 SUPER. Der Test wirkt bisher brauchbar. Sammle bei weiteren normalen Gesprächen Beobachtungen zu Antwortqualität und Geschwindigkeit, bevor Einstellungen geändert werden. Keine Modell- oder Kontexteinstellungen ändern.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-6209-79b8-a0b3-24225bd51c90",
+  "createdAt": "2026-11-25T12:18:57.783Z",
+  "updatedAt": "2026-11-25T12:19:09.912Z",
+  "why": "Der Pilot sollte den brauchbaren aktuellen lokalen Teststand dokumentieren und weitere normale Gespräche beobachten, bevor Modell- oder Kontexteinstellungen geändert werden.",
+  "acceptance": [
+    {
+      "text": "Teststand ist mit qwen3.5:9b, Kontextgröße 32768, lokaler Ollama-Ausführung auf RTX 4080 SUPER festgehalten",
+      "met": false
+    },
+    {
+      "text": "Beobachtungen zu Antwortqualität und Geschwindigkeit aus weiteren normalen Gesprächen werden gesammelt",
+      "met": false
+    },
+    {
+      "text": "Es werden bis zur Auswertung keine Modell- oder Kontexteinstellungen geändert.",
+      "met": false
+    }
+  ]
+}

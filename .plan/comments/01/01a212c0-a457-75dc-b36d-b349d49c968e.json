@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a212c0-a457-75dc-b36d-b349d49c968e",
+  "ticketId": "01a212a5-0b0f-7da2-9e4d-4ee3714bbe33",
+  "body": "Zusätzliche Pilotbeobachtung (25.11.2026): Der Nutzer berichtet, dass der Assistent gelegentlich auch in anderen Abläufen nicht mehr sichtbar antwortet. Im beigefügten Studio-Screenshot folgen auf eine Cursor-Delegation mehrere Tools (DelegateTask, GetTaskStatus) und Reasoning; am sichtbaren Ende ist keine abschließende Nutzerantwort zu sehen. Das erweitert die Symptome über LocalProjectLookup hinaus. Aus dem Screenshot allein ist nicht bestimmbar, ob Modellgenerierung, Tool-Schleife, Stream oder UI abbricht. Für die Reproduktion vollständige Mastra/Ollama-Logs und Stream-Ende/Fehler für dieselbe Thread-Ausführung sichern; Ursache offen lassen.",
+  "author": "codex",
+  "createdAt": "2026-11-25T12:49:04.599Z"
+}

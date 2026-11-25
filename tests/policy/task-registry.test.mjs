@@ -53,8 +53,8 @@ test('status reads reuse one task ID and never launch another worker', async (t)
     acceptanceCriteria: ['Return the result.'],
     contextReferences: [],
   };
-  const first = registry.start(root, brief);
-  const duplicate = registry.start(root, brief);
+  const first = await registry.start(root, brief);
+  const duplicate = await registry.start(root, brief);
   assert.equal(duplicate.reused, true);
   assert.equal(duplicate.task.taskId, first.task.taskId);
 
@@ -75,7 +75,7 @@ test('approval is bound to explicit user confirmation and the exact pending requ
   });
   const outsideFile = join(outside, 'scoped-write.txt');
   const registry = new TaskRegistry(startFakeAgent({ FAKE_PERMISSION_PATH: outsideFile }));
-  const started = registry.start(root, {
+  const started = await registry.start(root, {
     objective: 'FAKE_PERMISSION_TEST write the requested file',
     constraints: [],
     acceptanceCriteria: ['Do not write until approved.'],
@@ -110,7 +110,7 @@ test('cancel targets the active task and resolves after ACP cancellation', async
   const root = tempDir('mastra-registry-');
   t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
   const registry = new TaskRegistry(startFakeAgent());
-  const started = registry.start(root, {
+  const started = await registry.start(root, {
     objective: 'FAKE_WAIT_TEST wait for cancellation',
     constraints: [],
     acceptanceCriteria: [],
@@ -128,7 +128,7 @@ test('a worker question waits for an answer carrying its task token', async (t) 
   const root = tempDir('mastra-registry-');
   t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });
   const registry = new TaskRegistry(startFakeAgent({ FAKE_ASK_QUESTION: 'true' }));
-  const started = registry.start(root, {
+  const started = await registry.start(root, {
     objective: 'FAKE_ASK_QUESTION choose a greeting',
     constraints: [],
     acceptanceCriteria: [],

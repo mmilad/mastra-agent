@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "01a212a5-0b0f-7da2-9e4d-4ee3714bbe33",
+  "number": 52,
+  "title": "Untersuchen, warum Antworten nach lokaler Suche ausbleiben",
+  "kind": "bug",
+  "description": "Im beobachteten Ablauf ruft der Assistent LocalProjectLookup auf, listet Projektdateien und startet die lokale Suche erneut, gibt aber keine abschließende Antwort. Untersuche anhand von Logs oder einer reproduzierbaren Testsituation, ob der Toolaufruf hängt, eine Schleife entsteht, die Modellgenerierung endet oder der Stream/UI abbricht. Lege dich vor der Untersuchung nicht auf eine Ursache fest. Ziel: Der Assistent liefert immer entweder eine Antwort oder einen sichtbaren Fehler; Wiederholungen sind begrenzt und nachvollziehbar.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2083f-6209-79b8-a0b3-24225bd51c90",
+  "createdAt": "2026-11-25T12:18:55.887Z",
+  "updatedAt": "2026-11-25T12:19:09.136Z",
+  "acceptance": [
+    {
+      "text": "Logs oder reproduzierbare Tests grenzen die Fehlerstelle ein, ohne die Ursache vorab anzunehmen",
+      "met": false
+    },
+    {
+      "text": "Jeder Ablauf endet mit einer Antwort oder einem sichtbaren Fehler",
+      "met": false
+    },
+    {
+      "text": "Wiederholungen sind begrenzt und nachvollziehbar.",
+      "met": false
+    }
+  ],
+  "repro": {
+    "steps": [
+      "Starte eine normale Unterhaltung, die LocalProjectLookup und lokale Suche auslöst",
+      "zeichne Laufzeit-Logs sowie Stream/UI-Verhalten auf",
+      "a) Vergleiche den Verlauf mit einer reproduzierbaren Wiederholung und bestimme, ob Toolaufruf, Wiederholungsschleife, Modellgenerierung oder Stream/UI zuerst endet"
+    ],
+    "expected": "Nach dem Lookup erscheint eine abschließende Antwort oder ein sichtbarer Fehler; etwaige Wiederholungen bleiben begrenzt und sind nachvollziehbar.",
+    "actual": "Im beobachteten Ablauf werden Projektdateien gelistet und die lokale Suche erneut gestartet, danach erscheint keine abschließende Antwort; Ursache ist noch ungeklärt."
+  }
+}

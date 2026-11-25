@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a212b3-9b5e-739b-b019-1040e37e43ad",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Diagnosehinweis (25.11.2026): In der Projektumgebung löst Get-Command cursor zu C:\\\\Program Files\\\\cursor\\\\resources\\\\app\\\\bin\\\\cursor.cmd auf; cursor --help zeigt Cursor 3.32.4 und den agent-Subcommand. Der aktuelle Windows-Preflight in src/mastra/tools/task-registry.ts prüft bei PATH-Suche aber nur den exakten Namen bzw. die Endung .exe, nicht .cmd. Das kann 'Worker command not found: cursor' trotz installierter CLI erklären. Der tatsächliche Aufruf 'cursor agent --sandbox enabled acp' ist damit noch nicht als funktionsfähig bestätigt; Ursache als wahrscheinlichen, zu verifizierenden PATH/Windows-CMD-Auflösungsfehler behandeln.",
+  "author": "codex",
+  "createdAt": "2026-11-25T12:34:50.334Z"
+}

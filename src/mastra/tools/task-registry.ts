@@ -7,6 +7,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { acpSpawnSpec } from '../../integrations/acp/spawn-spec.ts';
 
 const execFileAsync = promisify(execFile);
 
@@ -96,15 +97,26 @@ function snapshot(record: TaskRecord): TaskSnapshot {
 }
 
 async function defaultPreflight(projectRoot: string, worker: WorkerProvider): Promise<void> {
-  const providers = await import('../../integrations/acp/providers.ts');
-  const launch = worker === 'cursor' ? providers.cursorAcpLaunch(projectRoot) : providers.codexAcpLaunch(projectRoot);
+  if (worker === 'claude') {
+    const { assertClaudeWorkerAuth } = await import('../../integrations/acp/claude-auth.ts');
+    await assertClaudeWorkerAuth();
+  }
+  const { workerAcpLaunch } = await import('../../integrations/acp/providers.ts');
+  const launch = workerAcpLaunch(worker, projectRoot);
   const executable = launch.command.includes('/') || launch.command.includes('\\')
     ? existsSync(launch.command)
     : (process.env.PATH ?? '').split(process.platform === 'win32' ? ';' : ':')
-        .some((directory) => existsSync(join(directory, launch.command)) || process.platform === 'win32' && existsSync(join(directory, `${launch.command}.exe`)));
+        .some((directory) => existsSync(join(directory, launch.command)) || process.platform === 'win32' &&
+          (process.env.PATHEXT ?? '.COM;.EXE;.BAT;.CMD').split(';').some((extension) => existsSync(join(directory, `${launch.command}${extension}`))));
   if (!executable) throw new Error(`Worker command not found: ${launch.command}`);
   try {
-    await execFileAsync(launch.command, [...launch.args, '--version'], { cwd: projectRoot, timeout: 3000, windowsHide: true });
+    const spec = acpSpawnSpec(launch, [...launch.args, '--version']);
+    await execFileAsync(spec.command, spec.args, {
+      cwd: projectRoot,
+      timeout: 3000,
+      windowsHide: true,
+      ...(spec.windowsVerbatimArguments ? { windowsVerbatimArguments: true } : {}),
+    });
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;
     if (code === 'ENOENT') throw new Error(`Worker command not found: ${launch.command}`);
@@ -143,7 +155,7 @@ export class TaskRegistry {
     this.timeoutMs = options.timeoutMs ?? (Number.isFinite(configuredTimeout) && configuredTimeout > 0 ? configuredTimeout : 15 * 60 * 1000);
     this.preflight = options.preflight ?? defaultPreflight;
     for (const stored of store?.loadAll() ?? []) {
-      const wasActive = activeStates.has(stored.status as TaskStatus);
+      const wasActive = activeStates.has(stored.status as TaskStatus) && stored.status !== 'queued';
       const record: TaskRecord = {
         ...stored,
         brief: stored.brief as TaskBrief,
@@ -155,12 +167,19 @@ export class TaskRegistry {
       };
       this.records.set(record.taskId, record);
       this.latestByWorkspace.set(record.projectRoot, record.taskId);
-      if (wasActive && stored.status !== 'queued') this.activeByWorkspace.set(record.projectRoot, record.taskId);
+      if (stored.status === 'queued') {
+        const queue = this.queues.get(record.projectRoot) ?? [];
+        queue.push(record.taskId);
+        this.queues.set(record.projectRoot, queue);
+      }
       if (wasActive) this.persist(record);
+    }
+    for (const projectRoot of this.queues.keys()) {
+      this.startNext(projectRoot);
     }
   }
 
-  start(projectRoot: string, brief: TaskBrief, handoff?: HandoffPackage): { task: TaskSnapshot; reused: boolean } {
+  async start(projectRoot: string, brief: TaskBrief, handoff?: HandoffPackage): Promise<{ task: TaskSnapshot; reused: boolean }> {
     // An identical request while the same task is active is a retry: return that task instead of queueing a copy.
     const activeId = this.activeByWorkspace.get(projectRoot);
     const activeRecord = activeId ? this.records.get(activeId) : undefined;
@@ -191,7 +210,14 @@ export class TaskRegistry {
       this.queues.set(projectRoot, queue);
     } else {
       this.activeByWorkspace.set(projectRoot, record.taskId);
-      void this.run(record);
+      try {
+        await this.preflight(record.projectRoot, record.brief.worker ?? 'codex');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        this.finish(record, 'failed', message);
+        return { task: snapshot(record), reused: false };
+      }
+      void this.run(record, { skipPreflight: true });
     }
     return { task: snapshot(record), reused: false };
   }
@@ -279,11 +305,18 @@ export class TaskRegistry {
     this.persist(record);
     if (record.expiryTimer) clearTimeout(record.expiryTimer);
     record.expiryTimer = undefined;
-    void this.run(record, { approval, resume });
+    void this.run(record, { resumption: { approval, resume } });
     return { ok: true, message: `Approval recorded. Task ${taskId} has resumed.`, task: snapshot(record) };
   }
 
-  private async run(record: TaskRecord, resumption?: { approval: PendingApproval; resume: ResumeDecision }): Promise<void> {
+  private async run(
+    record: TaskRecord,
+    options: {
+      resumption?: { approval: PendingApproval; resume: ResumeDecision };
+      skipPreflight?: boolean;
+    } = {},
+  ): Promise<void> {
+    const resumption = options.resumption;
     if (!resumption) record.status = 'running';
     record.updatedAt = new Date().toISOString();
     this.persist(record);
@@ -291,7 +324,7 @@ export class TaskRegistry {
     let timeout: ReturnType<typeof setTimeout> | undefined;
     let beforeFiles: string[] = [];
     try {
-      if (!resumption) {
+      if (!resumption && !options.skipPreflight) {
         await this.preflight(record.projectRoot, record.brief.worker ?? 'codex');
         beforeFiles = await gitFiles(record.projectRoot);
         record.evidence.changedFiles = [];

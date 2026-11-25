@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a212ba-2e85-7a69-83d4-8100bc7aac28",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Fix umgesetzt (25.11.2026): Cursor-CLI-Auflösung berücksichtigt unter Windows PATHEXT und löst cursor.cmd/cursor.bat aus PATH auf. Batch-Shims werden beim Preflight und ACP-Prozessstart über die Windows-Shell gestartet. Änderungen in providers.ts, client.ts und task-registry.ts. Der Live-ACP-Aufruf und Tests wurden in diesem Schritt nicht ausgeführt; MAST-49 bleibt offen bis zur Live-Prüfung.",
+  "author": "codex",
+  "createdAt": "2026-11-25T12:42:01.221Z"
+}

@@ -4,7 +4,7 @@ import { dirname, join, resolve } from 'node:path';
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { ACP_UNHANDLED, AcpWorkerClient, type AcpLaunch } from '../../integrations/acp/client.ts';
-import { codexAcpLaunch, cursorAcpLaunch } from '../../integrations/acp/providers.ts';
+import { type AcpWorker, workerAcpLaunch } from '../../integrations/acp/providers.ts';
 import { choosePermissionOption, inspectPermissionRequest, taskFingerprint } from '../../policy/workspace.ts';
 
 const approvalTtlMs = 5 * 60 * 1000;
@@ -84,7 +84,7 @@ export async function runCodexDelegation(
   return runWorkerDelegation(task, projectRoot, 'codex', context, dependencies);
 }
 
-export type WorkerProvider = 'codex' | 'cursor';
+export type WorkerProvider = AcpWorker;
 
 export async function runWorkerDelegation(
   task: string,
@@ -122,7 +122,7 @@ export async function runWorkerDelegation(
   }
   if (context.abortSignal?.aborted) return { response: `${worker} delegation was cancelled.`, stopReason: 'cancelled' };
 
-  const launch = worker === 'cursor' ? cursorAcpLaunch(projectRoot) : codexAcpLaunch(projectRoot);
+  const launch = workerAcpLaunch(worker, projectRoot);
   const client = await (dependencies.startClient ?? AcpWorkerClient.start)(launch);
   let response = '';
   let sessionId = '';

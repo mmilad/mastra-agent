@@ -2,15 +2,22 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { tmpdir } from 'node:os';
 import { AcpWorkerClient } from '../../src/integrations/acp/client.ts';
-import { codexAcpLaunch, cursorAcpLaunch } from '../../src/integrations/acp/providers.ts';
+import { claudeAcpLaunch, codexAcpLaunch, cursorAcpLaunch } from '../../src/integrations/acp/providers.ts';
 
 const enabled = process.env.RUN_ACP_PROVIDER_TESTS === '1';
 const cwd = tmpdir();
 
 test('Cursor launch uses the sandboxed ACP command in the selected workspace', () => {
   const launch = cursorAcpLaunch(cwd);
-  assert.equal(launch.command, process.env.CURSOR_AGENT_COMMAND ?? 'cursor');
-  assert.deepEqual(launch.args, ['agent', '--sandbox', 'enabled', 'acp']);
+  const expectedCommand = process.env.CURSOR_AGENT_COMMAND ?? 'agent';
+  if (process.env.CURSOR_AGENT_COMMAND) {
+    assert.equal(launch.command, expectedCommand);
+  } else if (process.platform === 'win32') {
+    assert.match(launch.command, /[/\\]agent(\.cmd)?$/i);
+  } else {
+    assert.equal(launch.command, expectedCommand);
+  }
+  assert.deepEqual(launch.args, ['--sandbox', 'enabled', 'acp']);
   assert.equal(launch.cwd, cwd);
 });
 
@@ -62,8 +69,20 @@ async function verifyProviderContract(launch) {
   }
 }
 
+test('Claude launch runs the packaged ACP adapter with Node', () => {
+  const launch = claudeAcpLaunch(cwd);
+  assert.equal(launch.command, process.execPath);
+  assert.match(launch.args[0], /claude-agent-acp[/\\]dist[/\\]index\.js$/);
+  assert.equal(launch.cwd, cwd);
+});
+
 test('Cursor satisfies the common live ACP provider contract', { skip: !enabled }, async () => {
   const result = await verifyProviderContract(cursorAcpLaunch(cwd));
+  assert.equal(typeof result.capabilities.loadSession, 'boolean');
+});
+
+test('Claude satisfies the common live ACP provider contract', { skip: !enabled }, async () => {
+  const result = await verifyProviderContract(claudeAcpLaunch(cwd));
   assert.equal(typeof result.capabilities.loadSession, 'boolean');
 });
 

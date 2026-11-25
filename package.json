@@ -18,6 +18,7 @@
     "test:plantool": "node --experimental-strip-types --test tests/tools/*.test.mjs"
   },
   "dependencies": {
+    "@agentclientprotocol/claude-agent-acp": "^0.112.0",
     "@agentclientprotocol/codex-acp": "2.10.0",
     "@libsql/client": "0.18.0",
     "@mastra/core": "1.85.0",

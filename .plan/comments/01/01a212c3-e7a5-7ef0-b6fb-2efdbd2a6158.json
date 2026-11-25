@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a212c3-e7a5-7ef0-b6fb-2efdbd2a6158",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Follow-up fix (25.11.2026): The first Windows shim fix still passed the Cursor .cmd path through Node's shell with an unquoted path, which can split 'C:\\\\Program Files\\\\...' at the space. Added an explicit cmd.exe /d /s /c spawn spec with Windows verbatim arguments for batch shims, shared by ACP startup and preflight. The Mastra process must be restarted to load the change. Live ACP execution remains unverified; keep MAST-49 open.",
+  "author": "codex",
+  "createdAt": "2026-11-25T12:52:38.438Z"
+}

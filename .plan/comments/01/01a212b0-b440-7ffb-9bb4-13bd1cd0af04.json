@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a212b0-b440-7ffb-9bb4-13bd1cd0af04",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Pilotbeobachtung (25.11.2026): Es traten zwei getrennte Probleme auf. 1) Bei einer ausdrücklichen Bitte, Cursor eine Datei bearbeiten zu lassen, wählte der Assistent zunächst Codex. 2) Nach der Korrektur und Auswahl von Cursor funktionierte auch dieser Lauf nicht erfolgreich. Ursache und genaue Fehlerstelle sind noch ungeklärt; Worker-Auswahl und Ausführung/Ergebnis des Cursor-Laufs getrennt anhand von Laufzeit- und Taskstatus-Logs untersuchen.",
+  "author": "codex",
+  "createdAt": "2026-11-25T12:31:40.096Z"
+}

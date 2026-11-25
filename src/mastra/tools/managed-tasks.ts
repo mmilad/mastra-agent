@@ -39,7 +39,7 @@ const taskSnapshotSchema = z.object({
   taskId: z.string(),
   objective: z.string(),
   projectRoot: z.string(),
-  worker: z.enum(['codex', 'cursor']),
+  worker: z.enum(['codex', 'cursor', 'claude']),
   status: taskStateSchema,
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -59,13 +59,13 @@ const taskSnapshotSchema = z.object({
 export const delegateTask = createTool({
   id: 'delegate-task',
   description:
-    'Start one bounded task with the selected ACP worker in this project and return its stable task ID immediately. Choose Codex by default or Cursor when the user requests it or its installed project context is useful. Use only for a new task. For status, approval, or cancellation requests, use the matching task tool instead of starting another worker.',
+    'Start one bounded task with the selected ACP worker in this project and return its stable task ID immediately. Choose Codex by default, Cursor when the user requests Cursor or its project context is useful, or Claude when the user requests Claude/Anthropic. Use only for a new task. For status, approval, or cancellation requests, use the matching task tool instead of starting another worker.',
   inputSchema: z.object({
     objective: z.string().min(1).max(4000),
-    worker: z.enum(['codex', 'cursor']).default('codex').describe('ACP worker to run for this task'),
-    constraints: z.array(z.string().min(1).max(500)).max(12).default([]),
-    acceptanceCriteria: z.array(z.string().min(1).max(500)).max(12).default([]),
-    contextReferences: z.array(z.string().min(1).max(500)).max(12).default([]),
+    worker: z.enum(['codex', 'cursor', 'claude']).default('codex').describe('ACP worker to run for this task'),
+    constraints: z.array(z.string().max(500)).max(12).default([]).transform((items) => items.map((item) => item.trim()).filter(Boolean)),
+    acceptanceCriteria: z.array(z.string().max(500)).max(12).default([]).transform((items) => items.map((item) => item.trim()).filter(Boolean)),
+    contextReferences: z.array(z.string().max(500)).max(12).default([]).transform((items) => items.map((item) => item.trim()).filter(Boolean)),
   }),
   outputSchema: z.object({
     taskId: z.string(),
@@ -84,7 +84,7 @@ export const delegateTask = createTool({
       handoff = buildHandoffPackage(brief, projectRoot, [], Number(process.env.HANDOFF_CHAR_BUDGET) || 6000);
       handoff.error = error instanceof Error ? error.message : String(error);
     }
-    const result = taskRegistry.start(projectRoot, brief, handoff);
+    const result = await taskRegistry.start(projectRoot, brief, handoff);
     const task = result.task;
     return {
       taskId: task.taskId,
@@ -93,7 +93,11 @@ export const delegateTask = createTool({
       reused: result.reused,
       message: result.reused
         ? `Task ${task.taskId} is already ${task.status}. No second worker was started.`
-        : `Started ${brief.worker ?? 'codex'} task ${task.taskId}. The worker is running in the background. Tell the user this ID and finish the turn; only check status if the user asks in a later message.`,
+        : task.status === 'failed'
+          ? `Task ${task.taskId} failed before the worker started: ${task.error ?? 'unknown error'}. Tell the user plainly and how to fix setup if the message mentions credentials or login.`
+        : task.status === 'queued'
+          ? `Queued ${brief.worker ?? 'codex'} task ${task.taskId} because another worker is already active in this project. Tell the user this ID, that it is waiting in line (not running yet), and to ask for status in a later message.`
+          : `Started ${brief.worker ?? 'codex'} task ${task.taskId}. The worker is running in the background. Tell the user this ID and finish the turn; only check status if the user asks in a later message.`,
     };
   },
 });
