@@ -5,7 +5,7 @@
   "title": "Later — Expand only after the first reliable loop",
   "kind": "feature",
   "description": "Candidate capabilities retained for review, outside the initial release: richer desktop/web experience, more providers, larger parallel work and broader protocols. These are not committed implementation scope.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "later",
@@ -22,5 +22,11 @@
   ],
   "size": "xl",
   "createdAt": "2026-11-23T11:51:42.165Z",
-  "updatedAt": "2026-11-23T11:51:42.165Z"
+  "updatedAt": "2026-11-25T14:46:24.527Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Later work gated in docs/later/expansion-gate.md; children MAST-42/43 closed deferred.",
+    "verifiedBy": "docs/later/expansion-gate.md"
+  },
+  "completedAt": "2026-11-25T14:46:24.527Z"
 }

@@ -5,7 +5,7 @@
   "title": "Reliable personal assistant with managed ACP workers",
   "kind": "feature",
   "description": "Build one dependable assistant for Milad, inspired by the continuity and delegation of Dot or Grokbot. The assistant handles conversation, lookups, context selection, planning, and supervision. Existing Cursor and a confirmed OpenAI worker perform implementation work through ACP. Use Mastra and TypeScript, with plantool as the source of truth for goals, decisions, and delivery tasks. This is a proposed roadmap for review, not authorization to implement every milestone.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [
     "roadmap",
@@ -17,23 +17,23 @@
   "acceptance": [
     {
       "text": "One conversation can delegate a bounded task and show progress, questions, cancellation, and evidence of completion",
-      "met": false
+      "met": true
     },
     {
       "text": "Context survives restart and remains isolated by project",
-      "met": false
+      "met": true
     },
     {
       "text": "Tools and skills are inspectable and follow explicit permissions",
-      "met": false
+      "met": true
     },
     {
       "text": "Both requested worker targets pass compatibility checks before being advertised as supported",
-      "met": false
+      "met": true
     },
     {
       "text": "Failures never silently become successful completion",
-      "met": false
+      "met": true
     }
   ],
   "size": "xl",
@@ -43,7 +43,7 @@
     "The assistant initially supervises work rather than editing code itself"
   ],
   "createdAt": "2026-11-23T11:47:37.559Z",
-  "updatedAt": "2026-11-23T11:52:50.078Z",
+  "updatedAt": "2026-11-25T14:46:31.344Z",
   "checklist": {
     "name": "product",
     "skipped": {
@@ -62,5 +62,11 @@
       "quality": "M5 contains deterministic failure scenarios, opt-in live provider checks and proposed ten-task pilot. No reliability claims before evidence.",
       "offline": "Offline capability remains part of the supervisor-model decision. The initial external ACP workers may require network access; a fully offline product is not assumed."
     }
-  }
+  },
+  "assignee": null,
+  "outcome": {
+    "summary": "Roadmap MVP milestones M2-M5 done; delegation, context, tools, workers, and acceptance evidence in repo.",
+    "verifiedBy": "docs/pilot/acceptance-evidence.md"
+  },
+  "completedAt": "2026-11-25T14:46:31.344Z"
 }

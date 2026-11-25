@@ -5,7 +5,7 @@
   "title": "M4 — Add useful tools and portable skills",
   "kind": "feature",
   "description": "Give the supervisor a small inspectable capability set: read project plans, retrieve scoped context, run approved lookups and manage workers. Add portable skill instructions with explicit provenance and lazy loading. Reuse worker-native tools. Broader connector catalogs are later work driven by an actual task.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "m4",
@@ -22,5 +22,11 @@
   ],
   "size": "l",
   "createdAt": "2026-11-23T11:51:37.104Z",
-  "updatedAt": "2026-11-23T11:51:37.104Z"
+  "updatedAt": "2026-11-25T14:46:15.966Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "M4 children complete; plantool, lookup, and skills tools ship with tests.",
+    "verifiedBy": "npm run test:plantool; tests/skills/registry.test.mjs"
+  },
+  "completedAt": "2026-11-25T14:46:15.966Z"
 }

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2132c-0dfc-7e18-9b25-18dbf684c508",
+  "ticketId": "01a2083f-6209-79b8-a0b3-24225bd51c90",
+  "body": "docs/pilot/acceptance-evidence.md + npm run test:acceptance cover deterministic scenarios. Live: Cursor/Claude verified 2026-11-25; Codex opt-in. Ten-task user pilot table still for Milad.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:46:23.996Z"
+}

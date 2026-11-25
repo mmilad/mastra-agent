@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2132b-ef43-74d5-9b9b-6aca5991af9e",
+  "ticketId": "01a212a5-0b0f-7da2-9e4d-4ee3714bbe33",
+  "body": "Tool always returns message; duplicate search guarded 30s; instruction requires answer after lookup.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:46:16.131Z"
+}

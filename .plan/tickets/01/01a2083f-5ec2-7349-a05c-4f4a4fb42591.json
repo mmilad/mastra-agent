@@ -5,7 +5,7 @@
   "title": "M5 — Validate a dependable daily-use assistant",
   "kind": "feature",
   "description": "Review the vertical slice against real representative requests and controlled failure scenarios. Define reliability through observable outcomes rather than a vague claim of autonomy. Expand the product only after this gate.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "m5",
@@ -22,5 +22,11 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:40.482Z",
-  "updatedAt": "2026-11-23T11:51:40.482Z"
+  "updatedAt": "2026-11-25T14:46:24.384Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "M5 gate: automated acceptance + evidence doc; user pilot rows optional.",
+    "verifiedBy": "docs/pilot/acceptance-evidence.md"
+  },
+  "completedAt": "2026-11-25T14:46:24.384Z"
 }

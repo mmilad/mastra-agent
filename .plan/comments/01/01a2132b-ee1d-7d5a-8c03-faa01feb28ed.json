@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2132b-ee1d-7d5a-8c03-faa01feb28ed",
+  "ticketId": "01a2083f-3fec-7eeb-a267-fb62f439d56c",
+  "body": "Project/resource isolation covered by memory-store and project-isolation tests; session pointer enforces resourceId.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:46:15.837Z"
+}

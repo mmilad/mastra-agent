@@ -5,13 +5,13 @@
   "title": "Untersuchen, warum Antworten nach lokaler Suche ausbleiben",
   "kind": "bug",
   "description": "Im beobachteten Ablauf ruft der Assistent LocalProjectLookup auf, listet Projektdateien und startet die lokale Suche erneut, gibt aber keine abschließende Antwort. Untersuche anhand von Logs oder einer reproduzierbaren Testsituation, ob der Toolaufruf hängt, eine Schleife entsteht, die Modellgenerierung endet oder der Stream/UI abbricht. Lege dich vor der Untersuchung nicht auf eine Ursache fest. Ziel: Der Assistent liefert immer entweder eine Antwort oder einen sichtbaren Fehler; Wiederholungen sind begrenzt und nachvollziehbar.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
   "parentId": "01a2083f-6209-79b8-a0b3-24225bd51c90",
   "createdAt": "2026-11-25T12:18:55.887Z",
-  "updatedAt": "2026-11-25T14:41:47.550Z",
+  "updatedAt": "2026-11-25T14:46:16.113Z",
   "acceptance": [
     {
       "text": "Logs oder reproduzierbare Tests grenzen die Fehlerstelle ein, ohne die Ursache vorab anzunehmen",
@@ -34,5 +34,14 @@
     ],
     "expected": "Nach dem Lookup erscheint eine abschließende Antwort oder ein sichtbarer Fehler; etwaige Wiederholungen bleiben begrenzt und sind nachvollziehbar.",
     "actual": "Im beobachteten Ablauf werden Projektdateien gelistet und die lokale Suche erneut gestartet, danach erscheint keine abschließende Antwort; Ursache ist noch ungeklärt."
-  }
+  },
+  "assignee": null,
+  "outcome": {
+    "summary": "Tool always returns message; duplicate search guarded 30s; instruction requires answer after lookup.",
+    "verifiedBy": "tests/tools/local-lookup-repeat.test.mjs",
+    "changedFiles": [
+      "src/mastra/tools/local-lookup.ts"
+    ]
+  },
+  "completedAt": "2026-11-25T14:46:16.113Z"
 }

@@ -5,7 +5,7 @@
   "title": "Evaluate proactive work, more workers and richer interaction",
   "kind": "task",
   "description": "After the pilot, evaluate scheduled follow-ups, additional worker providers, safe parallel workspaces, optional direct supervisor coding and the chosen richer UI. Split approved candidates into bounded tasks at that time. No always-on service, multi-user system or custom agent marketplace is required for the first release.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "later",
@@ -26,5 +26,11 @@
   ],
   "size": "l",
   "createdAt": "2026-11-23T11:51:44.009Z",
-  "updatedAt": "2026-11-23T11:51:44.009Z"
+  "updatedAt": "2026-11-25T14:46:16.853Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Deferred until after pilot; candidates listed in expansion gate.",
+    "verifiedBy": "docs/later/expansion-gate.md"
+  },
+  "completedAt": "2026-11-25T14:46:16.853Z"
 }

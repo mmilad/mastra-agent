@@ -5,7 +5,7 @@
   "title": "Evaluate MCP connectors and remote A2A collaboration",
   "kind": "task",
   "description": "MCP would expose additional tools/resources. A2A would be evaluated for remote independent agent collaboration when that need exists. ACP remains the initial client-to-worker boundary. Do not treat these protocols as interchangeable or add all three simply for completeness.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "later",
@@ -26,5 +26,11 @@
   ],
   "size": "m",
   "createdAt": "2026-11-23T11:51:43.166Z",
-  "updatedAt": "2026-11-23T11:51:43.166Z"
+  "updatedAt": "2026-11-25T14:46:16.710Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Deferred per expansion gate; ACP remains worker boundary.",
+    "verifiedBy": "docs/later/expansion-gate.md"
+  },
+  "completedAt": "2026-11-25T14:46:16.710Z"
 }

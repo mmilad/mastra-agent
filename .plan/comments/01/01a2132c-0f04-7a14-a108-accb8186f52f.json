@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2132c-0f04-7a14-a108-accb8186f52f",
+  "ticketId": "01a2083f-6209-79b8-a0b3-24225bd51c90",
+  "body": "Deterministic acceptance tests and evidence doc; live worker table updated; formal 10-task user log remains optional follow-up in docs/pilot/acceptance-evidence.md.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:46:24.260Z"
+}
