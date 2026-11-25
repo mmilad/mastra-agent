@@ -20,6 +20,23 @@ export type SupervisorTurnResult = {
   responseText?: string;
 };
 
+export function readKnowledgeWorkflowAnswer(result: { result?: unknown; steps?: Record<string, unknown> }): string | undefined {
+  const top = result.result;
+  if (top && typeof top === 'object' && 'answer' in top) {
+    const text = (top as { answer?: unknown }).answer;
+    if (typeof text === 'string' && text.trim()) return text.trim();
+  }
+  const rawStep = result.steps?.['answer-from-knowledge'];
+  if (rawStep && typeof rawStep === 'object' && rawStep !== null && 'output' in rawStep) {
+    const output = (rawStep as { output?: unknown }).output;
+    if (output && typeof output === 'object' && 'answer' in output) {
+      const text = (output as { answer?: unknown }).answer;
+      if (typeof text === 'string' && text.trim()) return text.trim();
+    }
+  }
+  return undefined;
+}
+
 async function runResearch(mastra: Mastra, question: string): Promise<string> {
   const workflow = mastra.getWorkflow('knowledgeAnswer');
   const run = await workflow.createRun();
@@ -28,8 +45,11 @@ async function runResearch(mastra: Mastra, question: string): Promise<string> {
     const msg = result.status === 'failed' ? result.error?.message ?? 'research workflow failed' : result.status;
     throw new Error(String(msg));
   }
-  const answer = (result.result as { answer?: string } | undefined)?.answer?.trim();
-  if (!answer) throw new Error('Research workflow returned no answer.');
+  const answer = readKnowledgeWorkflowAnswer(result);
+  if (!answer) {
+    console.warn('[supervisor] knowledge-answer succeeded but returned no answer text; using fallback.');
+    return 'No knowledge answer was produced. Sync docs with `npm run knowledge:index` and retry, or answer from general project context.';
+  }
   return answer;
 }
 

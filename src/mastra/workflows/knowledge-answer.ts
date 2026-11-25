@@ -3,6 +3,10 @@ import { createStep, createWorkflow } from '@mastra/core/workflows';
 import { z } from 'zod';
 import { findWorkspaceRoot } from '../../context/scope.ts';
 import { projectKnowledge, workspaceScopeAddress } from '../../knowledge/project-knowledge.ts';
+import { assistantDefaultOptions, generateWithCompletion } from '../agents/generate-options.ts';
+
+const emptyKnowledgeAnswer =
+  'Knowledge lookup did not return text (the model may have stopped after search). Run `npm run knowledge:index` if docs were never synced, then retry.';
 
 const modelName = process.env.ASSISTANT_MODEL || 'qwen3.5:9b';
 
@@ -20,6 +24,11 @@ const knowledgeAnswerer = new Agent({
     url: process.env.ASSISTANT_API || 'http://127.0.0.1:11434/v1',
     apiKey: process.env.ASSISTANT_API_KEY || 'ollama',
   },
+  defaultOptions: { ...assistantDefaultOptions },
+  defaultGenerateOptionsLegacy: {
+    maxTokens: Number(process.env.ASSISTANT_MAX_OUTPUT_TOKENS ?? 4_096),
+    maxSteps: assistantDefaultOptions.maxSteps,
+  },
 });
 
 const questionInput = z.object({
@@ -33,8 +42,9 @@ const answerStep = createStep({
     answer: z.string(),
   }),
   execute: async ({ inputData }) => {
-    const result = await knowledgeAnswerer.generate(inputData.question);
-    return { answer: result.text };
+    const result = await generateWithCompletion(knowledgeAnswerer, inputData.question);
+    const answer = result.text?.trim() || emptyKnowledgeAnswer;
+    return { answer };
   },
 });
 
