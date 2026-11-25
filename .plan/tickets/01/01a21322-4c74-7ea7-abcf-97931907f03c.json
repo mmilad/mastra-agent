@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21322-4c74-7ea7-abcf-97931907f03c",
+  "number": 56,
+  "title": "Register notification inbox tool on assistant",
+  "kind": "task",
+  "description": "Register createNotificationInboxTool on the supervisor agent using configured storage. Verify LibSQL notification domain support with a focused test before enabling in dev. Document tool usage in assistant instructions (read action for full payload).",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "signals m3"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "why": "sendNotificationSignal alone does not expose full stored payloads to the model; Mastra 1.85 requires createNotificationInboxTool.",
+  "acceptance": [
+    {
+      "text": "Assistant registers createNotificationInboxTool with existing LibSQL storage",
+      "met": false
+    },
+    {
+      "text": "scoped to current resource/thread",
+      "met": false
+    },
+    {
+      "text": "integration test verifies read of a seeded notification record",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/mastra-signals.md",
+    "MAST-45",
+    "MAST-33",
+    "MAST-34"
+  ],
+  "createdAt": "2026-11-25T14:35:44.628Z",
+  "updatedAt": "2026-11-25T14:35:44.628Z"
+}

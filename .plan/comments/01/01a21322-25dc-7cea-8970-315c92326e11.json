@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21322-25dc-7cea-8970-315c92326e11",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Cursor+Claude selectable workers; Windows spawn fix; tests and manual ACP preflight verified.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:35:34.748Z"
+}

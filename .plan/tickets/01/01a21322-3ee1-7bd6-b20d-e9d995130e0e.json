@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21322-3ee1-7bd6-b20d-e9d995130e0e",
+  "number": 54,
+  "title": "Implement durable signal intake ledger",
+  "kind": "task",
+  "description": "Add application-owned intake ledger (new SQLite store or shared LibSQL) per docs/mastra-signals.md: normalize envelope, validate category payloads, resolve workspaceId/conversationId from trusted server context and task-store correlation, insert before dispatch, return existing receipt on duplicate.",
+  "status": "todo",
+  "priority": "high",
+  "labels": [
+    "signals m3"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "why": "MAST-45 design requires accept-before-dispatch with producer dedupe; in-memory Mastra queues alone lose ingress on crash.",
+  "acceptance": [
+    {
+      "text": "SQLite ledger stores validated IntakeEnvelope rows with unique (producer, dedupeKey)",
+      "met": false
+    },
+    {
+      "text": "unknown schema rejected",
+      "met": false
+    },
+    {
+      "text": "integration test proves duplicate accept is idempotent",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/mastra-signals.md",
+    "MAST-45",
+    "MAST-33",
+    "MAST-34"
+  ],
+  "createdAt": "2026-11-25T14:35:41.153Z",
+  "updatedAt": "2026-11-25T14:35:41.153Z"
+}

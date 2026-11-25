@@ -5,7 +5,7 @@
   "title": "Wire Cursor ACP as a second worker tool",
   "kind": "task",
   "description": "Decision MAST-48: Cursor must work before the pilot. Expose Cursor ACP (cursor agent --sandbox enabled acp, already verified in M0) as a worker tool next to Codex. Reuse the shared ACP client and the workspace permission policy; Cursor questions already suspend the task. Add a contract test against the fake agent and an opt-in live check.",
-  "status": "in_progress",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -25,15 +25,46 @@
     },
     {
       "text": "Opt-in live Cursor check passes",
-      "met": false
+      "met": true
     }
   ],
   "createdAt": "2026-11-24T14:39:11.403Z",
-  "updatedAt": "2026-11-24T17:06:39.753Z",
+  "updatedAt": "2026-11-25T14:35:34.730Z",
   "why": "The pilot must exercise both worker implementations named in the confirmed decision; until Cursor is selectable through the same managed task and approval path, the assistant cannot claim the planned two-worker pilot capability.",
-  "assignee": {
-    "agent": "codex",
-    "claimedAt": "2026-11-24T16:58:17.743Z",
-    "expiresAt": "2026-11-24T17:58:17.743Z"
-  }
+  "assignee": null,
+  "outcome": {
+    "summary": "Cursor+Claude selectable workers; Windows spawn fix; tests and manual ACP preflight verified.",
+    "verifiedBy": "User confirmed Claude ACP; delegate path updates hello.txt via workers.",
+    "changedFiles": [
+      ".env.example",
+      ".plan/comments/01/01a212b0-b440-7ffb-9bb4-13bd1cd0af04.json",
+      ".plan/comments/01/01a212b3-9b5e-739b-b019-1040e37e43ad.json",
+      ".plan/comments/01/01a212ba-2e85-7a69-83d4-8100bc7aac28.json",
+      ".plan/comments/01/01a212c0-a457-75dc-b36d-b349d49c968e.json",
+      ".plan/comments/01/01a212c3-e7a5-7ef0-b6fb-2efdbd2a6158.json",
+      ".plan/tickets/01/01a212a5-0b0f-7da2-9e4d-4ee3714bbe33.json",
+      ".plan/tickets/01/01a212a5-1277-7164-8db5-b1275be3aade.json",
+      "README.md",
+      "package-lock.json",
+      "package.json",
+      "src/integrations/acp/claude-auth.ts",
+      "src/integrations/acp/client.ts",
+      "src/integrations/acp/providers.ts",
+      "src/integrations/acp/spawn-spec.ts",
+      "src/mastra/agents/assistant.ts",
+      "src/mastra/tools/delegate-to-codex.ts",
+      "src/mastra/tools/managed-tasks.ts",
+      "src/mastra/tools/task-registry.ts",
+      "tests/acp/claude-auth.test.mjs",
+      "tests/acp/providers.test.mjs",
+      "tests/context/task-store.test.mjs",
+      "tests/policy/delegation.test.mjs",
+      "tests/policy/task-registry.test.mjs",
+      "tests/policy/worker-registry.test.mjs"
+    ],
+    "commits": [
+      "d9ad749"
+    ]
+  },
+  "completedAt": "2026-11-25T14:35:34.730Z"
 }

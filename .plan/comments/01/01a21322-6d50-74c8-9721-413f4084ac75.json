@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21322-6d50-74c8-9721-413f4084ac75",
+  "ticketId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "body": "M3 design complete (MAST-45, docs/mastra-signals.md). Implementation phased: MAST-54 ledger -> MAST-55 worker notifications -> MAST-56 inbox tool -> MAST-57 reconcile/tests -> MAST-58 HTTP stub (not-mvp). MAST-33/34 remain task SoT; signals are delivery only. MAST-49 done (Cursor+Claude workers).",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:35:53.040Z"
+}

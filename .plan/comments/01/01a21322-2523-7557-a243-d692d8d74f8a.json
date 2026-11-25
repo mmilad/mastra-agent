@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21322-2523-7557-a243-d692d8d74f8a",
+  "ticketId": "01a20dff-182b-7efe-aac1-f08d823740dd",
+  "body": "Shipped in d9ad749: Cursor uses cursor-agent CLI (agent.cmd) with args --sandbox enabled acp; Claude worker added with packaged adapter + claude-auth preflight. Queue hydration fixes in task-registry. Opt-in: RUN_ACP_PROVIDER_TESTS=1 npm run test:acp:providers.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:35:34.563Z"
+}

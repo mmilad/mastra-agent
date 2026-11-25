@@ -18,9 +18,21 @@
     {
       "text": "A worker failure or assistant restart does not silently lose or duplicate work",
       "met": false
+    },
+    {
+      "text": "Durable intake ledger accepts validated events with dedupe before Mastra dispatch",
+      "met": false
+    },
+    {
+      "text": "Worker completion and progress reach the owning conversation via notifications without re-running tasks",
+      "met": false
+    },
+    {
+      "text": "Notification inbox tool lets the model read full stored payloads safely",
+      "met": false
     }
   ],
   "size": "l",
   "createdAt": "2026-11-23T11:51:34.765Z",
-  "updatedAt": "2026-11-24T11:50:12.113Z"
+  "updatedAt": "2026-11-25T14:35:52.930Z"
 }

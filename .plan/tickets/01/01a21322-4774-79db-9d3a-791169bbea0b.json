@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21322-4774-79db-9d3a-791169bbea0b",
+  "number": 55,
+  "title": "Emit worker task notifications via Mastra Signals",
+  "kind": "task",
+  "description": "Wire managed task lifecycle hooks in task-registry to sendNotificationSignal (worker_response/worker_progress mapping). Record dispatch in intake ledger when MAST-54 lands. Use stable dedupeKey/coalesceKey per design; route thread via conversation captured at delegate time.",
+  "status": "todo",
+  "priority": "high",
+  "labels": [
+    "signals m3"
+  ],
+  "properties": {},
+  "parentId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "why": "The assistant must learn task completion and meaningful progress without polling assistant-tasks.db.",
+  "acceptance": [
+    {
+      "text": "task-registry emits sendNotificationSignal for terminal states and coalesced progress",
+      "met": false
+    },
+    {
+      "text": "correlationId is task id",
+      "met": false
+    },
+    {
+      "text": "summary is bounded",
+      "met": false
+    },
+    {
+      "text": "notification never mutates task truth",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/mastra-signals.md",
+    "MAST-45",
+    "MAST-33",
+    "MAST-34"
+  ],
+  "createdAt": "2026-11-25T14:35:43.348Z",
+  "updatedAt": "2026-11-25T14:35:43.348Z"
+}
