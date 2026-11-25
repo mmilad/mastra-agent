@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21328-0d3e-76aa-83fa-fd960ad46337",
+  "ticketId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "body": "M3 complete: task store, worker registry, signals intake+notifications (c3ce454).",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:42:01.662Z"
+}
