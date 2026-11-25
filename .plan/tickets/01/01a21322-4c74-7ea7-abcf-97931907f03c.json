@@ -5,7 +5,7 @@
   "title": "Register notification inbox tool on assistant",
   "kind": "task",
   "description": "Register createNotificationInboxTool on the supervisor agent using configured storage. Verify LibSQL notification domain support with a focused test before enabling in dev. Document tool usage in assistant instructions (read action for full payload).",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "signals m3"
@@ -35,5 +35,15 @@
     "MAST-34"
   ],
   "createdAt": "2026-11-25T14:35:44.628Z",
-  "updatedAt": "2026-11-25T14:35:44.628Z"
+  "updatedAt": "2026-11-25T14:41:20.349Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in c3ce454: intake ledger, worker bridge, inbox tool, reconcile on bootstrap, http handler.",
+    "verifiedBy": "npm run test:signals; npm run check",
+    "changedFiles": [
+      "src/signals",
+      "src/mastra"
+    ]
+  },
+  "completedAt": "2026-11-25T14:41:20.349Z"
 }

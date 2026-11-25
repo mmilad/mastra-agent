@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21327-d5af-77f2-8d85-f5cbb6a14c64",
+  "ticketId": "01a212a5-0b0f-7da2-9e4d-4ee3714bbe33",
+  "body": "Mitigation: assistant instructions now require answering after local-project-lookup instead of repeating search; needs live repro to close.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:41:47.439Z"
+}

@@ -5,7 +5,7 @@
   "title": "Reconcile pending intake and add signal integration tests",
   "kind": "task",
   "description": "Background reconciler on process start: load pending intake ledger rows, re-dispatch with same dedupe keys, update delivery metadata, surface failures. Tests for duplicate HTTP retry, crash between steps 4-5, and rule that notification redelivery does not re-run workers.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "signals m3"
@@ -35,5 +35,15 @@
     "MAST-34"
   ],
   "createdAt": "2026-11-25T14:35:45.865Z",
-  "updatedAt": "2026-11-25T14:35:45.865Z"
+  "updatedAt": "2026-11-25T14:41:20.488Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in c3ce454: intake ledger, worker bridge, inbox tool, reconcile on bootstrap, http handler.",
+    "verifiedBy": "npm run test:signals; npm run check",
+    "changedFiles": [
+      "src/signals",
+      "src/mastra"
+    ]
+  },
+  "completedAt": "2026-11-25T14:41:20.488Z"
 }

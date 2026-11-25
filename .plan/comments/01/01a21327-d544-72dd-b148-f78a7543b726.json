@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21327-d544-72dd-b148-f78a7543b726",
+  "ticketId": "01a2083f-486d-7b44-a7f5-fe937a5e3bde",
+  "body": "Signals implementation landed (c3ce454). MAST-54-58 done. Remaining M3 feature acceptance #1 is owned by MAST-33/34 queue+interruption behavior.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:41:47.332Z"
+}

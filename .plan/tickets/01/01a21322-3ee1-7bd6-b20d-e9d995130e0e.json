@@ -5,7 +5,7 @@
   "title": "Implement durable signal intake ledger",
   "kind": "task",
   "description": "Add application-owned intake ledger (new SQLite store or shared LibSQL) per docs/mastra-signals.md: normalize envelope, validate category payloads, resolve workspaceId/conversationId from trusted server context and task-store correlation, insert before dispatch, return existing receipt on duplicate.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [
     "signals m3"
@@ -35,5 +35,15 @@
     "MAST-34"
   ],
   "createdAt": "2026-11-25T14:35:41.153Z",
-  "updatedAt": "2026-11-25T14:35:41.153Z"
+  "updatedAt": "2026-11-25T14:41:20.061Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in c3ce454: intake ledger, worker bridge, inbox tool, reconcile on bootstrap, http handler.",
+    "verifiedBy": "npm run test:signals; npm run check",
+    "changedFiles": [
+      "src/signals",
+      "src/mastra"
+    ]
+  },
+  "completedAt": "2026-11-25T14:41:20.061Z"
 }

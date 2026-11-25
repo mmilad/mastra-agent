@@ -5,7 +5,7 @@
   "title": "Stub authenticated local HTTP signal intake endpoint",
   "kind": "task",
   "description": "Minimal HTTP adapter: auth from local session/token, validate envelope, write ledger, async dispatch via reconciler/worker. No external webhooks in MVP; prepare adapter seam matching docs/mastra-signals.md endpoint security section.",
-  "status": "todo",
+  "status": "done",
   "priority": "low",
   "labels": [
     "signals m3 not-mvp"
@@ -39,5 +39,15 @@
     "MAST-34"
   ],
   "createdAt": "2026-11-25T14:35:47.120Z",
-  "updatedAt": "2026-11-25T14:35:47.120Z"
+  "updatedAt": "2026-11-25T14:41:20.626Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in c3ce454: intake ledger, worker bridge, inbox tool, reconcile on bootstrap, http handler.",
+    "verifiedBy": "npm run test:signals; npm run check",
+    "changedFiles": [
+      "src/signals",
+      "src/mastra"
+    ]
+  },
+  "completedAt": "2026-11-25T14:41:20.626Z"
 }

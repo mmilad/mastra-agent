@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21327-6b62-7f50-becd-e365e913d5db",
+  "ticketId": "01a21322-4774-79db-9d3a-791169bbea0b",
+  "body": "Implemented in c3ce454: intake ledger, worker bridge, inbox tool, reconcile on bootstrap, http handler.",
+  "author": "cursor",
+  "createdAt": "2026-11-25T14:41:20.226Z"
+}

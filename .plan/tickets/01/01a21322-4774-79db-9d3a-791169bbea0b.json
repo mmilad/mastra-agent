@@ -5,7 +5,7 @@
   "title": "Emit worker task notifications via Mastra Signals",
   "kind": "task",
   "description": "Wire managed task lifecycle hooks in task-registry to sendNotificationSignal (worker_response/worker_progress mapping). Record dispatch in intake ledger when MAST-54 lands. Use stable dedupeKey/coalesceKey per design; route thread via conversation captured at delegate time.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [
     "signals m3"
@@ -39,5 +39,15 @@
     "MAST-34"
   ],
   "createdAt": "2026-11-25T14:35:43.348Z",
-  "updatedAt": "2026-11-25T14:35:43.348Z"
+  "updatedAt": "2026-11-25T14:41:20.206Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in c3ce454: intake ledger, worker bridge, inbox tool, reconcile on bootstrap, http handler.",
+    "verifiedBy": "npm run test:signals; npm run check",
+    "changedFiles": [
+      "src/signals",
+      "src/mastra"
+    ]
+  },
+  "completedAt": "2026-11-25T14:41:20.206Z"
 }

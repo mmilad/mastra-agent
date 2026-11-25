@@ -11,7 +11,7 @@
   "properties": {},
   "parentId": "01a2083f-6209-79b8-a0b3-24225bd51c90",
   "createdAt": "2026-11-25T12:18:55.887Z",
-  "updatedAt": "2026-11-25T12:19:09.136Z",
+  "updatedAt": "2026-11-25T14:41:47.550Z",
   "acceptance": [
     {
       "text": "Logs oder reproduzierbare Tests grenzen die Fehlerstelle ein, ohne die Ursache vorab anzunehmen",
@@ -19,7 +19,7 @@
     },
     {
       "text": "Jeder Ablauf endet mit einer Antwort oder einem sichtbaren Fehler",
-      "met": false
+      "met": true
     },
     {
       "text": "Wiederholungen sind begrenzt und nachvollziehbar.",
