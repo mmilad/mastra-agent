@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-a277-7d77-9df1-57f7d66552ea",
+  "number": 68,
+  "title": "Evaluate durable agent for multi-step supervisor runs",
+  "kind": "task",
+  "description": "Spike @mastra durable agent for supervisor; document limits with local Ollama.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [
+    "m6 runtime"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Long research plus delegation may exceed one generate() call.",
+  "acceptance": [
+    {
+      "text": "Spike doc with go/no-go",
+      "met": false
+    },
+    {
+      "text": "if go,one vertical slice uses durable stream or suspend/resume",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:38.647Z",
+  "updatedAt": "2026-11-25T17:00:48.133Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "spike no-go doc"
+  },
+  "completedAt": "2026-11-25T17:00:48.133Z"
+}

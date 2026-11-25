@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-9d88-7b62-921b-c19d8b9f2b03",
+  "number": 67,
+  "title": "Long-running supervised process entrypoint",
+  "kind": "task",
+  "description": "Production-style node entry: bootstrap, periodic reconcile, SIGINT cleanup.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [
+    "m6 runtime"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "DOT-style assistants need a process that reconciles intake and does not rely only on mastra dev watch mode.",
+  "acceptance": [
+    {
+      "text": "Dedicated start script runs bootstrap,reconcile tick,graceful shutdown",
+      "met": false
+    },
+    {
+      "text": "documented in README",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:37.384Z",
+  "updatedAt": "2026-11-25T17:00:47.707Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "npm run supervisor"
+  },
+  "completedAt": "2026-11-25T17:00:47.707Z"
+}

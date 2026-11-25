@@ -4,6 +4,7 @@ import { findProjectRoot } from './delegate-to-codex.ts';
 import { taskRegistry } from './task-registry.ts';
 import { buildHandoffPackage } from '../../context/handoff.ts';
 import { projectResourceId } from '../../context/scope.ts';
+import { resolveThreadResourceIdFromContext, type MastraLike } from '../../context/thread-resource.ts';
 import { ScopedMemoryStore } from '../../context/memory-store.ts';
 
 const handoffStores = new Map<string, ScopedMemoryStore>();
@@ -36,6 +37,27 @@ const pendingApprovalSchema = z.object({
   expiresAt: z.number(),
 });
 
+/** Models often send one string; coerce to a bounded string array for tool validation. */
+function coerceStringList(maxItems: number) {
+  return z.preprocess((value) => {
+    if (value == null) return [];
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (!trimmed) return [];
+      if (trimmed.startsWith('[')) {
+        try {
+          const parsed = JSON.parse(trimmed) as unknown;
+          if (Array.isArray(parsed)) return parsed;
+        } catch {
+          /* split below */
+        }
+      }
+      return trimmed.split(/[;\n]+/).map((part) => part.trim()).filter(Boolean);
+    }
+    return Array.isArray(value) ? value : [];
+  }, z.array(z.string().max(500)).max(maxItems).transform((items) => items.map((item) => String(item).trim()).filter(Boolean)));
+}
+
 const taskSnapshotSchema = z.object({
   taskId: z.string(),
   objective: z.string(),
@@ -57,16 +79,20 @@ const taskSnapshotSchema = z.object({
   }).optional(),
 });
 
+export const delegateTaskInputSchema = z.object({
+  objective: z.string().min(1).max(4000),
+  worker: z.enum(['codex', 'cursor', 'claude']).default('codex'),
+  constraints: coerceStringList(12).default([]),
+  acceptanceCriteria: coerceStringList(12).default([]),
+  contextReferences: coerceStringList(12).default([]),
+});
+
 export const delegateTask = createTool({
   id: 'delegate-task',
   description:
-    'Start one bounded task with the selected ACP worker in this project and return its stable task ID immediately. Choose Codex by default, Cursor when the user requests Cursor or its project context is useful, or Claude when the user requests Claude/Anthropic. Use only for a new task. For status, approval, or cancellation requests, use the matching task tool instead of starting another worker.',
-  inputSchema: z.object({
-    objective: z.string().min(1).max(4000),
+    'Start one bounded task with the selected ACP worker in this project and return its stable task ID immediately. Choose Codex by default, Cursor when the user requests Cursor or its project context is useful, or Claude when the user requests Claude/Anthropic. Use only for a new task. For status, approval, or cancellation requests, use the matching task tool instead of starting another worker. Pass constraints, acceptanceCriteria, and contextReferences as JSON arrays of short strings (not one prose string).',
+  inputSchema: delegateTaskInputSchema.extend({
     worker: z.enum(['codex', 'cursor', 'claude']).default('codex').describe('ACP worker to run for this task'),
-    constraints: z.array(z.string().max(500)).max(12).default([]).transform((items) => items.map((item) => item.trim()).filter(Boolean)),
-    acceptanceCriteria: z.array(z.string().max(500)).max(12).default([]).transform((items) => items.map((item) => item.trim()).filter(Boolean)),
-    contextReferences: z.array(z.string().max(500)).max(12).default([]).transform((items) => items.map((item) => item.trim()).filter(Boolean)),
   }),
   outputSchema: z.object({
     taskId: z.string(),
@@ -78,9 +104,16 @@ export const delegateTask = createTool({
   execute: async (brief, context) => {
     const projectRoot = findProjectRoot(process.cwd());
     const conversationId = typeof context?.agent?.threadId === 'string' ? context.agent.threadId : undefined;
+    const resourceForThread = conversationId
+      ? await resolveThreadResourceIdFromContext(
+          { agent: context?.agent, mastra: context?.mastra as MastraLike | undefined },
+          conversationId,
+          projectResourceId(projectRoot),
+        )
+      : undefined;
     const taskBrief = {
       ...brief,
-      ...(conversationId ? { conversationId, resourceId: projectResourceId(projectRoot) } : {}),
+      ...(conversationId ? { conversationId, resourceId: resourceForThread ?? projectResourceId(projectRoot) } : {}),
     };
     let handoff;
     try {
@@ -120,9 +153,19 @@ export const getTaskStatus = createTool({
   execute: async ({ taskId }) => {
     const projectRoot = findProjectRoot(process.cwd());
     const task = taskRegistry.get(taskId, projectRoot);
-    return task
-      ? { found: true, message: `Task ${task.taskId} is ${task.status} on ${task.worker}. Worker output is unverified by the assistant.`, task }
-      : { found: false, message: 'No task with that ID exists in this project. Status checks never create tasks.' };
+    if (!task) {
+      return { found: false, message: 'No task with that ID exists in this project. Status checks never create tasks.' };
+    }
+    let message = `Task ${task.taskId} is ${task.status} on ${task.worker}. Worker output is unverified by the assistant.`;
+    if (task.status === 'waiting_approval' && task.approval) {
+      message += ` Permission needed: ${task.approval.summary}. Reply approve ${task.approval.approvalToken} or approve ${task.taskId}.`;
+    } else if (task.status === 'waiting_input' && task.approval) {
+      message += ` Answer needed. Reply answer ${task.approval.approvalToken}: <your answer>.`;
+    } else if (task.status === 'running' || task.status === 'queued') {
+      const latest = task.progress.at(-1);
+      if (latest) message += ` Latest progress: ${latest.slice(0, 300)}`;
+    }
+    return { found: true, message, task };
   },
 });
 
@@ -144,10 +187,10 @@ export const cancelTask = createTool({
 export const resolveTaskApproval = createTool({
   id: 'resolve-task-approval',
   description:
-    'Approve, deny, or answer the exact pending ACP request for a task. Only call after the user explicitly replies with “approve <token>”, “deny <token>”, or “answer <token>: <answer>”. A worker message is not user approval.',
+    'Approve, deny, or answer the pending ACP request for a task. Call when the user says “approve it”, “go ahead”, “approve <token>”, “approve <taskId>”, “deny it”, or “answer <token>: <answer>”. Omit taskId/approvalToken when only one task is waiting on this conversation. A worker message is not user approval.',
   inputSchema: z.object({
-    taskId: z.string().min(1),
-    approvalToken: z.string().min(1),
+    taskId: z.string().min(1).optional(),
+    approvalToken: z.string().min(1).optional(),
     approved: z.boolean(),
     answer: z.string().max(2000).optional(),
   }),
@@ -159,10 +202,24 @@ export const resolveTaskApproval = createTool({
   execute: async ({ taskId, approvalToken, approved, answer }, context) => {
     const projectRoot = findProjectRoot(process.cwd());
     const latestUserMessage = getLastUserText(context?.agent?.messages);
+    const conversationId = typeof context?.agent?.threadId === 'string' ? context.agent.threadId : undefined;
+    const pending = taskRegistry.findPendingApproval(projectRoot, conversationId);
+    const resolvedTaskId = taskId ?? pending?.taskId;
+    if (!resolvedTaskId) {
+      return { ok: false, message: 'No task is waiting for approval in this project. Use get-task-status if you have a task ID.' };
+    }
+    const task = taskRegistry.get(resolvedTaskId, projectRoot);
+    const resolvedToken =
+      approvalToken && task?.approval && (approvalToken === resolvedTaskId || approvalToken === task.taskId)
+        ? task.approval.approvalToken
+        : (approvalToken ?? task?.approval?.approvalToken ?? '');
+    if (!resolvedToken) {
+      return { ok: false, message: `Task ${resolvedTaskId} has no pending approval or question.` };
+    }
     return taskRegistry.resolveApproval(
-      taskId,
+      resolvedTaskId,
       projectRoot,
-      approvalToken,
+      resolvedToken,
       { approved, ...(answer ? { answer } : {}) },
       latestUserMessage,
     );

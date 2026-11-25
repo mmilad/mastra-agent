@@ -91,6 +91,24 @@ test('allows only the small command allowlist and rejects shell composition', (t
   assert.equal(request('npm run check && cat ~/.ssh/id_rsa').automaticallyAllowed, false);
 });
 
+test('allows in-workspace PowerShell read commands used by Cursor on Windows', (t) => {
+  const root = fixture();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const hello = join(root, 'hello.txt');
+  writeFileSync(hello, 'hi');
+  const scope = inspectPermissionRequest(root, 'session/request_permission', {
+    toolCall: {
+      kind: 'execute',
+      rawInput: {
+        command: `Get-Item "${hello}" | Select-Object FullName, Length`,
+        cwd: root,
+      },
+    },
+  });
+  assert.equal(scope.inWorkspace, true);
+  assert.equal(scope.automaticallyAllowed, true);
+});
+
 test('permission choices use provider option kinds, not provider-specific IDs', () => {
   const params = { options: [
     { optionId: 'allow-once', kind: 'allow_once' },

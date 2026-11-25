@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-8a23-7b88-b96a-7e9f0ddc4da1",
+  "number": 63,
+  "title": "Unrouted intake events and resolution policy",
+  "kind": "task",
+  "description": "Persist unrouted worker events; add resolution to bind conversationId before dispatch.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [
+    "m6 signals"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Worker events without conversationId must not be dropped or mis-routed.",
+  "acceptance": [
+    {
+      "text": "Unrouted rows persist with metadata",
+      "met": false
+    },
+    {
+      "text": "tool or CLI lists and resolves to a thread",
+      "met": false
+    },
+    {
+      "text": "no broadcast to all threads",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:32.419Z",
+  "updatedAt": "2026-11-25T17:00:47.576Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "unrouted status + resolve"
+  },
+  "completedAt": "2026-11-25T17:00:47.576Z"
+}

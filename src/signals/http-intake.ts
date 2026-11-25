@@ -36,9 +36,9 @@ export async function handleSignalIntakeRequest(request: Request): Promise<Respo
   );
 }
 
-/** Mastra-compatible route wrapper for local HTTP intake (MAST-58). */
+/** Mastra-compatible route wrapper for local HTTP intake (MAST-58 / MAST-60). */
 export const signalIntakeApiRoute = {
   method: 'POST' as const,
   path: '/signal-intake',
-  handler: handleSignalIntakeRequest,
+  handler: async (c: { req: { raw: Request } }) => handleSignalIntakeRequest(c.req.raw),
 };

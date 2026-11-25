@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "01a213a5-92f9-7178-a6b3-04ae4e0f09e6",
+  "number": 75,
+  "title": "Supervisor triage: heuristics vs LLM step?",
+  "kind": "decision",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Controls cost, latency, and mis-route rate for M6",
+  "decision": {
+    "owner": "human",
+    "criteria": [],
+    "chosen": "01a213a5-930a-75f4-aea2-39e1ae29342c",
+    "recommendation": {
+      "option": "01a213a5-9304-7a1c-bc63-218ede6c48c9",
+      "why": "Pilot: deterministic tests, no extra Ollama triage latency",
+      "by": "cursor",
+      "at": "2026-11-25T17:03:41.056Z"
+    },
+    "rationale": "User chose LLM triage for pilot: local model, regex fallback",
+    "decidedBy": "human",
+    "decidedAt": "2026-11-25T17:55:36.991Z",
+    "cancelled": [
+      "01a213a5-9304-7a1c-bc63-218ede6c48c9"
+    ]
+  },
+  "createdBy": "cursor",
+  "createdAt": "2026-11-25T16:59:07.897Z",
+  "updatedAt": "2026-11-25T17:55:36.991Z",
+  "completedAt": "2026-11-25T17:55:36.991Z"
+}

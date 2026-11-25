@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-7bdb-773c-a0a8-71e197a30900",
+  "number": 60,
+  "title": "Mount authenticated HTTP signal intake on Mastra server",
+  "kind": "task",
+  "description": "Wire signalIntakeApiRoute into Mastra server apiRoutes; require SIGNAL_INTAKE_TOKEN.",
+  "status": "done",
+  "priority": "high",
+  "labels": [
+    "m6 signals"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "External and scripted producers need the same ledger boundary as in-process events.",
+  "acceptance": [
+    {
+      "text": "POST /signal-intake returns 202 after ledger insert",
+      "met": false
+    },
+    {
+      "text": "Bearer token required",
+      "met": false
+    },
+    {
+      "text": "handler registered in mastra server apiRoutes",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:28.763Z",
+  "updatedAt": "2026-11-25T16:59:07.164Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in goal session"
+  },
+  "completedAt": "2026-11-25T16:59:07.164Z"
+}

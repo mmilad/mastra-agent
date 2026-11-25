@@ -30,7 +30,7 @@ defaults to 4,096 tokens; the model's larger native context is not allocated
 automatically. Check the active allocation with `ollama ps`. On Windows, change
 the context length in Ollama's Settings, then quit and relaunch Ollama so the
 server and model use the new value. The assistant itself keeps up to 6,000 input
-tokens and allows 2,048 output tokens per model step.
+tokens and allows 4,096 output tokens per model step (configurable).
 
 Configure the connection with `ASSISTANT_API`, `ASSISTANT_API_KEY`, and
 `ASSISTANT_MODEL`. The local Ollama server ignores the placeholder API key.
@@ -66,7 +66,8 @@ Mastra Studio saves chat threads and messages in `mastra.db` at the project
 root, so they remain available after restarting Studio. The assistant loads at
 most the latest 20 messages and trims older history when its configured
 6,000-token context budget is exceeded. Studio and direct calls allow up to
-2,048 output tokens per model step. Thread working memory keeps a bounded
+4,096 output tokens per model step and up to 12 agent steps (tool use plus a
+final answer). Tune with `ASSISTANT_MAX_STEPS` and `ASSISTANT_MAX_OUTPUT_TOKENS`. Thread working memory keeps a bounded
 snapshot of the objective, constraints, unresolved work, and decisions across
 turns. For the interactive test interface:
 
@@ -76,6 +77,35 @@ npm run dev
 
 Open http://localhost:4111, select **Assistant**, and send a message.
 Stop the server with Ctrl+C.
+
+User prompts from **npm run chat**, **Mastra Studio**, and **POST /v1/chat** enter
+through the **signal intake ledger** and the **supervisor-routing** workflow
+(answer / research / delegate) with one agent turn per message. Studio uses
+`acceptAndDispatch` with `syncReply` (producer `studio`, `studioInlineDispatch`) so
+reconcile does not double-run the supervisor on the same prompt.
+
+### Signal supervisor (M6)
+
+Long-running intake reconcile (single process):
+
+```sh
+npm run supervisor
+```
+
+Operator CLI for `signal-intake.db` (pending, failed, unrouted, retry, resolve):
+
+```sh
+npm run intake -- list pending
+npm run intake -- reconcile
+```
+
+Set `SIGNAL_INTAKE_TOKEN` in `.env` for authenticated `POST /signal-intake` on the
+Mastra server (`mastra dev`). See `docs/operator-signal-intake.md` and
+`docs/supervisor-workflow-contract.md`.
+
+Supervisor triage uses a **local LLM** call then branches (`answer` / `research` /
+`delegate`). If Ollama is down or slow, routing falls back to regex. Set
+`SUPERVISOR_TRIAGE_HEURISTIC_ONLY=1` to skip the extra model call.
 
 To test delegation in Studio, ask: “Create `hello.txt` in the project root with
 a friendly greeting.” Codex needs to be logged in locally (`codex login status`

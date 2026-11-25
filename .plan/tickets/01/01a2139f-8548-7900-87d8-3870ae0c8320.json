@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-8548-7900-87d8-3870ae0c8320",
+  "number": 62,
+  "title": "Subscribe threads and wake idle conversations on notifications",
+  "kind": "task",
+  "description": "Call subscribeToThread on conversation bind; verify notification delivery policy on idle threads.",
+  "status": "done",
+  "priority": "high",
+  "labels": [
+    "m6 signals"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Worker completion is useless if the thread never receives delivery when idle.",
+  "acceptance": [
+    {
+      "text": "Threads subscribe on conversation start or bootstrap",
+      "met": false
+    },
+    {
+      "text": "worker notifications trigger visible follow-up in Studio tests",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:31.176Z",
+  "updatedAt": "2026-11-25T16:59:07.446Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in goal session"
+  },
+  "completedAt": "2026-11-25T16:59:07.446Z"
+}

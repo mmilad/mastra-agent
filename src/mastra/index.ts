@@ -9,9 +9,14 @@ import { pathToFileURL } from 'node:url';
 import { assistantDatabasePath } from '../context/scope.ts';
 import { createAssistant } from './agents/assistant.ts';
 import { bootstrapSignals } from '../signals/bootstrap.ts';
+import { wrapAssistantSignalIntake } from '../signals/studio-intake.ts';
 import { LocalFilesystem, Workspace } from '@mastra/core/workspace';
 import { projectKnowledge } from '../knowledge/project-knowledge.ts';
 import { knowledgeAnswer } from './workflows/knowledge-answer.ts';
+import { supervisorRouting } from './workflows/supervisor-routing.ts';
+import { signalIntakeApiRoute } from '../signals/http-intake.ts';
+import { chatApiRoute } from '../signals/chat-api.ts';
+import { githubCiWebhookRoute } from '../signals/ci-webhook.ts';
 
 const projectRoot = dirname(assistantDatabasePath());
 const observabilityStore = new DuckDBStore({
@@ -26,10 +31,11 @@ const conversationStore = new LibSQLStore({
 await conversationStore.init();
 const notifications = await conversationStore.getStore('notifications');
 const assistant = createAssistant(notifications ? { notifications } : {});
+wrapAssistantSignalIntake(assistant);
 
 export const mastra = new Mastra({
   agents: { assistant },
-  workflows: { knowledgeAnswer },
+  workflows: { knowledgeAnswer, supervisorRouting },
   knowledge: { projectDocs: projectKnowledge },
   // Read-only workspace over the parent folder of this project, so all sibling projects are visible.
   // Override with PLANTOOL_WORKSPACE. contained: false is needed because Mastra's containment check
@@ -42,7 +48,7 @@ export const mastra = new Mastra({
     }),
   }),
   // Studio's Knowledge browser needs these routes; they list Knowledge instances registered here.
-  server: { apiRoutes: [...KNOWLEDGE_ROUTES] },
+  server: { apiRoutes: [...KNOWLEDGE_ROUTES, signalIntakeApiRoute, chatApiRoute, githubCiWebhookRoute] },
   // Keep conversations in LibSQL and route Studio observability features to DuckDB.
   storage: new MastraCompositeStore({
     id: 'assistant-storage',

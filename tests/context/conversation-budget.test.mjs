@@ -31,6 +31,7 @@ test('conversation history is token-budgeted and compact work memory is bounded 
   }).success, false);
 
   const defaults = await assistant.getDefaultOptions();
+  assert.equal(defaults.maxSteps, 12);
   assert.equal(defaults.modelSettings?.maxOutputTokens, 4_096);
   const generateDefaults = await assistant.getDefaultGenerateOptionsLegacy();
   const streamDefaults = await assistant.getDefaultStreamOptionsLegacy();

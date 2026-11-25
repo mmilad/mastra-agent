@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-93e2-7cb3-93c4-9cc08a9ace23",
+  "number": 65,
+  "title": "Implement supervisor routing workflow v1",
+  "kind": "task",
+  "description": "Mastra workflow: triage input and emit branch plus payload for answer, research, or delegate.",
+  "status": "done",
+  "priority": "high",
+  "labels": [
+    "m6 workflow"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "The assistant must decide delegation through workflow,not only system instructions.",
+  "acceptance": [
+    {
+      "text": "Workflow exposes answer,research,delegate branches",
+      "met": false
+    },
+    {
+      "text": "invoked from signal dispatch path",
+      "met": false
+    },
+    {
+      "text": "tests cover branch selection with fixtures",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:34.914Z",
+  "updatedAt": "2026-11-25T16:59:07.720Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in goal session"
+  },
+  "completedAt": "2026-11-25T16:59:07.720Z"
+}

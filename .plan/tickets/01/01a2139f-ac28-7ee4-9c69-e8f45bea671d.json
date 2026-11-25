@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-ac28-7ee4-9c69-e8f45bea671d",
+  "number": 70,
+  "title": "Research branch workflow (knowledge and bounded lookup)",
+  "kind": "task",
+  "description": "Extend knowledge-answer pattern into supervisor research branch with citations.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [
+    "m6 research"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "DOT-style assistants answer from project context before escalating to workers.",
+  "acceptance": [
+    {
+      "text": "Workflow composes knowledge-answer and local lookup",
+      "met": false
+    },
+    {
+      "text": "returns citations",
+      "met": false
+    },
+    {
+      "text": "does not delegate unless evidence gap remains",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:41.128Z",
+  "updatedAt": "2026-11-25T17:00:48.558Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "supervisor research branch uses knowledge-answer"
+  },
+  "completedAt": "2026-11-25T17:00:48.558Z"
+}

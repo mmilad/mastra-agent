@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a213a7-663f-7b00-84d1-9a26e6f0ddb1",
+  "ticketId": "01a2139f-b5d9-70eb-930e-3ef13b21b458",
+  "body": "POST /webhooks/github stub",
+  "author": "cursor",
+  "createdAt": "2026-11-25T17:01:07.519Z"
+}

@@ -45,7 +45,17 @@ function collectPaths(value: unknown, paths: string[] = [], key = ''): string[] 
   return paths;
 }
 
+function isWindowsReadCommand(command: string): boolean {
+  const trimmed = command.trim();
+  if (/[;&<>`$\n\r]/.test(trimmed)) return false;
+  const segments = trimmed.split('|').map((segment) => segment.trim());
+  if (segments.length === 0) return false;
+  const allowed = [/^(Get-Item|Test-Path|Get-Content)\b/i, /^Select-Object\b/i];
+  return segments.every((segment) => allowed.some((pattern) => pattern.test(segment)));
+}
+
 function isAllowedCommand(command: string): boolean {
+  if (isWindowsReadCommand(command)) return true;
   // Requests are command strings rather than an argv array. Refuse shell syntax
   // so a seemingly safe first command cannot conceal a second operation.
   if (/[;|&<>`$\n\r'"\\~*?\[\]{}()]/.test(command)) return false;

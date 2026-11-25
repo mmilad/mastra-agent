@@ -1,14 +1,23 @@
 import { validateIntakeEnvelope, type IntakeEnvelope, newEventId } from './envelope.ts';
 import type { IntakeLedger } from './intake-ledger.ts';
-import { intakeLedger } from './intake-ledger.ts';
+import { intakeLedger, intakeRequiresConversation } from './intake-ledger.ts';
 import { dispatchEnvelope } from './dispatch.ts';
 
 export type AcceptResult =
-  | { ok: true; duplicate: boolean; eventId: string; dispatched: boolean }
+  | {
+      ok: true;
+      duplicate: boolean;
+      eventId: string;
+      dispatched: boolean;
+      branch?: string;
+      responseText?: string;
+      unrouted?: boolean;
+    }
   | { ok: false; message: string };
 
 export class SignalIntakeService {
   private readonly ledger: IntakeLedger;
+  private readonly dispatchInFlight = new Set<string>();
 
   constructor(ledger: IntakeLedger = intakeLedger) {
     this.ledger = ledger;
@@ -30,9 +39,30 @@ export class SignalIntakeService {
     const validated = validateIntakeEnvelope(withTrust);
     if (!validated.ok) return { ok: false, message: validated.message };
 
-    const { inserted, row } = this.ledger.accept(validated.envelope);
+    const envelope = validated.envelope;
+    if (intakeRequiresConversation(envelope) && !envelope.conversationId) {
+      const { inserted, row } = this.ledger.acceptUnrouted(
+        envelope,
+        'Missing conversationId. Use intake resolve to bind a thread before dispatch.',
+      );
+      return {
+        ok: true,
+        duplicate: !inserted,
+        eventId: row.eventId,
+        dispatched: false,
+        unrouted: true,
+      };
+    }
+
+    const { inserted, row } = this.ledger.accept(envelope);
     if (!inserted) {
-      return { ok: true, duplicate: true, eventId: row.eventId, dispatched: row.status === 'dispatched' };
+      return {
+        ok: true,
+        duplicate: true,
+        eventId: row.eventId,
+        dispatched: row.status === 'dispatched',
+        ...(row.status === 'unrouted' ? { unrouted: true } : {}),
+      };
     }
     return { ok: true, duplicate: false, eventId: row.eventId, dispatched: false };
   }
@@ -40,24 +70,50 @@ export class SignalIntakeService {
   async acceptAndDispatch(raw: unknown, trusted: { workspaceId: string; conversationId?: string }): Promise<AcceptResult> {
     const accepted = this.accept(raw, trusted);
     if (!accepted.ok) return accepted;
+    if (accepted.unrouted) return accepted;
     if (accepted.duplicate && accepted.dispatched) return accepted;
     const dispatched = await this.dispatchEvent(accepted.eventId);
-  if (!dispatched.ok) return { ok: false, message: dispatched.error };
-    return { ...accepted, dispatched: true };
+    if (!dispatched.ok) return { ok: false, message: dispatched.error };
+    return {
+      ...accepted,
+      dispatched: true,
+      ...(dispatched.branch ? { branch: dispatched.branch } : {}),
+      ...(dispatched.responseText ? { responseText: dispatched.responseText } : {}),
+    };
   }
 
-  async dispatchEvent(eventId: string): Promise<{ ok: true; recordId?: string } | { ok: false; error: string }> {
+  async dispatchEvent(
+    eventId: string,
+  ): Promise<
+    | { ok: true; recordId?: string; branch?: string; responseText?: string }
+    | { ok: false; error: string }
+  > {
     const row = this.ledger.getByEventId(eventId);
     if (!row) return { ok: false, error: `Unknown intake event ${eventId}.` };
-    if (row.status === 'dispatched') return { ok: true, ...(row.mastraRecordId ? { recordId: row.mastraRecordId } : {}) };
-
-    const result = await dispatchEnvelope(row.envelope);
-    if (!result.ok) {
-      this.ledger.markFailed(eventId, result.error);
-      return result;
+    if (row.status === 'dispatched') {
+      return { ok: true, ...(row.mastraRecordId ? { recordId: row.mastraRecordId } : {}) };
     }
-    this.ledger.markDispatched(eventId, result.recordId);
-    return result;
+    if (this.dispatchInFlight.has(eventId)) {
+      return { ok: true };
+    }
+
+    this.dispatchInFlight.add(eventId);
+    try {
+      const result = await dispatchEnvelope(row.envelope);
+      if (!result.ok) {
+        this.ledger.markFailed(eventId, result.error);
+        return result;
+      }
+      this.ledger.markDispatched(eventId, result.recordId);
+      return {
+        ok: true,
+        ...(result.recordId ? { recordId: result.recordId } : {}),
+        ...(result.branch ? { branch: result.branch } : {}),
+        ...(result.responseText ? { responseText: result.responseText } : {}),
+      };
+    } finally {
+      this.dispatchInFlight.delete(eventId);
+    }
   }
 
   async reconcilePending(limit = 50): Promise<{ processed: number; failed: number }> {
@@ -65,11 +121,37 @@ export class SignalIntakeService {
     let processed = 0;
     let failed = 0;
     for (const row of pending) {
+      if (
+        row.envelope.category === 'user_prompt' &&
+        row.envelope.payload.studioInlineDispatch === true &&
+        this.dispatchInFlight.has(row.eventId)
+      ) {
+        continue;
+      }
       const result = await this.dispatchEvent(row.eventId);
       if (result.ok) processed += 1;
       else failed += 1;
     }
     return { processed, failed };
+  }
+
+  async resolveUnrouted(eventId: string, conversationId: string): Promise<AcceptResult> {
+    const row = this.ledger.resolveConversation(eventId, conversationId);
+    if (!row) return { ok: false, message: `Event ${eventId} is not unrouted or does not exist.` };
+    const dispatched = await this.dispatchEvent(eventId);
+    if (!dispatched.ok) return { ok: false, message: dispatched.error };
+    return {
+      ok: true,
+      duplicate: false,
+      eventId,
+      dispatched: true,
+      ...(dispatched.branch ? { branch: dispatched.branch } : {}),
+      ...(dispatched.responseText ? { responseText: dispatched.responseText } : {}),
+    };
+  }
+
+  listIntakeRows(status: 'accepted' | 'failed' | 'unrouted', limit = 50) {
+    return this.ledger.listByStatus(status, limit);
   }
 }
 

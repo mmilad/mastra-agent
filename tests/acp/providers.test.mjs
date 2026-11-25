@@ -2,10 +2,20 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { tmpdir } from 'node:os';
 import { AcpWorkerClient } from '../../src/integrations/acp/client.ts';
-import { claudeAcpLaunch, codexAcpLaunch, cursorAcpLaunch } from '../../src/integrations/acp/providers.ts';
+import {
+  claudeAcpLaunch,
+  codexAcpLaunch,
+  cursorAcpLaunch,
+  isLikelyCursorIdeBinary,
+} from '../../src/integrations/acp/providers.ts';
 
 const enabled = process.env.RUN_ACP_PROVIDER_TESTS === '1';
 const cwd = tmpdir();
+
+test('isLikelyCursorIdeBinary flags editor installs', () => {
+  assert.equal(isLikelyCursorIdeBinary('C:\\Program Files\\cursor\\resources\\app\\out\\cli.js'), true);
+  assert.equal(isLikelyCursorIdeBinary('C:\\Users\\me\\AppData\\Local\\cursor-agent\\agent.cmd'), false);
+});
 
 test('Cursor launch uses the sandboxed ACP command in the selected workspace', () => {
   const launch = cursorAcpLaunch(cwd);

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-bf9d-71b4-8a7b-d1311c77b340",
+  "number": 74,
+  "title": "End-to-end signal to delegate to notification test",
+  "kind": "task",
+  "description": "Integration test covering full DOT loop in one workspace.",
+  "status": "done",
+  "priority": "high",
+  "labels": [
+    "m6 test"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Prove the DOT loop before adding webhooks and durable agents.",
+  "acceptance": [
+    {
+      "text": "Automated or scripted scenario: prompt,delegate,worker notify,supervisor acknowledgment",
+      "met": false
+    },
+    {
+      "text": "no duplicate worker dispatch",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:46.109Z",
+  "updatedAt": "2026-11-25T17:00:47.993Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "dot-loop.test.mjs"
+  },
+  "completedAt": "2026-11-25T17:00:47.993Z"
+}

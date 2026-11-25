@@ -8,6 +8,7 @@ import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { acpSpawnSpec } from '../../integrations/acp/spawn-spec.ts';
+import { isInformalApproval, isInformalDenial } from '../../policy/approval-utterance.ts';
 
 const execFileAsync = promisify(execFile);
 
@@ -41,7 +42,10 @@ export type PendingApproval = {
   operation?: string;
   summary: string;
   expiresAt: number;
+  inWorkspace?: boolean;
 };
+
+const autoApproveDelegatedInWorkspace = process.env.TASK_AUTO_APPROVE_IN_WORKSPACE !== 'false';
 
 export type TaskRecord = {
   taskId: string;
@@ -241,6 +245,28 @@ export class TaskRegistry {
     return snapshot(record);
   }
 
+  /** Pending approval/input for this thread, else the sole pending task in the workspace. */
+  findPendingApproval(projectRoot: string, conversationId?: string): TaskRecord | undefined {
+    const waiting = [...this.records.values()].filter(
+      (record) =>
+        record.projectRoot === projectRoot &&
+        (record.status === 'waiting_approval' || record.status === 'waiting_input') &&
+        record.approval,
+    );
+    if (conversationId) {
+      const forThread = waiting.filter((record) => record.brief.conversationId === conversationId);
+      if (forThread.length === 1) return forThread[0];
+      if (forThread.length > 1) {
+        return forThread.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
+      }
+    }
+    if (waiting.length === 1) return waiting[0];
+    if (waiting.length > 1) {
+      return waiting.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
+    }
+    return undefined;
+  }
+
   cancel(taskId: string, projectRoot: string): { ok: boolean; message: string; task?: TaskSnapshot } {
     const record = this.records.get(taskId);
     if (!record || record.projectRoot !== projectRoot) return { ok: false, message: 'No task with that ID exists in this workspace.' };
@@ -281,14 +307,28 @@ export class TaskRegistry {
     if (!approval || record.status !== 'waiting_approval' && record.status !== 'waiting_input') {
       return { ok: false, message: `Task ${taskId} has no pending approval or question.`, task: snapshot(record) };
     }
-    if (approval.approvalToken !== approvalToken) return { ok: false, message: 'That approval token does not match the pending request.', task: snapshot(record) };
+    const expectedToken = approval.approvalToken;
+    const resolvedToken =
+      approvalToken === record.taskId || approvalToken === record.taskId.toLowerCase()
+        ? expectedToken
+        : approvalToken;
+    if (resolvedToken !== expectedToken) {
+      return { ok: false, message: 'That approval token does not match the pending request.', task: snapshot(record) };
+    }
     if (approval.kind === 'permission') {
       const verb = decision.approved ? 'approve' : 'deny';
       const normalizedMessage = latestUserMessage.trim().toLowerCase();
-      if (!normalizedMessage.startsWith(`${verb} ${approvalToken.toLowerCase()}`) && !normalizedMessage.startsWith(`please ${verb} ${approvalToken.toLowerCase()}`)) {
+      const allowedRefs = new Set([expectedToken.toLowerCase(), record.taskId.toLowerCase()]);
+      const matchesRef = [...allowedRefs].some(
+        (ref) =>
+          normalizedMessage.startsWith(`${verb} ${ref}`) ||
+          normalizedMessage.startsWith(`please ${verb} ${ref}`),
+      );
+      const informalOk = decision.approved ? isInformalApproval(latestUserMessage) : isInformalDenial(latestUserMessage);
+      if (!matchesRef && !informalOk) {
         return {
           ok: false,
-          message: `For safety, reply with exactly “${verb} ${approvalToken}” before I apply this decision.`,
+          message: `For safety, reply with “${verb} ${expectedToken}”, “${verb} ${record.taskId}”, or “${verb} it” for this pending request.`,
           task: snapshot(record),
         };
       }
@@ -308,7 +348,15 @@ export class TaskRegistry {
       return { ok: true, message: `Permission denied. Task ${taskId} is cancelled.`, task: snapshot(record) };
     }
 
-    const resume = { ...decision };
+    this.resumeAfterApproval(record, approval, decision);
+    return { ok: true, message: `Approval recorded. Task ${taskId} has resumed.`, task: snapshot(record) };
+  }
+
+  private resumeAfterApproval(
+    record: TaskRecord,
+    approval: PendingApproval,
+    resume: ResumeDecision,
+  ): void {
     record.approval = undefined;
     record.status = 'running';
     record.progress = [...record.progress, `Resuming after the user approved ${approval.operation ?? 'the pending request'}.`].slice(-20);
@@ -317,7 +365,6 @@ export class TaskRegistry {
     if (record.expiryTimer) clearTimeout(record.expiryTimer);
     record.expiryTimer = undefined;
     void this.run(record, { resumption: { approval, resume } });
-    return { ok: true, message: `Approval recorded. Task ${taskId} has resumed.`, task: snapshot(record) };
   }
 
   private async run(
@@ -360,6 +407,19 @@ export class TaskRegistry {
             record.status = approval.kind === 'permission' ? 'waiting_approval' : 'waiting_input';
             record.updatedAt = new Date().toISOString();
             this.persist(record);
+            const autoApprove =
+              autoApproveDelegatedInWorkspace &&
+              approval.kind === 'permission' &&
+              approval.inWorkspace === true;
+            if (autoApprove) {
+              record.progress = [
+                ...record.progress,
+                'Auto-approved in-workspace permission for this delegated task.',
+              ].slice(-20);
+              this.persist(record);
+              this.resumeAfterApproval(record, approval, { approved: true });
+              return;
+            }
             this.emitLifecycle(record, 'status');
             const delay = Math.max(0, approval.expiresAt - Date.now());
             record.expiryTimer = setTimeout(() => this.expireApproval(record), delay);

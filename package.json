@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "mastra dev",
+    "supervisor": "node --env-file-if-exists=.env src/supervisor-process.ts",
+    "intake": "node --env-file-if-exists=.env src/signals/intake-cli.ts",
     "chat": "node --env-file-if-exists=.env src/run.ts",
     "knowledge:index": "node --env-file-if-exists=.env src/knowledge/cli.ts",
     "check": "tsc --noEmit",
@@ -17,7 +19,8 @@
     "test:acp": "node --experimental-strip-types --test tests/acp/client.test.mjs",
     "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs",
     "test:plantool": "node --experimental-strip-types --test tests/tools/*.test.mjs",
-    "test:signals": "node --experimental-strip-types --test tests/signals/*.test.mjs"
+    "test:signals": "node --experimental-strip-types --test tests/signals/*.test.mjs",
+    "test:supervisor": "node --experimental-strip-types --test tests/supervisor/*.test.mjs"
   },
   "dependencies": {
     "@agentclientprotocol/claude-agent-acp": "^0.112.0",

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-8ef7-7103-a6b3-5ed472c6b4c8",
+  "number": 64,
+  "title": "Design supervisor triage workflow contract",
+  "kind": "task",
+  "description": "Author supervisor workflow I/O and branch table in docs; align with knowledge-answer and delegate-task.",
+  "status": "done",
+  "priority": "high",
+  "labels": [
+    "m6 workflow"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Delegation,research,and direct answer need an explicit state machine before implementation.",
+  "acceptance": [
+    {
+      "text": "Documented inputs,outputs,and branches in docs/",
+      "met": false
+    },
+    {
+      "text": "plantool decision or plan link",
+      "met": false
+    },
+    {
+      "text": "maps to Mastra workflow steps",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:33.655Z",
+  "updatedAt": "2026-11-25T16:59:07.582Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in goal session"
+  },
+  "completedAt": "2026-11-25T16:59:07.582Z"
+}

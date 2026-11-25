@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-98ba-7128-8253-cdbf06f8c5c9",
+  "number": 66,
+  "title": "Connect assistant execution to supervisor workflow",
+  "kind": "task",
+  "description": "Route substantive agent runs through supervisor workflow; keep thin tools as executors.",
+  "status": "done",
+  "priority": "high",
+  "labels": [
+    "m6 workflow"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Studio and chat should trigger the workflow for substantive requests.",
+  "acceptance": [
+    {
+      "text": "File-change requests flow delegate branch",
+      "met": false
+    },
+    {
+      "text": "lookup-only requests avoid unnecessary workers",
+      "met": false
+    },
+    {
+      "text": "small talk uses answer branch",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:36.154Z",
+  "updatedAt": "2026-11-25T16:59:07.859Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in goal session"
+  },
+  "completedAt": "2026-11-25T16:59:07.859Z"
+}

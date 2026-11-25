@@ -238,6 +238,58 @@ export const updatePlanTicket = createTool({
   },
 });
 
+const M6_FEATURE_ID = '01a2139f-7726-7cba-b89d-8467d3b585cc';
+
+export const proposeSkillOrWorkflow = createTool({
+  id: 'propose-skill-or-workflow',
+  description:
+    'When the user explicitly asks to capture a repeating pattern, propose a new skill or Mastra workflow as a Plantool task under M6. Does not create or load skill files; human review is required before adoption.',
+  inputSchema: z.object({
+    kind: z.enum(['skill', 'workflow']),
+    title: z.string().min(5).max(160),
+    rationale: z.string().min(20).max(2000),
+    suggestedAcceptance: z.array(z.string().min(5).max(300)).min(1).max(6),
+  }),
+  outputSchema: z.object({
+    ok: z.boolean(),
+    created: z.boolean(),
+    projectRoot: z.string(),
+    ticketJson: z.string().optional(),
+    message: z.string(),
+  }),
+  execute: async ({ kind, title, rationale, suggestedAcceptance }, context) => {
+    const projectRoot = findProjectRoot(process.cwd());
+    const userText = lastUserText(context?.agent?.messages);
+    if (!explicitAction(userText, /\b(propose|capture|repeat|pattern|skill|workflow)\b/i, title)) {
+      return {
+        ok: false,
+        created: false,
+        projectRoot,
+        message: 'I need an explicit user request to propose a new skill or workflow in Plantool.',
+      };
+    }
+    const description = `Proposed ${kind}: ${rationale}\n\nThis is a draft ticket only; do not load skill bodies until the user approves.`;
+    const why = `Repeated ${kind} pattern observed in conversation; needs human review before implementation.`;
+    const args = [
+      'ticket', 'create', '--title', title.trim(), '--description', description, '--parent', M6_FEATURE_ID,
+      '--kind', 'task', '--priority', 'low', '--labels', `m6-${kind},not-mvp`, '--why', why,
+      '--accept', suggestedAcceptance.join(';'),
+    ];
+    try {
+      const created = runPlantoolJson(projectRoot, args);
+      return {
+        ok: true,
+        created: true,
+        projectRoot,
+        ticketJson: JSON.stringify(created).slice(0, 10_000),
+        message: `Proposed ${kind} "${title}" as a Plantool task for human review.`,
+      };
+    } catch (error) {
+      return { ok: false, created: false, projectRoot, message: cliError(error).slice(0, 1000) };
+    }
+  },
+});
+
 export const commentOnPlanTicket = createTool({
   id: 'comment-on-plan-ticket',
   description:

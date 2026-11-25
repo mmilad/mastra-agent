@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-babf-7b4d-89ab-5d84e6f49aee",
+  "number": 73,
+  "title": "Intake failure inspector and operator commands",
+  "kind": "task",
+  "description": "Operator CLI for signal-intake.db pending and failed rows.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [
+    "m6 ops"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Long-running systems need to debug stuck accepted rows without reading SQLite by hand.",
+  "acceptance": [
+    {
+      "text": "CLI lists failed and pending intake",
+      "met": false
+    },
+    {
+      "text": "retry by eventId",
+      "met": false
+    },
+    {
+      "text": "documented operator flow",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:44.863Z",
+  "updatedAt": "2026-11-25T17:00:47.859Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "npm run intake"
+  },
+  "completedAt": "2026-11-25T17:00:47.859Z"
+}

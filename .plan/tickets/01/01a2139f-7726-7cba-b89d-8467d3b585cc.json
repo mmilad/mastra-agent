@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "number": 59,
+  "title": "M6 — Signal-first long-running supervisor (DOT-style)",
+  "kind": "feature",
+  "description": "Build the DOT/Grokbot-style loop: signals as front door, Mastra supervisor workflow for triage and delegation, long-running process supervision, research branch, and plantool-backed proposals for new skills/workflows. Builds on MAST-54-58 and docs/mastra-signals.md.",
+  "status": "todo",
+  "priority": "high",
+  "labels": [
+    "m6 signals supervisor"
+  ],
+  "properties": {},
+  "parentId": "01a2083b-a9d7-7058-b040-5ee4a701a9a9",
+  "why": "MVP workers and intake exist; the product goal is a persistent companion that routes all input through Signals and decides delegation via workflow rather than prompt luck.",
+  "acceptance": [
+    {
+      "text": "Every user and worker event enters through the intake ledger",
+      "met": false
+    },
+    {
+      "text": "Supervisor workflow routes answer,research,and delegation",
+      "met": false
+    },
+    {
+      "text": "Long runs survive restart via reconcile and task or durable resume",
+      "met": false
+    },
+    {
+      "text": "User can inspect failed intake and background work",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:27.558Z",
+  "updatedAt": "2026-11-25T16:52:27.558Z"
+}

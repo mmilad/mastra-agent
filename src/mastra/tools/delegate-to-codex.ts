@@ -18,6 +18,7 @@ const approvalPayloadSchema = z.object({
   operation: z.string().optional(),
   summary: z.string(),
   expiresAt: z.number(),
+  inWorkspace: z.boolean().optional(),
 });
 
 const resumeSchema = z.object({
@@ -177,6 +178,7 @@ export async function runWorkerDelegation(
           operation: scope.operation,
           summary: `${scope.summary}. ${scope.reason ?? 'This action requires approval.'}`,
           expiresAt: Date.now() + approvalTtlMs,
+          inWorkspace: scope.inWorkspace,
         };
         if (!(await pauseForApproval(payload))) {
           permissionRejected = true;

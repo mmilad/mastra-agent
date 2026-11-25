@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-b0f8-747b-83bd-5bddd4f03c82",
+  "number": 71,
+  "title": "Propose new skills and workflows into plantool",
+  "kind": "task",
+  "description": "Template for supervisor to create plantool tasks for new skills/workflows.",
+  "status": "done",
+  "priority": "low",
+  "labels": [
+    "m6 skills not-mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Repeated patterns should become inspectable artifacts,not prompt clutter.",
+  "acceptance": [
+    {
+      "text": "Supervisor can create plantool task with rationale",
+      "met": false
+    },
+    {
+      "text": "optional skill scaffold",
+      "met": false
+    },
+    {
+      "text": "human approval before load",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:42.360Z",
+  "updatedAt": "2026-11-25T17:00:48.413Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "propose-skill-or-workflow tool"
+  },
+  "completedAt": "2026-11-25T17:00:48.413Z"
+}

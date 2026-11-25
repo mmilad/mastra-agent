@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-b5d9-70eb-930e-3ef13b21b458",
+  "number": 72,
+  "title": "CI and GitHub webhook intake adapter",
+  "kind": "task",
+  "description": "HTTP adapter for ci_run envelopes with signature verification seam.",
+  "status": "done",
+  "priority": "low",
+  "labels": [
+    "m6 webhook not-mvp"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "External async events are core to long-running companions.",
+  "acceptance": [
+    {
+      "text": "Verified signature hook",
+      "met": false
+    },
+    {
+      "text": "envelope maps ci_run",
+      "met": false
+    },
+    {
+      "text": "subscription table stub",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:43.609Z",
+  "updatedAt": "2026-11-25T17:01:07.500Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "POST /webhooks/github stub"
+  },
+  "completedAt": "2026-11-25T17:01:07.500Z"
+}

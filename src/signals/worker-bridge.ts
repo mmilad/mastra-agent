@@ -19,6 +19,15 @@ function summarizeTask(record: TaskRecord): string {
   if (record.status === 'interrupted') {
     return `Task ${record.taskId.slice(0, 8)} was interrupted before completion.`;
   }
+  if (record.status === 'waiting_approval' && record.approval) {
+    const inWorkspace = record.approval.inWorkspace !== false;
+    return inWorkspace
+      ? `Task ${record.taskId} needs permission: ${record.approval.summary.slice(0, 240)}. Reply approve it, approve ${record.taskId}, or approve ${record.approval.approvalToken}.`
+      : `Task ${record.taskId} needs out-of-workspace permission: ${record.approval.summary.slice(0, 240)}. Reply approve ${record.approval.approvalToken} or deny.`;
+  }
+  if (record.status === 'waiting_input' && record.approval) {
+    return `Task ${record.taskId} needs an answer. Reply answer ${record.approval.approvalToken}: <your answer>.`;
+  }
   const latest = record.progress.at(-1);
   return latest?.slice(0, 400) ?? `Task ${record.taskId.slice(0, 8)} is ${record.status}.`;
 }
@@ -26,7 +35,6 @@ function summarizeTask(record: TaskRecord): string {
 export async function notifyTaskLifecycle(record: TaskRecord, reason: 'status' | 'progress'): Promise<void> {
   const conversationId = record.brief.conversationId;
   const resourceId = record.brief.resourceId ?? projectResourceId(record.projectRoot);
-  if (!conversationId) return;
 
   const worker = record.brief.worker ?? 'codex';
   const isTerminal = terminalStatuses.has(record.status);
@@ -65,7 +73,10 @@ export async function notifyTaskLifecycle(record: TaskRecord, reason: 'status' |
     },
   });
 
-  await signalIntakeService.acceptAndDispatch(envelope, { workspaceId: resourceId, conversationId });
+  await signalIntakeService.acceptAndDispatch(envelope, {
+    workspaceId: resourceId,
+    ...(conversationId ? { conversationId } : {}),
+  });
 }
 
 export function wireWorkerTaskSignals(

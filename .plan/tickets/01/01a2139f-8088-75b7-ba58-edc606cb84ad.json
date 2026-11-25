@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-8088-75b7-ba58-edc606cb84ad",
+  "number": 61,
+  "title": "Route Studio and chat prompts through intake ledger",
+  "kind": "task",
+  "description": "Replace direct agent.generate from Studio/chat adapters with acceptAndDispatch user_prompt envelope.",
+  "status": "done",
+  "priority": "high",
+  "labels": [
+    "m6 signals"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Signals must be the front door for user prompts, not a bypass around the ledger.",
+  "acceptance": [
+    {
+      "text": "User turns create ledger rows and dispatch sendMessage",
+      "met": false
+    },
+    {
+      "text": "duplicate retries are idempotent",
+      "met": false
+    },
+    {
+      "text": "Studio and npm run chat use the same path",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:29.960Z",
+  "updatedAt": "2026-11-25T16:59:07.305Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Implemented in goal session"
+  },
+  "completedAt": "2026-11-25T16:59:07.305Z"
+}

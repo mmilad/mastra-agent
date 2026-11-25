@@ -1,6 +1,13 @@
 import type { SendNotificationSignalInput } from '@mastra/core/notifications';
 import type { IntakeEnvelope } from './envelope.ts';
 import { getSignalMastra } from './runtime.ts';
+import { runSupervisorRouting } from '../mastra/workflows/supervisor-routing.ts';
+import { ensureThreadSubscribed } from './thread-subscribe.ts';
+import { resolveThreadResourceId } from '../context/thread-resource.ts';
+import { generateWithCompletion } from '../mastra/agents/generate-options.ts';
+
+const TERMINAL_WORKER_STATUSES = new Set(['completed', 'failed', 'cancelled', 'interrupted']);
+const workerFollowupEnabled = process.env.WORKER_FOLLOWUP_GENERATE !== 'false';
 
 function notificationInput(envelope: IntakeEnvelope): SendNotificationSignalInput | undefined {
   const { category, payload, correlationId, dedupeKey } = envelope;
@@ -29,7 +36,9 @@ function notificationInput(envelope: IntakeEnvelope): SendNotificationSignalInpu
   };
 }
 
-export type DispatchResult = { ok: true; recordId?: string } | { ok: false; error: string };
+export type DispatchResult =
+  | { ok: true; recordId?: string; branch?: string; responseText?: string }
+  | { ok: false; error: string };
 
 export async function dispatchEnvelope(envelope: IntakeEnvelope): Promise<DispatchResult> {
   const mastra = getSignalMastra();
@@ -41,12 +50,21 @@ export async function dispatchEnvelope(envelope: IntakeEnvelope): Promise<Dispat
     if (!envelope.conversationId) return { ok: false, error: 'user_prompt requires conversationId.' };
     const text = typeof envelope.payload.text === 'string' ? envelope.payload.text : '';
     if (!text.trim()) return { ok: false, error: 'user_prompt payload.text is required.' };
+    const syncReply = envelope.payload.syncReply === true;
     try {
-      await agent.sendMessage(text, {
-        resourceId: envelope.workspaceId,
+      const resourceId = await resolveThreadResourceId(agent, envelope.conversationId, envelope.workspaceId);
+      await ensureThreadSubscribed(agent, { resourceId, threadId: envelope.conversationId });
+      const routed = await runSupervisorRouting(mastra, {
+        text,
+        resourceId,
         threadId: envelope.conversationId,
+        syncReply,
       });
-      return { ok: true };
+      return {
+        ok: true,
+        branch: routed.branch,
+        ...(routed.responseText ? { responseText: routed.responseText } : {}),
+      };
     } catch (error) {
       return { ok: false, error: error instanceof Error ? error.message : String(error) };
     }
@@ -59,11 +77,35 @@ export async function dispatchEnvelope(envelope: IntakeEnvelope): Promise<Dispat
   }
 
   try {
+    const resourceId = await resolveThreadResourceId(agent, envelope.conversationId, envelope.workspaceId);
+    await ensureThreadSubscribed(agent, { resourceId, threadId: envelope.conversationId });
     const result = await agent.sendNotificationSignal(input, {
-      resourceId: envelope.workspaceId,
+      resourceId,
       threadId: envelope.conversationId,
     });
     const recordId = Array.isArray(result) ? result[0]?.record?.id : result.record?.id;
+
+    const workerStatus = typeof envelope.payload.status === 'string' ? envelope.payload.status : '';
+    if (
+      workerFollowupEnabled &&
+      envelope.category === 'worker_response' &&
+      TERMINAL_WORKER_STATUSES.has(workerStatus)
+    ) {
+      const summary = typeof envelope.payload.summary === 'string' ? envelope.payload.summary : input.summary;
+      try {
+        await generateWithCompletion(
+          agent,
+          `[Worker task update — summarize for the user in plain language; do not start a new task]\n${summary}`,
+          { memory: { thread: envelope.conversationId, resource: resourceId } },
+        );
+      } catch (error) {
+        console.warn(
+          '[signals] worker follow-up generate failed:',
+          error instanceof Error ? error.message : error,
+        );
+      }
+    }
+
     return { ok: true, ...(recordId ? { recordId } : {}) };
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : String(error) };

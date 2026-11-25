@@ -106,6 +106,61 @@ test('approval is bound to explicit user confirmation and the exact pending requ
   assert.equal(finished.acceptanceVerified, false);
 });
 
+test('accepts approve it when one task is waiting on permission', async (t) => {
+  const root = tempDir('mastra-registry-');
+  const outside = tempDir('mastra-registry-outside-');
+  t.after(() => {
+    rmSync(root, { recursive: true, force: true });
+    rmSync(outside, { recursive: true, force: true });
+  });
+  const outsideFile = join(outside, 'informal-approve.txt');
+  const registry = new TaskRegistry(startFakeAgent({ FAKE_PERMISSION_PATH: outsideFile }));
+  const started = await registry.start(root, {
+    objective: 'FAKE_PERMISSION_TEST informal approve',
+    constraints: [],
+    acceptanceCriteria: [],
+    contextReferences: [],
+  });
+  const waiting = await waitFor(registry, started.task.taskId, root, (task) => task.status === 'waiting_approval');
+  const informal = registry.resolveApproval(
+    waiting.taskId,
+    root,
+    waiting.approval.approvalToken,
+    { approved: true },
+    'approve it',
+  );
+  assert.equal(informal.ok, true);
+});
+
+test('accepts approve <taskId> when resolving a pending permission', async (t) => {
+  const root = tempDir('mastra-registry-');
+  const outside = tempDir('mastra-registry-outside-');
+  t.after(() => {
+    rmSync(root, { recursive: true, force: true });
+    rmSync(outside, { recursive: true, force: true });
+  });
+  const outsideFile = join(outside, 'task-id-approve.txt');
+  const registry = new TaskRegistry(startFakeAgent({ FAKE_PERMISSION_PATH: outsideFile }));
+  const started = await registry.start(root, {
+    objective: 'FAKE_PERMISSION_TEST write by task id approval',
+    constraints: [],
+    acceptanceCriteria: [],
+    contextReferences: [],
+  });
+  const waiting = await waitFor(registry, started.task.taskId, root, (task) => task.status === 'waiting_approval');
+  const byTaskId = registry.resolveApproval(
+    waiting.taskId,
+    root,
+    waiting.taskId,
+    { approved: true },
+    `approve ${waiting.taskId}`,
+  );
+  assert.equal(byTaskId.ok, true);
+  const finished = await waitFor(registry, waiting.taskId, root, (task) => task.status === 'completed');
+  assert.equal(existsSync(outsideFile), true);
+  assert.match(finished.workerOutput, /FAKE_PERMISSION_GRANTED/);
+});
+
 test('cancel targets the active task and resolves after ACP cancellation', async (t) => {
   const root = tempDir('mastra-registry-');
   t.after(async () => { await closeClients(); rmSync(root, { recursive: true, force: true }); });

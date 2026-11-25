@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2139f-a75a-787d-9831-990ad98cc3de",
+  "number": 69,
+  "title": "Resume suspended worker and approval flows across turns",
+  "kind": "task",
+  "description": "Bridge waiting_approval tasks to notifications and supervisor resume instructions.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [
+    "m6 runtime"
+  ],
+  "properties": {},
+  "parentId": "01a2139f-7726-7cba-b89d-8467d3b585cc",
+  "why": "Long runs include waiting on user approval and explicit resume tokens.",
+  "acceptance": [
+    {
+      "text": "Documented resume path for waiting_approval tasks",
+      "met": false
+    },
+    {
+      "text": "supervisor surfaces pending work via notification and get-task-status",
+      "met": false
+    }
+  ],
+  "createdBy": "cursor",
+  "refs": [
+    "docs/signal-driven-assistant-roadmap.md",
+    "docs/mastra-signals.md"
+  ],
+  "createdAt": "2026-11-25T16:52:39.898Z",
+  "updatedAt": "2026-11-25T17:00:48.265Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "resume-approval-flow.md"
+  },
+  "completedAt": "2026-11-25T17:00:48.265Z"
+}

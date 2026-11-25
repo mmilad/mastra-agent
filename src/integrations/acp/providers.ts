@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
 import { delimiter, dirname, extname, join } from 'node:path';
+import { homedir } from 'node:os';
 import type { AcpLaunch } from './client.ts';
 
 export const acpWorkers = ['codex', 'cursor', 'claude'] as const;
@@ -22,6 +23,40 @@ function resolveWindowsCommand(command: string): string {
         : join(directory, `${command}${extension}`);
       if (existsSync(candidate)) return candidate;
     }
+  }
+  return command;
+}
+
+/** True when PATH resolved to the Cursor editor instead of the Agent CLI (opens bogus tabs like agent/acp/enabled). */
+export function isLikelyCursorIdeBinary(command: string): boolean {
+  const normalized = command.replace(/\\/g, '/').toLowerCase();
+  if (normalized.includes('/cursor-agent/')) return false;
+  return (
+    normalized.includes('/cursor/resources/')
+    || normalized.includes('/programs/cursor/')
+    || /[/\\]cursor\.(cmd|exe)$/i.test(command)
+    || /[/\\]cli\.js$/i.test(command)
+  );
+}
+
+export function defaultCursorAgentCommand(): string {
+  const configured = process.env.CURSOR_AGENT_COMMAND?.trim();
+  if (configured) return configured;
+  if (process.platform === 'win32') {
+    const local = process.env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local');
+    const agentCmd = join(local, 'cursor-agent', 'agent.cmd');
+    if (existsSync(agentCmd)) return agentCmd;
+  }
+  return 'agent';
+}
+
+export function resolveCursorAgentCommand(): string {
+  const command = resolveWindowsCommand(defaultCursorAgentCommand());
+  if (isLikelyCursorIdeBinary(command)) {
+    throw new Error(
+      'Cursor worker launch resolved to the Cursor editor, not the Agent CLI. '
+      + 'Set CURSOR_AGENT_COMMAND to your agent.cmd (for example %LOCALAPPDATA%\\cursor-agent\\agent.cmd).',
+    );
   }
   return command;
 }
@@ -53,7 +88,7 @@ export function claudeAcpLaunch(cwd: string): AcpLaunch {
 
 /** Cursor Agent CLI ACP server; sandboxed to the workspace unless permissions are granted. */
 export function cursorAcpLaunch(cwd: string): AcpLaunch {
-  const command = resolveWindowsCommand(process.env.CURSOR_AGENT_COMMAND ?? 'agent');
+  const command = resolveCursorAgentCommand();
   return {
     command,
     args: ['--sandbox', 'enabled', 'acp'],

@@ -5,6 +5,10 @@ import { findWorkspaceRoot, projectResourceId } from './context/scope.ts';
 import { saveSelectedThread, selectConversation } from './context/conversations.ts';
 import { findProjectRoot } from './mastra/tools/delegate-to-codex.ts';
 import { taskRegistry } from './mastra/tools/task-registry.ts';
+import { signalIntakeService } from './signals/intake-service.ts';
+import { buildUserPromptEnvelope } from './signals/user-prompt.ts';
+import { ensureThreadSubscribed } from './signals/thread-subscribe.ts';
+import { tryApplyApprovalUserMessage } from './mastra/tools/approval-routing.ts';
 
 const agent = mastra.getAgent('assistant');
 const root = findWorkspaceRoot();
@@ -13,7 +17,6 @@ const args = process.argv.slice(2);
 const requestedThreadIndex = args.indexOf('--thread');
 const requestedThread = requestedThreadIndex >= 0 ? args[requestedThreadIndex + 1] : undefined;
 if (requestedThreadIndex >= 0 && !requestedThread) throw new Error('--thread requires a conversation ID.');
-const startNew = args.includes('--new');
 const listOnly = args.includes('--list');
 const prompt = args.filter((arg, index) => arg !== '--new' && arg !== '--list' && arg !== '--thread' && (requestedThreadIndex < 0 || index !== requestedThreadIndex + 1)).join(' ').trim();
 const memory = await agent.getMemory();
@@ -26,12 +29,37 @@ if (listOnly) {
   process.exit(0);
 }
 
-let threadId = await selectConversation(memory, root, { requestedThreadId: requestedThread, startNew });
+let threadId = await selectConversation(memory, root, { requestedThreadId: requestedThread, startNew: args.includes('--new') });
 
 async function send(text: string): Promise<void> {
   try {
-    const response = await agent.generate(text, { memory: { thread: threadId, resource: resourceId } });
-    console.log(`\nAssistant: ${response.text}\n`);
+    const quick = tryApplyApprovalUserMessage(text, threadId);
+    if (quick.handled) {
+      console.log(`\n${quick.message}\n`);
+      return;
+    }
+    await ensureThreadSubscribed(agent, { resourceId, threadId });
+    const envelope = buildUserPromptEnvelope({
+      workspaceId: resourceId,
+      conversationId: threadId,
+      text,
+      producerId: 'chat-cli',
+      syncReply: true,
+    });
+    const result = await signalIntakeService.acceptAndDispatch(envelope, {
+      workspaceId: resourceId,
+      conversationId: threadId,
+    });
+    if (!result.ok) {
+      console.error('\nAssistant intake failed:', result.message, '\n');
+      return;
+    }
+    const body = result.responseText?.trim();
+    if (!body) {
+      console.log('\nAssistant: (no text in the model response — try again or check Ollama / Mastra logs.)\n');
+      return;
+    }
+    console.log(`\nAssistant: ${body}\n`);
   } catch (error) {
     console.error('\nAssistant request failed:', error instanceof Error ? error.message : String(error), '\n');
   }
@@ -72,6 +100,7 @@ if (prompt) {
       }
       threadId = existing.id;
       saveSelectedThread(root, threadId);
+      await ensureThreadSubscribed(agent, { resourceId, threadId });
       console.log(`Switched to: ${threadId}`);
       terminal.prompt();
       continue;
