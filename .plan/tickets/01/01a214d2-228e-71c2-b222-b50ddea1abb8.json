@@ -5,12 +5,12 @@
   "title": "Heuristic-first triage (skip LLM when unambiguous)",
   "kind": "task",
   "description": "Research: rule-first routing — unambiguous keyword hits route without classifier call. Refs: llm-triage.ts, triage.ts. Links: compile n run agents-routing.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
   "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
-  "why": "Every message pays ~5s LLM triage even when regex would agree (src/supervisor/triage.ts).",
+  "why": "triageHighConfidenceBranch fast path in llm-triage; SUPERVISOR_TRIAGE_LLM_ALWAYS disables it; tests added.",
   "acceptance": [
     {
       "text": "High-confidence regex-only paths skip triageAgent.generate",
@@ -27,5 +27,6 @@
   ],
   "createdBy": "composer",
   "createdAt": "2026-11-25T22:27:25.454Z",
-  "updatedAt": "2026-11-25T22:27:25.454Z"
+  "updatedAt": "2026-11-26T17:17:41.924Z",
+  "completedAt": "2026-11-26T17:17:41.924Z"
 }
