@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "01a214d2-a789-7f48-b861-1fc70ad2cdc5",
+  "number": 93,
+  "title": "Register supervisor-triage agent on Mastra (optional)",
+  "kind": "task",
+  "description": "DX only; not required for routing correctness.",
+  "status": "todo",
+  "priority": "low",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
+  "why": "Triage agent is standalone; harder to inspect in Studio Agents list.",
+  "acceptance": [
+    {
+      "text": "triageAgent exported on Mastra.agents OR documented intentional omission",
+      "met": false
+    },
+    {
+      "text": "traces still show step",
+      "met": false
+    }
+  ],
+  "createdBy": "composer",
+  "createdAt": "2026-11-25T22:27:59.497Z",
+  "updatedAt": "2026-11-25T22:27:59.497Z"
+}

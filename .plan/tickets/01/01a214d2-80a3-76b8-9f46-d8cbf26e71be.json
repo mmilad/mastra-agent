@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "01a214d2-80a3-76b8-9f46-d8cbf26e71be",
+  "number": 88,
+  "title": "Context-aware supervisor triage (recent thread context)",
+  "kind": "task",
+  "description": "Context-aware routing (AWS/Microsoft patterns). Max tokens bounded.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
+  "why": "Triage uses only current string; follow-ups like 'do that' mis-route.",
+  "acceptance": [
+    {
+      "text": "Triage prompt includes capped last user+assistant lines or working-memory objective",
+      "met": false
+    },
+    {
+      "text": "tests for follow-up phrases",
+      "met": false
+    },
+    {
+      "text": "SUPERVISOR_TRIAGE_CONTEXT Turns env documented",
+      "met": false
+    }
+  ],
+  "createdBy": "composer",
+  "createdAt": "2026-11-25T22:27:49.539Z",
+  "updatedAt": "2026-11-25T22:27:49.539Z"
+}

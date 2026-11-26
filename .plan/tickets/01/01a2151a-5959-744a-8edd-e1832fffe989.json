@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2151a-5959-744a-8edd-e1832fffe989",
+  "number": 98,
+  "title": "Define prompt-kind primitives and ingest contract",
+  "kind": "task",
+  "description": "Kinds to cover: social, general_qa, project_research, project_task, planning_plantool, ops_task_status, approval, compound_multi. Ingest step = optional workflow step 0 after ledger accept, before supervisor-triage.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
+  "why": "v1 branches collapse many user intents; planning and multi-intent are implicit. Agree taxonomy then implement ingest/decompose.",
+  "acceptance": [
+    {
+      "text": "Written taxonomy in docs/supervisor-workflow-contract.md or ADR",
+      "met": false
+    },
+    {
+      "text": "each kind maps to branch+tools+user-visible Assistant-only rule",
+      "met": false
+    },
+    {
+      "text": "multi-intent strategy documented (sequential sub-prompts vs single turn with checklist)",
+      "met": false
+    }
+  ],
+  "createdBy": "composer",
+  "createdAt": "2026-11-25T23:46:18.073Z",
+  "updatedAt": "2026-11-25T23:46:18.073Z"
+}

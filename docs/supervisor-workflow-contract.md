@@ -45,13 +45,15 @@ Registered on `Mastra` as `supervisorRouting`; invoked from `dispatchEnvelope` f
 | Workflow | Role |
 | --- | --- |
 | `knowledge-answer` | Research branch backend |
-| *(future)* `delegate-handoff` | Structured worker brief assembly |
+| *(future)* `delegate-handoff` | Structured worker brief assembly — **MAST-82** |
 | *(future)* `propose-plantool-skill` | MAST-71 invention path |
+
+Post-pilot improvement backlog (Plantool **MAST-78** epic): `docs/supervisor-improvement-backlog.md`.
 
 ## Product decisions
 
 1. **Triage model** — **MAST-75 → MAST-77**: LLM triage with regex fallback (see `src/supervisor/llm-triage.ts`).
-2. **Research delivery** — v1 queues knowledge text then sends user message; alternative is single merged assistant turn only.
+2. **Research delivery** — **Decided (MAST-83 → MAST-85):** only the **Assistant** speaks to the user; `knowledge-answer` stays internal; MAST-87 optimizes latency under that rule.
 3. **Studio sync** — Studio stays async-only; whether CLI is the only `syncReply` consumer.
 4. **Unrouted events (MAST-63)** — Default activity thread vs. operator-only resolution (no broadcast).
 5. **Long-running entry (MAST-67)** — `mastra dev` only vs. dedicated supervisor process/systemd.

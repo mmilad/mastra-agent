@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "01a214d2-31fb-7bd0-b040-a89712fc04d9",
+  "number": 81,
+  "title": "Triage golden suite (labeled messages + CI)",
+  "kind": "task",
+  "description": "Evaluate router on its own (confusion matrix). Ref: Anthropic-style router eval.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
+  "why": "No regression harness for routing quality beyond regex unit tests.",
+  "acceptance": [
+    {
+      "text": "tests/supervisor/triage-golden.jsonl with expected branch",
+      "met": false
+    },
+    {
+      "text": "CI runs heuristic mode always",
+      "met": false
+    },
+    {
+      "text": "optional nightly Ollama job documented",
+      "met": false
+    }
+  ],
+  "createdBy": "composer",
+  "createdAt": "2026-11-25T22:27:29.403Z",
+  "updatedAt": "2026-11-25T22:27:29.403Z"
+}

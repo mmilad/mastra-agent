@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "01a214d2-5ad2-78e3-a067-1e0393e3dba3",
+  "number": 87,
+  "title": "Research branch: implement chosen delivery option",
+  "kind": "task",
+  "description": "Options A/B/C from architecture review. Depends on decision ticket.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
+  "why": "Blocked on MAST-83 decision; reduce hops after pilot showed ~49s supervisor-routing on research.",
+  "acceptance": [
+    {
+      "text": "Implements accepted option from MAST-83",
+      "met": false
+    },
+    {
+      "text": "supervisor-execute path measurable in traces",
+      "met": false
+    },
+    {
+      "text": "<30s target on local Ollama for README question (stretch)",
+      "met": false
+    }
+  ],
+  "createdBy": "composer",
+  "createdAt": "2026-11-25T22:27:39.858Z",
+  "updatedAt": "2026-11-25T22:27:39.858Z"
+}

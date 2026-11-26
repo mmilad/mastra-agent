@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "01a214d2-88b9-7bda-9011-b8f352aa18d4",
+  "number": 89,
+  "title": "Branch-aware assistant tool profiles",
+  "kind": "task",
+  "description": "Routing to specialized handler with reduced tools. src/mastra/agents/tool-profile.ts",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
+  "why": "Full tool surface on research branch despite instructions; risks mistaken delegate-task.",
+  "acceptance": [
+    {
+      "text": "executeSupervisorTurn passes branch-specific tool set or profile flag",
+      "met": false
+    },
+    {
+      "text": "delegate branch keeps delegate tools",
+      "met": false
+    },
+    {
+      "text": "research branch excludes delegate-task unless user overrides",
+      "met": false
+    }
+  ],
+  "createdBy": "composer",
+  "createdAt": "2026-11-25T22:27:51.609Z",
+  "updatedAt": "2026-11-25T22:27:51.609Z"
+}
