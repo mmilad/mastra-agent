@@ -85,7 +85,7 @@ export class SignalIntakeService {
   async dispatchEvent(
     eventId: string,
   ): Promise<
-    | { ok: true; recordId?: string; branch?: string; responseText?: string }
+    | { ok: true; recordId?: string; branch?: string; responseText?: string; routing?: string }
     | { ok: false; error: string }
   > {
     const row = this.ledger.getByEventId(eventId);
@@ -104,7 +104,7 @@ export class SignalIntakeService {
         this.ledger.markFailed(eventId, result.error);
         return result;
       }
-      this.ledger.markDispatched(eventId, result.recordId);
+      this.ledger.markDispatched(eventId, result.recordId, result.routing);
       return {
         ok: true,
         ...(result.recordId ? { recordId: result.recordId } : {}),

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21865-0cd0-7114-b579-18e36ff02c57",
+  "ticketId": "01a214d2-2a5d-7de2-bb7d-8e419dbbee50",
+  "body": "Partial (2026-11-26): markDispatched stores routing_note JSON (branch, primaryKind, kinds, ingestSource, triageSource). CLI display still TODO.",
+  "author": "composer",
+  "createdAt": "2026-11-26T15:06:45.328Z"
+}

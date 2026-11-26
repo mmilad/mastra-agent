@@ -24,7 +24,7 @@ export interface IntakeLedger {
   accept(envelope: IntakeEnvelope): { inserted: boolean; row: IntakeLedgerRow };
   acceptUnrouted(envelope: IntakeEnvelope, note: string): { inserted: boolean; row: IntakeLedgerRow };
   resolveConversation(eventId: string, conversationId: string): IntakeLedgerRow | undefined;
-  markDispatched(eventId: string, mastraRecordId?: string): void;
+  markDispatched(eventId: string, mastraRecordId?: string, routingNote?: string): void;
   markFailed(eventId: string, error: string): void;
   listPending(limit?: number): IntakeLedgerRow[];
   listByStatus(status: IntakeDispatchStatus, limit?: number): IntakeLedgerRow[];
@@ -138,10 +138,11 @@ export class SqliteIntakeLedger implements IntakeLedger {
     }
   }
 
-  markDispatched(eventId: string, mastraRecordId?: string): void {
+  markDispatched(eventId: string, mastraRecordId?: string, routingNote?: string): void {
     const updatedAt = new Date().toISOString();
-    this.db.prepare(`UPDATE signal_intake SET status = 'dispatched', mastra_record_id = ?, delivery_error = NULL, updated_at = ?
-      WHERE event_id = ?`).run(mastraRecordId ?? null, updatedAt, eventId);
+    const note = routingNote?.trim() ? routingNote.trim().slice(0, 2000) : null;
+    this.db.prepare(`UPDATE signal_intake SET status = 'dispatched', mastra_record_id = ?, delivery_error = NULL, routing_note = COALESCE(?, routing_note), updated_at = ?
+      WHERE event_id = ?`).run(mastraRecordId ?? null, note, updatedAt, eventId);
   }
 
   markFailed(eventId: string, error: string): void {

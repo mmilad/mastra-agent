@@ -37,7 +37,7 @@ function notificationInput(envelope: IntakeEnvelope): SendNotificationSignalInpu
 }
 
 export type DispatchResult =
-  | { ok: true; recordId?: string; branch?: string; responseText?: string }
+  | { ok: true; recordId?: string; branch?: string; responseText?: string; routing?: string }
   | { ok: false; error: string };
 
 export async function dispatchEnvelope(envelope: IntakeEnvelope): Promise<DispatchResult> {
@@ -60,10 +60,12 @@ export async function dispatchEnvelope(envelope: IntakeEnvelope): Promise<Dispat
         threadId: envelope.conversationId,
         syncReply,
       });
+      const routingNote = routed.routing ? JSON.stringify({ branch: routed.branch, ...routed.routing }) : undefined;
       return {
         ok: true,
         branch: routed.branch,
         ...(routed.responseText ? { responseText: routed.responseText } : {}),
+        ...(routingNote ? { routing: routingNote } : {}),
       };
     } catch (error) {
       return { ok: false, error: error instanceof Error ? error.message : String(error) };

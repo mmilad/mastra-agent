@@ -23,6 +23,12 @@ Industry patterns cited in tickets: [rule-first routing](https://www.compilenrun
 | MAST-92 | Wrong-branch recovery UX (discussion + optional reroute) | 3 |
 | MAST-93 | Register supervisor-triage agent on Mastra (optional DX) | 3 |
 
-Implementation order (suggested): **79 → 80 → 81 → 82 → decide 83 → 87 → 88–93**.
+Implementation order (updated): **98 + ingest Phase A (shipped)** → **80** (routing_note) partial → **79 → 81 → 82 → 87 → MAST-99 Phase B decompose → 88–93**.
+
+| ID | Title | Status |
+| --- | --- | --- |
+| MAST-98 | Prompt-kind primitives + ingest contract | **Done** (doc + Phase A heuristic) |
+| MAST-99 | Phase B: LLM ingest + confidence-gated decompose | Planned |
+| MAST-100 | Phase C: sequential ledger fan-out for compound | Planned |
 
 Contract reference: `docs/supervisor-workflow-contract.md`. Architecture: `docs/architecture/decisions.md`.

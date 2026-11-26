@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21864-fd31-7cd3-930a-68470ea1c4ea",
+  "number": 99,
+  "title": "Phase B: LLM prompt ingest and confidence-gated decompose",
+  "kind": "task",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a214d2-0326-7ade-ae35-7befa1ceff12",
+  "why": "MAST-96 Phase B: structured ingest + split only when confident.",
+  "acceptance": [
+    {
+      "text": "LLM ingest returns kinds, confidence, subIntents",
+      "met": false
+    },
+    {
+      "text": "no ledger fan-out below threshold",
+      "met": false
+    },
+    {
+      "text": "golden compound cases pass",
+      "met": false
+    }
+  ],
+  "createdBy": "composer",
+  "createdAt": "2026-11-26T15:06:41.329Z",
+  "updatedAt": "2026-11-26T15:06:41.329Z"
+}

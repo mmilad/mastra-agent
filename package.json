@@ -20,7 +20,8 @@
     "test:acp:providers": "node --experimental-strip-types --test tests/acp/providers.test.mjs",
     "test:plantool": "node --experimental-strip-types --test tests/tools/*.test.mjs",
     "test:signals": "node --experimental-strip-types --test tests/signals/*.test.mjs",
-    "test:supervisor": "node --experimental-strip-types --test tests/supervisor/*.test.mjs"
+    "test:supervisor": "node --experimental-strip-types --test tests/supervisor/*.test.mjs",
+    "supervisor:smoke": "node --env-file-if-exists=.env --experimental-strip-types src/scripts/supervisor-routing-smoke.ts"
   },
   "dependencies": {
     "@agentclientprotocol/claude-agent-acp": "^0.112.0",

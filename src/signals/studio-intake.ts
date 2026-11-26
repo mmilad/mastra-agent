@@ -93,6 +93,10 @@ export function wrapAssistantSignalIntake(agent: Agent): void {
     options: unknown,
     fallback: typeof originalGenerate,
   ): Promise<{ text: string }> {
+    if (process.env.MASTRA_SUPERVISOR_EXECUTE === '1') {
+      const response = (await fallback(userText as never, options as never)) as { text?: string | null };
+      return { text: response.text?.trim() ?? '' };
+    }
     const quick = tryApplyApprovalUserMessage(userText, threadId(memory));
     if (quick.handled) return { text: quick.message };
 

@@ -35,8 +35,9 @@ Intake `user_prompt` payload mirrors `text` and optional `syncReply`.
 
 ## Mastra steps
 
-1. `supervisor-triage` — `triageUserPromptWithLlm(text)` → branch label (`llm` or `heuristic`)
-2. `supervisor-execute` — branch executor (`executeSupervisorTurn`)
+1. `prompt-ingest` — prompt kinds + compound metadata (Phase A: heuristic only). See `docs/supervisor-prompt-ingest.md` (**MAST-98**).
+2. `supervisor-triage` — `triageUserPromptWithLlm(text)` → branch label (`llm` or `heuristic`)
+3. `supervisor-execute` — branch executor (`executeSupervisorTurn`)
 
 Registered on `Mastra` as `supervisorRouting`; invoked from `dispatchEnvelope` for `user_prompt` and via `runSupervisorRouting()`.
 

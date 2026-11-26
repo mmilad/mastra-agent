@@ -59,11 +59,17 @@ async function deliverSync(
   thread: { resourceId: string; threadId: string },
   branch: SupervisorBranch,
 ): Promise<string> {
-  const response = await generateWithCompletion(agent, text, {
-    memory: { thread: thread.threadId, resource: thread.resourceId },
-    instructions: instructionsForBranch(branch),
-  });
-  return response.text?.trim() ?? '';
+  // Workflow execute already ran intake; do not re-enter Studio acceptAndDispatch via wrapped generate.
+  process.env.MASTRA_SUPERVISOR_EXECUTE = '1';
+  try {
+    const response = await generateWithCompletion(agent, text, {
+      memory: { thread: thread.threadId, resource: thread.resourceId },
+      instructions: instructionsForBranch(branch),
+    });
+    return response.text?.trim() ?? '';
+  } finally {
+    delete process.env.MASTRA_SUPERVISOR_EXECUTE;
+  }
 }
 
 async function deliverAsync(agent: Agent, text: string, thread: { resourceId: string; threadId: string }): Promise<void> {

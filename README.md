@@ -76,6 +76,14 @@ npm run dev
 ```
 
 Open http://localhost:4111, select **Assistant**, and send a message.
+
+Supervisor workflow smoke (ingest + triage without Studio; full run via the dev API while `dev` is up):
+
+```sh
+npm run supervisor:smoke
+# Windows / PowerShell (with pnpm dev running):
+$env:MASTRA_DEV_URL='http://127.0.0.1:4111'; $env:SUPERVISOR_SMOKE_FULL='1'; $env:SUPERVISOR_SMOKE_NO_FALLBACK='1'; npm run supervisor:smoke -- "How does signal intake work in the docs?"
+```
 Stop the server with Ctrl+C.
 
 User prompts from **npm run chat**, **Mastra Studio**, and **POST /v1/chat** enter
