@@ -8,28 +8,48 @@ registerSignalRuntime(mastra);
 
 const [command, ...rest] = process.argv.slice(2);
 
+function formatRoutingNote(note?: string): string {
+  if (!note?.trim()) return '';
+  try {
+    const parsed = JSON.parse(note) as { branch?: string; primaryKind?: string; compound?: boolean };
+    const parts = [
+      parsed.branch ? `branch=${parsed.branch}` : '',
+      parsed.primaryKind ? `kind=${parsed.primaryKind}` : '',
+      parsed.compound === true ? 'compound' : '',
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(' ') : note.slice(0, 120);
+  } catch {
+    return note.slice(0, 120);
+  }
+}
+
 function printRows(rows: Array<{ eventId: string; status: string; deliveryError?: string; routingNote?: string }>) {
   if (rows.length === 0) {
     console.log('(none)');
     return;
   }
   for (const row of rows) {
-    const extra = row.deliveryError ?? row.routingNote ?? '';
-    console.log(`${row.eventId}\t${row.status}${extra ? `\t${extra}` : ''}`);
+    if (row.deliveryError) {
+      console.log(`${row.eventId}\t${row.status}\t${row.deliveryError}`);
+      continue;
+    }
+    const routing = formatRoutingNote(row.routingNote);
+    console.log(`${row.eventId}\t${row.status}${routing ? `\t${routing}` : ''}`);
   }
 }
 
 async function main(): Promise<void> {
   if (command === 'list') {
     const which = rest[0] ?? 'pending';
-    const map: Record<string, 'accepted' | 'failed' | 'unrouted'> = {
+    const map: Record<string, 'accepted' | 'failed' | 'unrouted' | 'dispatched'> = {
       pending: 'accepted',
       failed: 'failed',
       unrouted: 'unrouted',
+      dispatched: 'dispatched',
     };
     const key = map[which];
     if (!key) {
-      console.error('Usage: intake list [pending|failed|unrouted]');
+      console.error('Usage: intake list [pending|dispatched|failed|unrouted]');
       process.exitCode = 1;
       return;
     }
@@ -87,7 +107,7 @@ async function main(): Promise<void> {
   }
   console.log(`Signal intake operator commands (MAST-73 / MAST-63)
 
-  npm run intake -- list [pending|failed|unrouted]
+  npm run intake -- list [pending|dispatched|failed|unrouted]
   npm run intake -- retry <eventId>
   npm run intake -- resolve <eventId> <conversationId>
   npm run intake -- reconcile

@@ -14,7 +14,7 @@
   "acceptance": [
     {
       "text": "markDispatched or payload snapshot stores branch, triageSource, optional rationale",
-      "met": false
+      "met": true
     },
     {
       "text": "intake CLI and POST /v1/chat expose branch",
@@ -22,10 +22,10 @@
     },
     {
       "text": "docs operator-signal-intake.md updated",
-      "met": false
+      "met": true
     }
   ],
   "createdBy": "composer",
   "createdAt": "2026-11-25T22:27:27.453Z",
-  "updatedAt": "2026-11-25T22:27:27.453Z"
+  "updatedAt": "2026-11-26T17:30:00.000Z"
 }

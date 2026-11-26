@@ -6,8 +6,14 @@ Database: `signal-intake.db` next to `mastra.db` (see `assistantDatabasePath()`)
 
 ```sh
 npm run intake -- list pending
+npm run intake -- list dispatched
 npm run intake -- list failed
 npm run intake -- list unrouted
+```
+
+Dispatched rows may show routing metadata parsed from `routing_note` (e.g. `branch=research kind=project_research compound`).
+
+```sh
 npm run intake -- retry <eventId>
 npm run intake -- resolve <eventId> <conversationId>
 npm run intake -- reconcile

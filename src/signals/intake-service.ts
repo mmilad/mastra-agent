@@ -150,7 +150,7 @@ export class SignalIntakeService {
     };
   }
 
-  listIntakeRows(status: 'accepted' | 'failed' | 'unrouted', limit = 50) {
+  listIntakeRows(status: 'accepted' | 'failed' | 'unrouted' | 'dispatched', limit = 50) {
     return this.ledger.listByStatus(status, limit);
   }
 }
