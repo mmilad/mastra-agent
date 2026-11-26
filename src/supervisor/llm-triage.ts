@@ -1,5 +1,5 @@
 import { Agent } from '@mastra/core/agent';
-import { supervisorBranches, triageUserPrompt, type SupervisorBranch } from './triage.ts';
+import { supervisorBranches, triageHighConfidenceBranch, triageUserPrompt, type SupervisorBranch } from './triage.ts';
 
 const modelName = process.env.ASSISTANT_MODEL || 'qwen3.5:9b';
 
@@ -61,6 +61,10 @@ function heuristicOnly(): boolean {
   return process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY === '1' || process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY === 'true';
 }
 
+function llmTriageRequired(): boolean {
+  return process.env.SUPERVISOR_TRIAGE_LLM_ALWAYS === '1' || process.env.SUPERVISOR_TRIAGE_LLM_ALWAYS === 'true';
+}
+
 function triageTimeoutMs(): number {
   const parsed = Number(process.env.SUPERVISOR_TRIAGE_TIMEOUT_MS ?? 20_000);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 20_000;
@@ -71,6 +75,13 @@ export async function triageUserPromptWithLlm(text: string): Promise<TriageResul
   if (!trimmed) return { branch: 'answer', source: 'heuristic', rationale: 'empty input' };
   if (heuristicOnly()) {
     return { branch: triageUserPrompt(trimmed), source: 'heuristic', rationale: 'heuristic-only mode' };
+  }
+
+  if (!llmTriageRequired()) {
+    const fast = triageHighConfidenceBranch(trimmed);
+    if (fast !== undefined) {
+      return { branch: fast, source: 'heuristic', rationale: 'high-confidence regex triage' };
+    }
   }
 
   const controller = new AbortController();

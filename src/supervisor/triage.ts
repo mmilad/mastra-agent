@@ -18,6 +18,21 @@ export function matchesResearchIntent(text: string): boolean {
   return researchPattern.test(text);
 }
 
+/**
+ * When delegate and research cues do not conflict, branch without an LLM call (MAST-79).
+ * Returns `undefined` when both match — caller should use LLM triage.
+ */
+export function triageHighConfidenceBranch(text: string): SupervisorBranch | undefined {
+  const trimmed = text.trim();
+  if (!trimmed) return 'answer';
+  const delegate = matchesDelegateIntent(trimmed);
+  const research = matchesResearchIntent(trimmed);
+  if (delegate && research) return undefined;
+  if (delegate) return 'delegate';
+  if (research) return 'research';
+  return 'answer';
+}
+
 /** Regex fallback when LLM triage fails or `SUPERVISOR_TRIAGE_HEURISTIC_ONLY` is set. */
 export function triageUserPrompt(text: string): SupervisorBranch {
   const trimmed = text.trim();

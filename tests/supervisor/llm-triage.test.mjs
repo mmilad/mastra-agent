@@ -15,6 +15,24 @@ test('parseTriageBranchFromLlm reads bare branch word', () => {
   assert.equal(parseTriageBranchFromLlm('branch: answer'), 'answer');
 });
 
+test('triageUserPromptWithLlm uses high-confidence fast path without LLM', async () => {
+  const prevOnly = process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY;
+  const prevAlways = process.env.SUPERVISOR_TRIAGE_LLM_ALWAYS;
+  delete process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY;
+  delete process.env.SUPERVISOR_TRIAGE_LLM_ALWAYS;
+  try {
+    const result = await triageUserPromptWithLlm('Please implement a new file foo.ts');
+    assert.equal(result.source, 'heuristic');
+    assert.equal(result.branch, 'delegate');
+    assert.equal(result.rationale, 'high-confidence regex triage');
+  } finally {
+    if (prevOnly === undefined) delete process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY;
+    else process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY = prevOnly;
+    if (prevAlways === undefined) delete process.env.SUPERVISOR_TRIAGE_LLM_ALWAYS;
+    else process.env.SUPERVISOR_TRIAGE_LLM_ALWAYS = prevAlways;
+  }
+});
+
 test('triageUserPromptWithLlm uses heuristic when forced', async () => {
   const previous = process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY;
   process.env.SUPERVISOR_TRIAGE_HEURISTIC_ONLY = '1';
