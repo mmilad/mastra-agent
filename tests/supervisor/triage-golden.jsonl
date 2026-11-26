@@ -1,0 +1,9 @@
+{"text":"Thanks, that helps!","branch":"answer","kind":"social","expectFastPath":true}
+{"text":"What time is it in Berlin?","branch":"answer","expectFastPath":true}
+{"text":"How does signal intake work in the docs?","branch":"research","kind":"project_research","expectFastPath":true}
+{"text":"lookup where supervisor routing is documented","branch":"research","expectFastPath":true}
+{"text":"Please create a new file notes.txt with hello","branch":"delegate","expectFastPath":true}
+{"text":"fix the bug in src/run.ts","branch":"delegate","expectFastPath":true}
+{"text":"approve it","branch":"answer","kind":"ops","expectFastPath":true}
+{"text":"Explain how signal intake is documented and create hello.txt in the project root","branch":"delegate","expectFastPath":false,"note":"ambiguous regex; ingest marks compound"}
+{"text":"I got an error when downloading my invoice","branch":"answer","expectFastPath":true,"note":"compile-n-run overlap stays answer until LLM"}

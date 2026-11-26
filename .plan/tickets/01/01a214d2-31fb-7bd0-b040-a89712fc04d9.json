@@ -5,7 +5,7 @@
   "title": "Triage golden suite (labeled messages + CI)",
   "kind": "task",
   "description": "Evaluate router on its own (confusion matrix). Ref: Anthropic-style router eval.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,18 +14,18 @@
   "acceptance": [
     {
       "text": "tests/supervisor/triage-golden.jsonl with expected branch",
-      "met": false
+      "met": true
     },
     {
       "text": "CI runs heuristic mode always",
-      "met": false
+      "met": true
     },
     {
       "text": "optional nightly Ollama job documented",
-      "met": false
+      "met": true
     }
   ],
   "createdBy": "composer",
   "createdAt": "2026-11-25T22:27:29.403Z",
-  "updatedAt": "2026-11-25T22:27:29.403Z"
+  "updatedAt": "2026-11-26T17:30:00.000Z"
 }
