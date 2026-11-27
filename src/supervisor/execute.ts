@@ -2,7 +2,7 @@ import type { Mastra } from '@mastra/core';
 import type { Agent } from '@mastra/core/agent';
 import { generateWithCompletion } from '../mastra/agents/generate-options.ts';
 import { instructionsForBranch } from '../mastra/agents/instructions.ts';
-import { buildDelegateSupervisorPrompt } from './delegate-prompt.ts';
+import { formatDelegateHandoffForAssistant, type DelegateHandoffBrief } from './delegate-handoff.ts';
 import type { SupervisorBranch } from './triage.ts';
 
 export type SupervisorTurnInput = {
@@ -20,6 +20,24 @@ export type SupervisorTurnResult = {
   responseText?: string;
 };
 
+export function readDelegateHandoffBrief(result: {
+  result?: unknown;
+  steps?: Record<string, unknown>;
+}): DelegateHandoffBrief | undefined {
+  const fromTop = result.result;
+  if (fromTop && typeof fromTop === 'object' && 'objective' in fromTop && 'worker' in fromTop) {
+    return fromTop as DelegateHandoffBrief;
+  }
+  const rawStep = result.steps?.['assemble-delegate-brief'];
+  if (rawStep && typeof rawStep === 'object' && rawStep !== null && 'output' in rawStep) {
+    const output = (rawStep as { output?: unknown }).output;
+    if (output && typeof output === 'object' && 'objective' in output) {
+      return output as DelegateHandoffBrief;
+    }
+  }
+  return undefined;
+}
+
 export function readKnowledgeWorkflowAnswer(result: { result?: unknown; steps?: Record<string, unknown> }): string | undefined {
   const top = result.result;
   if (top && typeof top === 'object' && 'answer' in top) {
@@ -35,6 +53,21 @@ export function readKnowledgeWorkflowAnswer(result: { result?: unknown; steps?: 
     }
   }
   return undefined;
+}
+
+async function runDelegateHandoff(mastra: Mastra, text: string): Promise<DelegateHandoffBrief> {
+  const workflow = mastra.getWorkflow('delegateHandoff');
+  const run = await workflow.createRun();
+  const result = await run.start({ inputData: { text } });
+  if (result.status !== 'success') {
+    const msg = result.status === 'failed' ? result.error?.message ?? 'delegate-handoff failed' : result.status;
+    throw new Error(String(msg));
+  }
+  const brief = readDelegateHandoffBrief(result);
+  if (!brief) {
+    throw new Error('delegate-handoff succeeded but returned no brief');
+  }
+  return brief;
 }
 
 async function runResearch(mastra: Mastra, question: string): Promise<string> {
@@ -93,13 +126,21 @@ export async function executeSupervisorTurn(mastra: Mastra, input: SupervisorTur
     return { branch: input.branch, delivered: true };
   }
 
-  const prompt =
-    input.branch === 'delegate' ? buildDelegateSupervisorPrompt(input.text) : input.text;
+  if (input.branch === 'delegate') {
+    const brief = await runDelegateHandoff(mastra, input.text);
+    const prompt = formatDelegateHandoffForAssistant(brief);
+    if (input.syncReply) {
+      const responseText = await deliverSync(agent, prompt, thread, input.branch);
+      return { branch: input.branch, delivered: true, responseText };
+    }
+    await deliverAsync(agent, prompt, thread);
+    return { branch: input.branch, delivered: true };
+  }
 
   if (input.syncReply) {
-    const responseText = await deliverSync(agent, prompt, thread, input.branch);
+    const responseText = await deliverSync(agent, input.text, thread, input.branch);
     return { branch: input.branch, delivered: true, responseText };
   }
-  await deliverAsync(agent, prompt, thread);
+  await deliverAsync(agent, input.text, thread);
   return { branch: input.branch, delivered: true };
 }

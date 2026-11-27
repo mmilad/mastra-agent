@@ -23,7 +23,7 @@ Industry patterns cited in tickets: [rule-first routing](https://www.compilenrun
 | MAST-92 | Wrong-branch recovery UX (discussion + optional reroute) | 3 |
 | MAST-93 | Register supervisor-triage agent on Mastra (optional DX) | 3 |
 
-Implementation order (updated): **98 ✓ · 79 ✓ · 81 ✓ · 80 (partial) · 82 · 87 · 99 · 88–93**.
+Implementation order (updated): **98 ✓ · 79 ✓ · 81 ✓ · 82 ✓ · 80 (partial) · 87 · 99 · 88–93**.
 
 **Lead cadence:** push `main` when supervisor tests pass and commits are self-contained; one MAST ticket per commit when practical; no push on WIP unless you ask for a backup branch.
 

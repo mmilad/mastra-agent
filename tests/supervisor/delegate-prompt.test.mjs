@@ -4,9 +4,9 @@ import { buildDelegateSupervisorPrompt } from '../../src/supervisor/delegate-pro
 
 test('delegate prompt stresses edit vs create', () => {
   const edit = buildDelegateSupervisorPrompt('edit the joke in hello.txt');
-  assert.match(edit, /edit\/update/i);
+  assert.match(edit, /editing existing content/i);
   const create = buildDelegateSupervisorPrompt('create hello.txt with a joke');
-  assert.match(create, /create objective/i);
+  assert.match(create, /New artifact/i);
   const cursor = buildDelegateSupervisorPrompt('use cursor to update hello.txt');
   assert.match(cursor, /worker: cursor/i);
 });

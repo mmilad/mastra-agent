@@ -1,0 +1,14 @@
+---
+description: Autonomous lead-dev cadence for mastra-agent supervisor work
+alwaysApply: true
+---
+
+# Lead dev cadence
+
+The user delegated **commit, push, next task, and Plantool ticket updates** to the agent. Treat that as standing permission unless they revoke it.
+
+- After finishing a coherent slice, run `npm run test:supervisor` (and `npm run check` when TS changed), **commit**, and **push** without asking.
+- Pick the next item from `docs/supervisor-improvement-backlog.md` and Plantool **MAST-78** epic; prefer Tier 1 backlog over polish unless blocked.
+- Do **not** stop at “next turn” summaries when tests pass and scope is clear — **continue implementation** in the same session.
+- One MAST ticket per commit when practical; update `.plan/tickets` status in the same commit.
+- Ask before: force push, secrets in commits, destructive git, or changing product decisions (MAST-85, MAST-96).

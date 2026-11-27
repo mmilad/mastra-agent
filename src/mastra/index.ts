@@ -12,6 +12,7 @@ import { bootstrapSignals } from '../signals/bootstrap.ts';
 import { wrapAssistantSignalIntake } from '../signals/studio-intake.ts';
 import { LocalFilesystem, Workspace } from '@mastra/core/workspace';
 import { projectKnowledge } from '../knowledge/project-knowledge.ts';
+import { delegateHandoff } from './workflows/delegate-handoff.ts';
 import { knowledgeAnswer } from './workflows/knowledge-answer.ts';
 import { supervisorRouting } from './workflows/supervisor-routing.ts';
 import { signalIntakeApiRoute } from '../signals/http-intake.ts';
@@ -35,7 +36,7 @@ wrapAssistantSignalIntake(assistant);
 
 export const mastra = new Mastra({
   agents: { assistant },
-  workflows: { knowledgeAnswer, supervisorRouting },
+  workflows: { delegateHandoff, knowledgeAnswer, supervisorRouting },
   knowledge: { projectDocs: projectKnowledge },
   // Read-only workspace over the parent folder of this project, so all sibling projects are visible.
   // Override with PLANTOOL_WORKSPACE. contained: false is needed because Mastra's containment check

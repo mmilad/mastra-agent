@@ -31,7 +31,7 @@ Intake `user_prompt` payload mirrors `text` and optional `syncReply`.
 | --- | --- | --- |
 | **answer** | Default; small talk; general questions | `sendMessage` / `generate` with user text |
 | **research** | Doc/knowledge phrasing (`explain`, `documented`, `lookup`, …) | Run `knowledge-answer` workflow, then deliver lookup context to the thread |
-| **delegate** | File/code change verbs + targets, or explicit delegate | Async: `sendMessage` with delegate routing hint; sync: same via `generate` (agent calls `delegate-task`) |
+| **delegate** | File/code change verbs + targets, or explicit delegate | Run `delegate-handoff` workflow, then deliver structured brief; agent calls `delegate-task` once |
 
 ## Mastra steps
 
@@ -46,7 +46,7 @@ Registered on `Mastra` as `supervisorRouting`; invoked from `dispatchEnvelope` f
 | Workflow | Role |
 | --- | --- |
 | `knowledge-answer` | Research branch backend |
-| *(future)* `delegate-handoff` | Structured worker brief assembly — **MAST-82** |
+| `delegate-handoff` | Normalize objective, worker, constraints, acceptance criteria before delegate-task — **MAST-82** |
 | *(future)* `propose-plantool-skill` | MAST-71 invention path |
 
 Post-pilot improvement backlog (Plantool **MAST-78** epic): `docs/supervisor-improvement-backlog.md`.

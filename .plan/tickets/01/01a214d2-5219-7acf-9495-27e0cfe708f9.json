@@ -5,7 +5,7 @@
   "title": "Implement delegate-handoff workflow",
   "kind": "task",
   "description": "Handoff pattern (Azure): deterministic brief assembly before specialist. Files: src/supervisor/execute.ts, new workflow.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
@@ -14,18 +14,18 @@
   "acceptance": [
     {
       "text": "Mastra workflow normalizes objective, acceptance criteria, worker hint",
-      "met": false
+      "met": true
     },
     {
       "text": "supervisor execute delegates branch calls workflow before delegate-task",
-      "met": false
+      "met": true
     },
     {
       "text": "docs/supervisor-workflow-contract.md updated",
-      "met": false
+      "met": true
     }
   ],
   "createdBy": "composer",
   "createdAt": "2026-11-25T22:27:37.625Z",
-  "updatedAt": "2026-11-25T22:27:37.625Z"
+  "updatedAt": "2026-11-27T17:25:00.000Z"
 }
